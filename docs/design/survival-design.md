@@ -19,6 +19,26 @@ Every run is a different survival problem, and the meta-game is the player's own
 
 This principle is the test for every design decision: does it create variance between runs, and does it reward learning? If yes, build it. If no, cut it.
 
+### No Dominant Strategy
+
+Foundational pillar: **no one way is the best way to play.** Every design decision is tested against this rule.
+
+The principle says: if any single weapon, class, playstyle, server mode, progression path, or system becomes objectively optimal, the design has failed. Every "best option" must be paired with a specific cost that makes alternatives equally viable in their own lanes.
+
+Concrete applications:
+
+- **Combat tools** — guns are powerful AND loud, ammo-scarce, meat-damaging, socially hostile-coded. Bows are clean AND limited at range against apex predators. Snares are passive AND require patience. No tool dominates; each trades capability for cost.
+- **Character archetypes** — Hunter, Forager, Trapper, Naturalist, Survivalist, Builder, Botanist, Tracker are all viable game-completion paths. A Forager must be able to complete a long arc *without ever firing a weapon* — they're not "a Hunter who can't fight yet," they're a fully realized alternative archetype with their own defensive options (better stealth, scent management, avoidance routing, deterrent crafting).
+- **Playstyles** — kill-big-game runs, foraging-only runs, trap-only runs, naturalist-observation runs, builder-fortress runs all complete. No single loop is "the win condition."
+- **Camp strategy** — settled fortification AND nomadic ranging are both valid. Resource depletion radius, scent buildup, and Camp Stalkers prevent indefinite settled play; weather, energy budget, and gear weight prevent indefinite nomadic play.
+- **Progression** — deep specialization in one domain AND breadth across many are both viable, with different rewards (signature abilities vs more milestones unlocked).
+- **MP interaction** — kill-on-sight, trade, cooperation, and pure avoidance are all viable jungle-rules approaches. None dominates; each has costs.
+- **Server mode** — solo, friends-only, and public are full-fidelity experiences. Public isn't "the real game"; solo isn't "training mode." Each mode is its own complete arc.
+
+The principle is the design's central immune system against feature creep collapsing into a single optimal path. Every new system added must be tested: does it make one existing path obviously better, or does it open a new path with its own costs?
+
+When a system inadvertently violates this principle (a craftable that trivializes hunting; a weapon with no real cost; a class with universal applicability), the system is wrong, not the principle.
+
 ### Platform & Engine
 
 - Target platform: Steam (PC)
@@ -513,9 +533,9 @@ DECISION: NO cabin-fever-style mechanic. The Long Dark's pattern of punishing ti
 
 Rationale: cabin fever in The Long Dark divides its audience and inverts the survival fantasy by forbidding the player's natural response to bad weather (wait it out). Mother Nature's pressure to leave shelter comes from food/water/fuel running out, not from an artificial timer.
 
-### 12.3 Combat / weapons — held open
+### 12.3 Combat / weapons — RESOLVED → see §15
 
-STATUS: OPEN. The Phase 2 recommendation of "no-guns / nature-cannot-be-defeated" (Subnautica adapted) is held open. Mother Nature may include guns; combat feel remains in §11 as an open design item.
+STATUS: RESOLVED 2026-05-09. Pre-industrial ranged tools (knife, axe, spear, bow, crossbow, atlatl, slingshot) and limited firearms (.22 rifle, shotgun, hunting rifle) are IN. Lethality is hit-zone-based, not HP-bar. Each weapon has a specific cost matrix that prevents dominance, per the No Dominant Strategy pillar (§1, "No Dominant Strategy"). Full spec lives in §15.
 
 ### 12.4 Logout model
 
@@ -783,3 +803,123 @@ Five structural passes plus one refinement landed here:
 6. Two-region progression refinement (above-baseline mastery + signature abilities + quality grading)
 
 Locked 2026-05-09. Future passes welcome but should reference this baseline rather than starting fresh.
+
+---
+
+## 15. Combat & Weapons (Locked, 2026-05-09)
+
+STATUS: LOCKED. Resolves §12.3. All weapons in this section are IN; their cost matrices implement the No Dominant Strategy pillar (§1). Magnitudes (effective ranges, ammo weights, sound radii) are tuning proposals, not committed values.
+
+### 15.1 Weapon roster
+
+Pre-industrial:
+
+- **Knife** — universal melee + utility tool. Every character starts with one.
+- **Hand axe** — utility + heavy melee. Builder starts; others can craft.
+- **Spear** — thrown 15-25m, thrust melee. Universal low-tier; craftable from straight wood + knife.
+- **Bow + arrows** — primary hunting tool, 30-60m effective range. Recurve craftable; arrows consumed but recoverable from misses and successful kills.
+- **Crossbow** — 40-80m, slower reload. Master-tier craft (Builder/Hunter mastery required).
+- **Atlatl** — 20-40m thrown spear, paleolithic. Naturalist/Forager flavor weapon.
+- **Slingshot** — 10-25m, small game only (squirrel, bird, rabbit at close range).
+
+Firearms (limited per the No Dominant Strategy pillar):
+
+- **.22 rifle** — small game efficiency tool. 50-100m effective. Sharp crack audible ~1km. Light ammo, can carry many rounds.
+- **Shotgun** — 5-30m slug, 10-40m shot. Camp/predator defense and waterfowl. Heavy shells, very scarce.
+- **Hunting rifle** (.30-06 / 7mm class) — 100-300m+ big game tool. Thunderous report carries 2-3km, broadcasting position drainage-wide. Heavy rounds, very scarce.
+
+### 15.2 Starting kit by node (proposal — magnitudes tunable)
+
+| Node | Starting weapons |
+|---|---|
+| Hunter | bow + 8 arrows + knife |
+| Tracker | bow + 6 arrows + knife |
+| Trapper | snares + spear + knife |
+| Survivalist | spear + knife + atlatl |
+| Builder | hand axe + knife + spear |
+| Forager | knife + slingshot |
+| Botanist | knife only |
+| Naturalist | knife + atlatl |
+
+Non-starting weapons can be learned over time via the §14 progression system (slower for non-domain skills). A Forager who chooses to learn bow can; it just takes longer than for a Hunter.
+
+Firearms are NOT in any starting kit by default. They are scenario-dependent (the "hiked-in modern hunter" scenario from Run 01 might include a rifle; a "shipwrecked" scenario might not). Starting-scenario weapon allocation is a separate decision per character/scenario combination.
+
+### 15.3 Lethality model — hit-zone, not HP
+
+Wildlife hits resolve as one of three outcomes:
+
+- **Vital hit** (lung, heart, head): instant or near-instant kill. Animal may run 50-100m before collapse — recovery is a tracking job (§13.3 Tracks system fires).
+- **Wound** (gut, leg, shoulder, hip): animal flees, leaves blood trail, can be tracked, recoverable if pursued well, escapes if abandoned. Wounded animal becomes a moral and practical decision point — chase or let go.
+- **Miss**: animal flees, no kill, no info, no trail.
+
+This model integrates directly with §13.3 substrate-aware tracks: the wounded-animal blood trail degrades with weather (per §13.3 weather erasure). A storm front arriving mid-tracking forces the same brutal decision as the Carrion-Chains design — rush the recovery or lose the animal.
+
+For player characters: same model. Vital hit by arrow or bullet is potentially fatal. No "respawn after 50 arrow hits." Combat between players (jungle-rules MP) is a serious choice with serious stakes — DayZ-early-days feel.
+
+For apex predators (bear, moose, large wolf): bow shots typically wound rather than drop. Multi-hit kills with bow are real but risky. Hunting rifle drops bear in 1-3 shots reliably. Shotgun slug at 5m drops a charging bear (defensive use). This is the design intent — apex predators stay genuinely dangerous; the player has tools but the encounter is not trivial.
+
+### 15.4 Weapon cost matrix (the No Dominant Strategy implementation)
+
+| Axis | Bow | .22 rifle | Shotgun | Hunting rifle |
+|---|---|---|---|---|
+| Effective range | 30-60m | 50-100m | 5-30m slug / 10-40m shot | 100-300m+ |
+| Sound | quiet whoosh | sharp crack ~1km | loud boom ~1.5km | thunderous, 2-3km |
+| Wildlife disturbance | local | regional | regional | drainage-wide |
+| Ammo per shot | 1 arrow (recoverable, craftable) | 1 round (light, scarce) | 1 shell (heavy, very scarce) | 1 round (heavy, very scarce) |
+| Carry weight per shot | minimal | low | medium | high |
+| Lethality on small game | excellent | excellent | poor (shot ruins meat) | terrible (round destroys carcass) |
+| Lethality on big game | requires good shot placement | useless | poor (close-range only) | one or two shots |
+| Lethality on apex predator | usually wounds, doesn't drop | useless | drops at very close range, defensive | drops in 1-3 shots |
+| Meat damage to carcass | minimal | minimal | significant | severe (ruins large portion) |
+| Stealth signature | excellent | poor | terrible | catastrophic |
+| Maintenance burden | low (string, arrows) | medium (cleaning, oil) | medium-high | high (cleaning kit, oil, condition) |
+| MP social signal | neutral | neutral | hostile-coded | very hostile-coded |
+| Failure mode if neglected | string snap | misfire, jam | misfire, jam | misfire, accuracy drift |
+
+The matrix is the principle in spec form: every weapon's strength is paired with a specific cost. Bow Hunter has stealth + sustainability + low impact, sacrificing apex-predator-stopping power. Rifle Hunter has range + power, sacrificing meat yield + scent stealth + ammo sustainability + MP neutrality.
+
+No row in the matrix has a strictly dominant weapon. A Hunter choosing rifle for a moose hunt accepts that the report broadcasts their position regionally and that the recovered carcass has a damaged shoulder. A Hunter choosing bow accepts the longer tracking job and risk that the animal escapes.
+
+### 15.5 Wounded-self mechanics
+
+Player wounds use the same vital/wound/miss model:
+
+- **Vital wound** to player (chest, abdomen, head): potentially fatal without immediate care; serious blood loss; reduced effective stats from the moment of wound onward
+- **Wound** to player (limb, hip): bleeding, mobility reduction, infection risk if not cleaned, scarring affects long-term performance within §14 caps
+- **Bandage / treat / clean**: active skills; quality of treatment affects healing curve per §14 quality grading
+
+Long-term wound consequences integrate with §14 — a poorly-treated leg wound that leaves a scar may impose a small permanent debuff (capped by §14 magnitude rules; can be partially compensated by re-mastering relevant passives).
+
+### 15.6 Forager game-completion path constraint (downstream)
+
+Per the No Dominant Strategy pillar (§1), a Forager player must be able to complete a long survival arc without ever firing a weapon. This constrains future system design:
+
+- Defensive options that don't require combat skill: snares, perimeter trip-lines, deterrent fires, scent management, avoidance routing
+- Avoidance mastery: better stealth passives, faster threat-sign recognition, route-planning around predator territories
+- Cooperative options on multiplayer: partner-up so a combat-oriented player handles threats while the Forager handles supply
+
+Any future system that makes combat *required* for survival (forced encounters, mandatory kills, locked-content gating) violates this pillar and is wrong by definition.
+
+### 15.7 What this resolves
+
+- §12.3 closed (cross-references §15)
+- G2 from Run 01 closed (CRITICAL gap → resolved)
+- Hunter active skill tree (§14) gains a complete action set including bow-shot, draw-strength, arrow-recovery, shot-placement
+- Carrion Chains (§13.2) — kills now have a clear how-they-happen mechanism
+- Camp Stalkers (§13.2) — players have a defensive option vs persistent threats (shotgun for close-range bear; bow for ambush-from-distance)
+- Wounded-animal tracking — integrates with §13.3 substrate-aware tracks + weather erasure
+- Multiplayer interaction — PvP is possible with real stakes, no respawn-grind dynamics
+- Field-dressing + scent beacon (§13.4) — assumes a kill happens; now the kill is reachable
+
+### 15.8 What's deliberately not specified yet
+
+- Specific ammo counts per starting kit (tunable)
+- Sound-radius numbers (tunable)
+- Maintenance interval for firearms (tunable)
+- Crafting recipes for arrows, bows, crossbows (will be designed as part of crafting tree)
+- Specific scenarios that include firearms in starting kit (will be designed as part of character scenarios)
+- Bullet drop / drift physics fidelity (Real or arcade — to be decided in implementation)
+- Whether handguns exist (currently NO; can be revisited)
+
+These are tuning and content questions, not architectural ones. The architecture is locked.
