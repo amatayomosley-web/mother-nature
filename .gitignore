@@ -1,0 +1,32 @@
+# Godot 4+ specific ignores
+.godot/
+/android/
+/build/
+/builds/
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# Export credentials (NEVER commit — contains keystore passwords, API keys)
+export_credentials.cfg
+
+# Editor-specific
+.vscode/
+.idea/
+*.code-workspace
+
+# OS-specific
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# Backup / temp files
+*~
+*.bak
+*.tmp
