@@ -394,15 +394,7 @@ Entries do not have character voice. They are static skill-level recordings, wri
 
 The expert entry is not just more text — it contains actionable information the novice entry doesn't. The expert knows wolfsbane has a use case as a sedative or weapon coating; the novice just knows not to eat it. Specialist runs are genuinely valuable to a long-term player because they're the only way to unlock certain uses of certain things.
 
-### 8.4 Entries Can Be Wrong
-
-If a novice writes an entry based on partial information, the entry can contain mistakes. "Red berries: poisonous" — but actually only some red berries are poisonous, and the novice didn't know to distinguish. A future character checking the compendium gets bad information from a past one. Only when a more expert character encounters the same thing does the entry get corrected or expanded.
-
-This is a load-bearing mechanic. The compendium itself gets better over time as more specialist runs happen, and it teaches the player that their own past knowledge is provisional. It also gives a real reason to play characters the player doesn't normally play — to upgrade entries stuck at novice quality.
-
-Low-confidence entries are visually flagged. Entries are upgradeable, not just overwritten — the expert entry may preserve the novice's original observation as a footnote, because the novice may have noticed something the expert dismisses.
-
-### 8.5 Cost of Consultation
+### 8.4 Cost of Consultation
 
 The compendium is a real object, not a wiki. Pulling it out costs:
 
@@ -412,7 +404,7 @@ The compendium is a real object, not a wiki. Pulling it out costs:
 
 Optional refinements: physical wear (the book degrades, pages get water-damaged); no symptom-based search (must flip to plant section trying to remember which one looked like the one eaten). The compendium is a book, not a database.
 
-### 8.6 First-Run Behavior
+### 8.5 First-Run Behavior
 
 The compendium is empty at start. No seeded "common knowledge" entries — every entry must represent something the player has personally lived through. Seeding entries the player didn't earn would erode the system's premise.
 
@@ -420,7 +412,7 @@ To compensate: the world is visually readable enough that a new player can survi
 
 First-run learning is forgiving in terms of how entries are earned (low interaction cost to generate first novice entries) but uncompromising in terms of what they represent. The first death is the first real lesson, and the resulting compendium entries — the things that just killed or saved the player — mean something.
 
-### 8.7 Cross-Tier Persistence
+### 8.6 Cross-Tier Persistence
 
 Compendium content carries across all server tiers. Knowledge built in solo carries to private and public servers. By the time a player walks onto a world server, their compendium represents real hours of learning.
 
@@ -473,7 +465,7 @@ The character-locked crafting trees give specialists genuine value to other play
 
 ### 10.1 What Persists
 
-- The compendium (with skill-tier entries, possibly with low-confidence flags).
+- The compendium (with skill-tier entries).
 - Challenge completion progress.
 - Server tier unlocks (private access, public access).
 - Custom character unlock and configuration.
@@ -542,7 +534,7 @@ DECISION: Per-account by default for solo and friends-only servers. Public serve
 
 Rationale: resolves the soft-pay-to-win risk on public servers without forfeiting the personal long-arc the compendium represents. Account-shared for the personal arc, server-isolated for the social arc; the player chooses by choosing the server.
 
-Closes: §8.7 / §10.1 open question.
+Closes: §8.6 / §10.1 open question.
 
 ### 12.6 Storyteller meta-agent — held open
 
@@ -564,8 +556,7 @@ Validated and committed without dispute:
 - Scent-on-the-weather-grid for wildlife — directional smell with wind advection. (The differentiator: no surveyed game does this properly.)
 - Apex individual identity capped at ~10 tracked individuals near player; ambient prey via per-region per-species population counters with Lotka-Volterra-with-carrying-capacity dynamics.
 - Tracks as substrate-aware decay-buffer objects; symmetric API — predators read player tracks via the same `emit_track()` path.
-- Compendium event-sourced: append-only `ObservationEvent` log + pure `project(entity_id, events) → CompendiumEntry` function. Tier promotion is grep-able from the event log.
-- Wrong-information mechanic via superseded-note footnotes (never hidden, only initially-only). Visual blur/opacity for low-confidence entries; partial-identification renaming as a tier signal.
+- Compendium event-sourced: append-only `ObservationEvent` log + pure `project(entity_id, events) → CompendiumEntry` function. Tier promotion is grep-able from the event log. (Event sourcing is now optional with the wrong-info mechanic removed — a simple counter-per-entity would also work — but is retained for future-extensibility headroom.)
 - Daily state-preserving server restart, no wipes ever.
 - Regional in-world clock offset per shard so prime-time content aligns with regional evening hours.
 
