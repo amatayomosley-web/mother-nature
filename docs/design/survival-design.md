@@ -655,3 +655,131 @@ If the v1 launch must pick a subset, highest-leverage candidates (each is a forc
 Forest Signs depends on whether public-world servers ship in v1. The remaining items (Corvid Escort, Shadow Scavengers, Decoy Sounds, Trap Bycatch, Field Dressing duration, Metabolic Debt) are excellent v1.x material — enrichment without being load-bearing.
 
 All of §13 is brainstorming. Commit nothing until each item has its own design pass.
+
+---
+
+## 14. Skill System Architecture (Locked, 2026-05-09)
+
+STATUS: LOCKED through 14 design decisions taken in conversation 2026-05-09. Numbers in this section (magnitudes, thresholds, time-scales) are proposals for tuning in playtest, not committed values. The architecture is locked; the dials are open.
+
+This section supersedes §8's mechanical-progression role. §8 must be rewritten to its new role as a read-only lore log when build begins. §6 (body meters) and §13 (perception ladder) need integration passes to fold into the structure below.
+
+### 14.1 Four artifacts
+
+The progression system is built from four interacting pieces:
+
+- **Compendium** — read-only lore log. Per-account. Persists across deaths. Pre-populated to Expert tier in the character's domain at start; otherwise filled by observation. Holds *what the player has seen and understood*. No mechanical capability gate; pure reference.
+- **Passive skill tree** — auto-applied perks. Per-character. Resets on death. Removes specific debuffs (sub-baseline) or adds capped bonuses (above-baseline). Holds *what the character automatically is*.
+- **Active skill tree** — toggleable abilities. Per-character. Resets on death. Each skill is an action the player triggers. Holds *what the character can do on input*.
+- **Linked-skill graph** — relatedness map. Globally defined design content. Each skill names its links. Determines which skills can emerge from which actions. Holds *the structure of knowledge transfer*.
+
+The Compendium is data. The two trees are character state. The Linked-skill graph is the bridge between actions and learning.
+
+### 14.2 The debuff-removal inversion
+
+Baseline = a clueless modern human dropped in wilderness. Mastery direction has two regions:
+
+- **Sub-baseline (debuff removal)** — every novice starts with the full debuff stack: walking pace tax, running stamina tax, hiking tax, terrain friction tax, noise emission, scent emission, tracking-literacy tax, plant-ID tax, animal-behavior-reading tax, fire-starting fumble, knot slippage, cold tolerance reduction, sleep efficiency reduction, etc. Skills *remove* these debuffs. A character at "competent baseline" in a domain has all that domain's debuffs removed.
+- **Above-baseline (mastery bonuses)** — past competent baseline, mastery yields capped bonuses (proposed 15–30% over baseline depending on attribute). Domain-locked: a master cook is only special at cooking, not at carrying. Slow accrual: above-baseline takes ~2–3× the time of sub-baseline.
+
+The skill tree IS the debuff-removal map. Every passive skill = remove or reduce a specific debuff. Every active skill = an ability the baseline novice literally cannot perform until trained.
+
+The cognitive debuffs are removed via the Compendium's expert-tier grants — a Hunter's "bear-reading" debuff is removed because the Hunter starts with Expert compendium on bears.
+
+### 14.3 Multi-axis quality grading
+
+Every produced/processed/gathered item carries three attributes that scale with the character's debuff stack:
+
+- **Action time** — duration to complete (novice 4h shack vs expert 1h)
+- **Output quality grade** — A → A+ → S above baseline; B / C / D / F below
+- **Failure mode** — primary failure is continuous degradation (a grade-D shelter is leaky and short-lived, *predictably*). Catastrophic failure (probabilistic full destruction) is reserved for genuinely extreme conditions where physics is itself stochastic — a category-4 storm hitting a grade-D shelter may roll for collapse.
+
+Quality flows through the world: a grade-D shelter renders as recognizably worse, decays differently, performs at reduced spec. Not "a normal shelter with a hidden penalty"; an observably worse object.
+
+By action type:
+- **Production / processing** (build, butcher, craft, cook, preserve) — full time + grade + failure axes
+- **Gathering** (firewood, water, plants) — quality axis applies (novice grabs wet wood, expert picks dry deadfall)
+- **Real-time** (movement, combat, perception, navigation) — execution-friction axis instead of completion-time
+
+### 14.4 XP and emergence
+
+Progression mechanics, unified across both trees:
+
+- **XP-by-action** — every action ticks XP for the relevant skill plus its linked skills. Doing fishing ticks fishing AND linked skills (trapping, patience-craft, etc.).
+- **Linked-skill graph bounds emergence** — emergence is deterministic via the graph. No randomness in which skills ARE eligible; randomness only in which of the eligible skills emerge first within a tier.
+- **Mastery diminishing returns (both trees)** — once a skill is mastered, XP from same-context repetition drops to near-zero. To keep progressing, vary the activity. Setting the same snare 100× doesn't level Trapper post-mastery.
+- **Novelty multiplier** — post-mastery, only novel context refreshes a trickle. New biome, new species, new tool, new conditions = small XP returns. Same context = nothing.
+- **Tier-crossing is deterministic** — same total accumulated experience yields the same tier crossing for everyone. Public, transparent, MP-fair.
+- **Within-tier skill selection is random** — when crossing into Practiced, you draw 2–3 of the 8 Practiced skills randomly. Every Practiced player has the same NUMBER of Practiced skills, just a different SHAPE. Variety without power asymmetry.
+- **Milestone unlocks are experience-gated** — special perks unlocked by unfakeable conditions ("first moose kill while alone," "survived a category-3 storm in the open," "tracked an apex individual across three drainages"). Retroactive announcement only — never pre-listed; discovery is the genre's emotional engine.
+
+### 14.5 Master-only signature abilities
+
+Above-baseline mastery includes both quantitative bonuses AND signature abilities — unique active skills a baseline player literally cannot perform regardless of equipment.
+
+Examples (target ~2–3 per node, ~20 across the game):
+- Master cook: medicinal stew · preservation-grade smoking
+- Master builder: smoke-vented winter cabin · raised flood-tolerant platform · multi-room layout
+- Master hunter: read-the-herd (predict deer movement 24h ahead)
+- Master tracker: back-track-to-source (read a trail backward to find origin point)
+
+Signature abilities are LOW frequency, HIGH significance. They give long-arc players a moment of "I just did something a normal person literally couldn't" — the emotional payoff that justifies 100+ hours of investment.
+
+### 14.6 Player perception model (Hybrid)
+
+Debuff state is hybrid-visible:
+
+- **Real-time gameplay** shows only the felt consequence — winded, cold, noisy, slipping. No labels, no debuff sheet on the HUD. Pure diegesis during play.
+- **Compendium back-room** holds the labeled debuff inventory. The player can open a "current state" view to see "Walking pace tax: -30%; Cold tolerance: -25%; Tracking literacy: removed; ..." and see what's still holding them back.
+
+The real-life parallel: while hiking you don't think "+30% stamina cost," you just feel tired. If you reflect, you know what you're missing. The game preserves that gap.
+
+### 14.7 Multiplayer fairness
+
+The architecture intrinsically resists MP meta-breaking without per-server-mode policies:
+
+- Tier-crossing thresholds are equal for everyone (no information asymmetry on power timing)
+- Random within-tier selection adds character-flavor variance, not power asymmetry (every Practiced Hunter has the same NUMBER of skills)
+- Mastery diminishing returns kill repetition farming
+- Linked-skill graph kills "spam any action, hope for a rare"
+- Resource hoarding helps once for the unlock, then yields nothing
+- Group help-farming fails (XP ties to the actor)
+- Datamining the optimal path yields "vary your activity" — which is the design's intent
+
+### 14.8 Power-creep + permadeath trade-off
+
+Veteran characters are observably more capable than new ones — within their specialties, ~15–30% better, plus a few signature abilities. This gap is intentional and bounded:
+
+- Bonuses are CAPPED — no infinite ladder
+- Bonuses are DOMAIN-SPECIFIC — master cook still gets bitten by bears at baseline lethality
+- World does not scale to player level — bears, weather, hunger remain themselves
+- Compendium persists per-account — death loses character muscle memory but not learned knowledge
+
+Permadeath stings; that's the point. But a new character is sub-baseline, not doomed — they're at the same starting point everyone began. The veteran's death is a real loss of competence + mastery; the replacement's challenge is real but survivable.
+
+### 14.9 Onboarding requirement
+
+Because baseline characters are deliberately impaired, the new-player experience needs explicit framing: "you are a clueless human in the wilderness — this is intentional." Without that frame, players will read the impairment as bugs or unbalanced design.
+
+The character intro / tutorial owes the player an honest contract: starting weak is the design. Mastery is the long arc.
+
+### 14.10 What this restructure changes elsewhere
+
+When build begins, three sections need work:
+
+- **§8 Compendium** — full chapter rewrite. Loses mechanical-gate role; becomes pure read-only lore log + observation system + back-room debuff inventory.
+- **§6 Body meters** — debuff treatment integration. The six meters' baseline values become the "competent" reference; novice characters operate with reduced effective ranges (smaller warm window, lower stamina cap, faster fatigue, etc.).
+- **§13 Brainstorming** — the perception ladder (PRESENCE / IDENTIFICATION / INFERENCE) folds into the Passive tree. Focus mode (L3) and Inspect (L4) become Active skills. L1 ambient and L2 character mutter become Passive auto-perks tied to debuff removal.
+
+### 14.11 Iteration history
+
+Five structural passes plus one refinement landed here:
+
+1. Compendium-tier-as-mechanical-gate (original §8, pre-2026-05-09)
+2. Skill nodes with cross-overlap (early conversation 2026-05-09)
+3. Passive/Active two-tree split
+4. Linked-skill graph + mastery diminishing returns
+5. Debuff-removal inversion (sub-baseline framing)
+6. Two-region progression refinement (above-baseline mastery + signature abilities + quality grading)
+
+Locked 2026-05-09. Future passes welcome but should reference this baseline rather than starting fresh.
