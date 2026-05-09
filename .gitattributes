@@ -46,6 +46,14 @@
 *.7z filter=lfs diff=lfs merge=lfs -text
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
 
+# Office documents (originals — design docs in Word/Office formats)
+*.docx filter=lfs diff=lfs merge=lfs -text
+*.doc filter=lfs diff=lfs merge=lfs -text
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.odt filter=lfs diff=lfs merge=lfs -text
+*.xlsx filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+
 # Godot text formats — force text + LF so cross-platform diffs stay clean
 *.tscn text eol=lf
 *.tres text eol=lf

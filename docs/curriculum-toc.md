@@ -3,6 +3,8 @@
 > Status: planning artifact. The doc itself is not yet drafted; this is the synthesis + table of contents that the curriculum will be written against.
 >
 > Source: 17 multi-source research agents run 2026-05-08 covering academic curricula, postmortems, Godot official docs, ecosystem, design theory, math/physics, architecture patterns, four genre toolkits, art, audio, production, shipping, game feel, and an audit of the existing 736-line learning guide at `C:/Users/willi/Claude Flow/docs/game-dev-learning-guide.md`.
+>
+> **Open conflict with the actual Mother Nature design** (see `docs/design/survival-design.md`): this curriculum's TOC dropped multiplayer/networking to appendix mention. The Mother Nature design is multiplayer to its bones (solo / private / public-world tiers, persistent regional clocks, thousands of players). Genre toolkit also needs rework — none of the four (action / puzzle / RPG / roguelike) directly cover survival sim. **Decision pending**: rebuild TOC to fit Mother Nature specifically, or keep it generic with the design doc as a parallel reference.
 
 ---
 
