@@ -502,3 +502,71 @@ Areas that need further design work before this becomes an implementation docume
 - Compendium scope question: per-account vs. per-server on public worlds.
 - Sound, light, and tracking depth: how deeply player noise, light sources, and player-left tracks are simulated.
 - Steam-specific scope: Steamworks integration plan (achievements, cloud saves, workshop), Steam page timing for wishlist marketing (target 6–12 months pre-launch).
+
+## 12. Architecture Commitments (Phase 2 Research, 2026-05-09)
+
+This section records architectural and design commitments arising from the Phase 2 research wave (`docs/_research/18-23`) and a follow-on design conversation. Items here either close, supersede, or hold-open items in §11.
+
+### 12.1 Multiplayer scope reduced for launch
+
+DECISION: Launch with reduced per-shard player counts. The §1 framing of "thousands of players" reframes as "thousands of concurrent players across many regional shards." Per-shard concurrent target TBD pending playtest; research suggests 64–128 as the indie-viable range. Single-shard-thousands deferred to v2.0 or never.
+
+Rationale: indie survival multiplayer that promises single-shard CCU thousands has historically failed (Worlds Adrift, Mavericks, Crowfall). Indie survival multiplayer that delivers scoped persistent worlds at dozens-per-shard has historically shipped (Valheim, Conan Exiles, Project Zomboid).
+
+Closes: aspirational §1 / §9.1 framing. Implementation work scopes to Conan/PZ-class servers.
+
+### 12.2 No cabin-fever pressure
+
+DECISION: NO cabin-fever-style mechanic. The Long Dark's pattern of punishing time spent indoors is rejected. Routine maintenance, weather pressure, and wildlife pressure carry the de-camping motivation without a separate mechanic.
+
+Rationale: cabin fever in The Long Dark divides its audience and inverts the survival fantasy by forbidding the player's natural response to bad weather (wait it out). Mother Nature's pressure to leave shelter comes from food/water/fuel running out, not from an artificial timer.
+
+### 12.3 Combat / weapons — held open
+
+STATUS: OPEN. The Phase 2 recommendation of "no-guns / nature-cannot-be-defeated" (Subnautica adapted) is held open. Mother Nature may include guns; combat feel remains in §11 as an open design item.
+
+### 12.4 Logout model
+
+DECISION: Sleeping-bag tether.
+
+- Safe regions (own camp, claimed territory): logout vanishes the body.
+- Wilderness: body sleeps for 5–10 minutes (during which combat-loggers can be punished) and then despawns to a tracked "sleep state" rejoined on next login.
+
+Rationale: balances anti-combat-log without permanent AFK vulnerability. Avoids Rust's full-vulnerability model that punishes solo players who can't predict raid windows; avoids Valheim's vanish-on-logout that lets anyone combat-log to safety.
+
+Closes: ambiguity in §9 about what happens to disconnected character bodies.
+
+### 12.5 Compendium per-account vs per-server
+
+DECISION: Per-account by default for solo and friends-only servers. Public servers default to compendium-isolated — a veteran starts a public-server run with the same blank compendium as a new player. Server administrators can flip the policy at server creation.
+
+Rationale: resolves the soft-pay-to-win risk on public servers without forfeiting the personal long-arc the compendium represents. Account-shared for the personal arc, server-isolated for the social arc; the player chooses by choosing the server.
+
+Closes: §8.7 / §10.1 open question.
+
+### 12.6 Storyteller meta-agent — held open
+
+STATUS: OPEN. A RimWorld-style meta-agent pacing weather/wildlife/event rhythms across biomes is the highest-leverage genre import surfaced by Phase 2 research. Decision pending.
+
+### 12.7 Sanity / morale 7th meter — held open
+
+STATUS: OPEN. The 6 body meters in §6 are physical. Adding sanity/morale/isolation as a 7th would shift Mother Nature toward Don't Starve's psychological-horror lane and away from the realist Long Dark/PZ lane the design is committed to. Recommendation: skip for v1; revisit if playtest surfaces a need.
+
+### 12.8 Architectural patterns confirmed by Phase 2 research
+
+Validated and committed without dispute:
+
+- Server-authoritative state via Godot 4 high-level multiplayer API (MultiplayerSpawner, MultiplayerSynchronizer, typed `@rpc`).
+- Per-shard SQLite WAL save with hourly/daily/weekly rolling backups.
+- Account-level central database (separate from per-shard world DB) for compendium, characters, challenges, custom-character unlocks.
+- Hex grid weather (~100 cells, 6 floats per cell, 0.5 Hz server tick, semi-Lagrangian advection, front director for storms, server-authoritative with 9-cell client-window deltas).
+- Barometer item + telegraphed front lifecycle (APPROACH → ARRIVE → PEAK → DEPART) as the predictability mechanic.
+- Scent-on-the-weather-grid for wildlife — directional smell with wind advection. (The differentiator: no surveyed game does this properly.)
+- Apex individual identity capped at ~10 tracked individuals near player; ambient prey via per-region per-species population counters with Lotka-Volterra-with-carrying-capacity dynamics.
+- Tracks as substrate-aware decay-buffer objects; symmetric API — predators read player tracks via the same `emit_track()` path.
+- Compendium event-sourced: append-only `ObservationEvent` log + pure `project(entity_id, events) → CompendiumEntry` function. Tier promotion is grep-able from the event log.
+- Wrong-information mechanic via superseded-note footnotes (never hidden, only initially-only). Visual blur/opacity for low-confidence entries; partial-identification renaming as a tier signal.
+- Daily state-preserving server restart, no wipes ever.
+- Regional in-world clock offset per shard so prime-time content aligns with regional evening hours.
+
+These commitments are the architectural defaults; deviations require explicit rationale.
