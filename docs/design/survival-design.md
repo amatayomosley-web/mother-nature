@@ -561,3 +561,97 @@ Validated and committed without dispute:
 - Regional in-world clock offset per shard so prime-time content aligns with regional evening hours.
 
 These commitments are the architectural defaults; deviations require explicit rationale.
+
+---
+
+## 13. Brainstorming — Mechanic ideas (pending development)
+
+STATUS: BRAINSTORMING. None of the items below are committed design. Each is a candidate mechanic that extends a system already in §6–§9 and §12.8. Every entry needs further development before it ships. Items marked OPEN-CONCERN have a known design-discipline question that must be resolved before implementation.
+
+### 13.1 Player communication — non-verbal signaling
+
+**Forest Signs.** On public-world servers (and optionally elsewhere), players leave persistent in-world marks — broken branches, stacked stones, scratched bark — to communicate without chat. A hunter marks a trail leading to a known bear den to warn allies or lure rivals into a trap.
+
+- Rides on: persistent per-shard world DB; jungle-rules-no-chat commitment.
+- OPEN-CONCERN: symbol vocabulary needs explicit design. Dark Souls works because messages are templated. If any stick arrangement can mean anything, the world fills with noise. Define a tight alphabet (~10–15 templated meanings: warning, kill site, water, trap, do-not-pass) and let players invent grammar within it.
+- Storage: every sign is a small entity in the per-shard DB; needs decay rules so the world doesn't accumulate forever.
+
+### 13.2 Wildlife behavior extensions
+
+**Carrion Chains.** A killed large animal becomes a multi-day event. The carcass first attracts ambient fauna (crows, flies), then mid-tier scavengers (coyotes), then an apex predator (bear) who claims and defends the territory until the meat is gone.
+
+- Rides on: scent-on-weather-grid; wildlife utility AI; apex individual identity.
+- Implementation: carcass is a scent-emitting entity with intensity decaying over time; AI utility curves include "scavenge" priority modulated by hunger; apex claim creates a temporary territory the player cannot easily re-enter.
+
+**Camp Stalkers.** A specific bear or wolf that successfully scavenges a player's poorly-secured food storage learns the lesson permanently. That individual stops hunting natural prey, loses caution, and becomes a personal antagonist — testing defenses, waiting just outside firelight.
+
+- Rides on: apex-individuals-capped-at-10; persistent per-shard wildlife identity.
+- Player response paths: better food storage, kill the stalker, relocate camp.
+- Multiplayer interaction: another player who kills a Camp Stalker bear gets a notable trophy; the original player's threat ends. Emergent shared story.
+
+**The Starvation State (Desperate Predators).** When local prey populations crash (harsh winter, player overhunting), remaining predators enter a "Desperate" behavioral state. Wolves coordinate daytime attacks on healthy adults. Bears push through fire and traps. Localized overhunting becomes an emergent lethal consequence.
+
+- Rides on: Lotka-Volterra-with-K population model; wildlife AI behavior states.
+- Multiplayer note: on shared servers, one player's overhunting can destabilize ecology for everyone in the region. Compendium must communicate WHY predators are aggressive ("ravenous: prey scarce") so players can diagnose the cause.
+
+**The Corvid Escort & Shadow Scavengers.** Crows and ravens follow apex predators because they know a kill is coming — a player who notices a slow-moving canopy flock can deduce a bear or cougar below. Mid-tier predators (coyotes, wolverines) shadow apex predators from a safe distance for scraps — a player tracking coyote prints might suddenly realize the coyotes are tracking a grizzly.
+
+- Rides on: wildlife utility AI; sense systems; apex identity.
+- Cost: adds corvid behavior class with "follow apex" utility. Bounded.
+- Value: layered environmental storytelling — the player who reads the world deeply gets free intelligence.
+
+### 13.3 Tracking & observation
+
+**Track Age & Weather Erasure.** Tracks degrade based on the weather grid, not a uniform timer. The sharpness of a hoofprint in mud tells the player whether the animal passed ten minutes or ten hours ago. A sudden downpour washes away blood trails completely. A hunter who shoots a deer just as a storm front arrives faces a brutal decision: rush the tracking job and risk spooking the wounded animal into a sprint, or wait out the storm and lose the trail entirely.
+
+- Rides on: substrate-aware tracks (§12.8); hex weather grid; front lifecycle (APPROACH → ARRIVE → PEAK → DEPART).
+- Implementation: each track records substrate, age, and weather exposure since creation; renders to the player as a graded sharpness cue.
+
+### 13.4 Player action & consequence
+
+**Wet Wood & Fire.** Wood items have a wetness state tied to the weather grid. Wet wood burns poorly, produces more smoke (more visible to other players AND wildlife), and outputs less heat. Players must gather and store fuel before a storm front arrives — dry firewood becomes high-value temporary currency.
+
+- Rides on: hex weather grid (humidity field); scent/visibility systems for smoke.
+- Implementation: every wood item has a `wetness` float that updates from cell humidity when not sheltered; combustion behavior reads wetness directly.
+- High value: forces planning loop, ties storm prediction to concrete reward.
+
+**First Principles of Field Dressing + Scent Beacon.** A dead moose is too heavy to carry — players must decide what to strip, what to debone, what to leave. Higher yield demands more stationary time at the carcass. The moment butchery begins, fresh blood scent catches the wind; the longer the player stays, the wider the scent radius grows, acting as a dinner bell for every downwind predator.
+
+- Rides on: scent-on-weather-grid; wildlife AI utility curves.
+- OPEN-CONCERN: time scale. "Hours" of real-time at a carcass is a frustration trap and an AFK-vulnerability invitation in a 64-player shard. Compress: ~5–10 min real-time for full debone, 2–3 for rough strip. The whole loop's tension is *watching the tree line while you work* — duration must be short enough that the player stays present.
+
+**Decoy Sounds.** Throwing a rock to snap a branch in the opposite direction shifts a predator from "Hunting" to "Investigating," directed away from the player.
+
+- Rides on: hearing attenuation system; predator AI sense states.
+- Cost: trivial. Rocks are likely already throwable.
+
+**Trap Bycatch (Execution Paths).** A snared rabbit doesn't disappear into an inventory slot — it remains in the world as a struggling, noisy agent. The struggling rabbit becomes bait. A player checking their trap line might find the snare broken with fresh wolf tracks, or arrive just as a wolverine claims the catch.
+
+- Rides on: wildlife as persistent agents; scent and noise systems.
+- Behavioral consequence: forces players to check trap lines often or accept losses to predators.
+
+### 13.5 Long-term body state — OPEN-CONCERN
+
+**Metabolic Debt.** Beyond the instantaneous hunger meter, prolonged starvation imposes a recovery debuff — a player who starved for days suffers a multi-day reduction to maximum stamina even after eating, as the body recovers.
+
+- Rides on: §6 body-meter system.
+- OPEN-CONCERN: this is structurally the same shape as the cabin-fever mechanic rejected in §12.2 (long-term debuff carrying forward from a past condition). Before committing, confirm whether the cabin-fever objection ("don't want pressure that compounds suffering across multiple play sessions") applies here too.
+- If kept, bind tightly to avoid frustration-stacking:
+  - ONE visible tier ("Recovering"), not a stacking ladder.
+  - Capped at ~-25% stamina max.
+  - Recoverable within 24–48 game hours via calorie surplus, not just elapsed time.
+  - Surfaced explicitly in HUD and compendium so the player knows what triggered it and what ends it.
+- Without those guardrails: hidden state, compounding penalties, and reverse-catharsis (player solved the problem but still feels bad for days). All three are frustration mechanics, not depth.
+
+### 13.6 v1 leverage ranking
+
+If the v1 launch must pick a subset, highest-leverage candidates (each is a forcing function for the planning loop and rides on already-committed systems):
+
+1. **Carrion Chains** — turns kills into multi-day events; ties scent, AI, territory together.
+2. **Wet Wood & Fire** — concrete reward for storm-prediction; uses existing humidity field.
+3. **Camp Stalkers** — emergent personal antagonist; uses apex-individual identity directly.
+4. **Track Age & Weather Erasure** — completes the tracking system; uses substrate + weather grid.
+
+Forest Signs depends on whether public-world servers ship in v1. The remaining items (Corvid Escort, Shadow Scavengers, Decoy Sounds, Trap Bycatch, Field Dressing duration, Metabolic Debt) are excellent v1.x material — enrichment without being load-bearing.
+
+All of §13 is brainstorming. Commit nothing until each item has its own design pass.
