@@ -923,3 +923,62 @@ Any future system that makes combat *required* for survival (forced encounters, 
 - Whether handguns exist (currently NO; can be revisited)
 
 These are tuning and content questions, not architectural ones. The architecture is locked.
+
+---
+
+## 16. System Interaction Graph
+
+STATUS: ACTIVE. This section is a hub pointing to detailed system specifications and causal-chain notes that live in `docs/systems/` and `docs/chains/` respectively. The dual-layer structure keeps the design doc as architecture-level reference while detail lives in dedicated notes that support graph-based navigation (any markdown reader; Obsidian users get backlinks and graph view automatically).
+
+### 16.1 Why split
+
+The cause-and-effect graph between game systems (over-hunting → prey decline → predator hunger → aggression rising; player camp scent → bear behavioral memory → Camp Stalker pathway; etc.) is hard to track with inline §-references alone. Splitting into per-system and per-chain notes lets each system's inputs and outputs be explicitly linked, and lets multi-system causal chains be tracked as first-class artifacts.
+
+### 16.2 High-level system map
+
+```mermaid
+graph LR
+  Weather[Weather Grid] --> Scent[Scent System]
+  Weather --> Tracks[Tracks Substrate]
+  Weather --> WetWood[Wet Wood Mechanic]
+  Scent --> Wildlife[Wildlife AI]
+  Tracks --> Wildlife
+  Wildlife --> Carrion[Carrion Chains]
+  Wildlife --> CampStalker[Camp Stalkers]
+  Player[Player Action] --> Wildlife
+  Player --> Compendium[Compendium]
+  Player --> SkillSystem[Skill System §14]
+  SkillSystem --> Combat[Combat §15]
+  Combat --> Wildlife
+  Wildlife --> Compendium
+  Population[Population Model] --> Wildlife
+  Player --> Population
+  Population --> Wildlife
+```
+
+This is illustrative, not exhaustive. The full graph (with all systems, mechanics, and states as nodes) emerges from the linked notes' wikilink connections when viewed in Obsidian or any graph-aware markdown tool.
+
+### 16.3 Detailed notes
+
+- **System notes**: `docs/systems/` — one note per system or mechanic, explicit inputs/outputs, internal-vs-player-facing distinction
+- **Causal chains**: `docs/chains/` — one note per multi-system cause-effect chain, with sequence + diegetic signals + counter-actions
+
+Both folders have READMEs explaining the conventions and `_index.md` files listing all current notes.
+
+### 16.4 Conventions
+
+- All cross-references between notes use Obsidian-style wikilinks `[[note-name]]` — these work in any markdown viewer as plain text and as live links in Obsidian, VS Code with Foam, etc.
+- Cross-references to this design doc use §-numbers
+- Each note distinguishes what the **system** tracks (engineering reference) from what the **player** experiences (in-game observable)
+- No UI alerts ever — signals are always observable in-world or reviewable in [[compendium-observations]]
+- Tags classify notes by category for filtering (`#wildlife`, `#causal-chain`, `#ecology`, etc.)
+
+### 16.5 Initial population (2026-05-09)
+
+System notes:
+- `bear-ai.md` — full 8-output utility AI, 5 attack pathways, individual identity, 5 personality variance
+
+Chain notes:
+- `overhunting-predator-aggression.md` — paradigmatic ecology pressure chain
+
+More notes will land as systems get specified through ongoing playthrough scripting and design discussion. Future high-priority spec targets surfaced in Run 01: water system (G11), shelter construction (G6), movement modes (G9), sleep system (G36), food caches (G41), apex predator economic intelligence (G42).
