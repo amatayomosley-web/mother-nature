@@ -868,6 +868,72 @@ This list is provisional. The actual catalog will be authored after sufficient d
 - Reference observable signals, not internal stats
 - Never include UI directions or button prompts
 
+### 14.13 Skill-Modulated Saliency (Locked, 2026-05-09)
+
+STATUS: LOCKED. The render-pipeline expression of the §14 debuff-removal model and §13 perception ladder. Defines how skill differential surfaces in 2D top-down rendering without UI clutter, hand-holding, or floating world labels.
+
+**Principle.** Every player sees the same world, rendered the same way at the entity-data level. Skill modulates **visual saliency** — subtle contrast, saturation, and depth cues that bias the trained eye toward relevant entities. The novice and the expert see the same pixels representing the same entities; the expert's pixels for entities in their domain are subtly more vivid, drawing the trained eye more readily.
+
+This matches real-world perceptual science. Trained experts don't have superhuman vision — they have biased visual attention that surfaces relevant features in their visual field. A birder spots a bird in the foliage; a non-birder walks past. Same world, same data, different attentional bias. Mother Nature models this through per-entity per-skill rendering shaders.
+
+**Per-entity saliency tiers:**
+
+- **NO SKILL**: entity renders as-is, no saliency boost. Default appearance.
+- **MEDIUM SKILL**: subtle saliency increase — slightly higher contrast and saturation for the entity. The trained eye begins to catch it more readily against the background.
+- **EXPERT SKILL**: clear saliency increase — entity visibly draws the eye against background. Color depth, edge contrast, and visual prominence are noticeably elevated, but never garish.
+
+The shading is continuous across these tiers as skill grows. There is no point at which the entity "pops" with an outline or glow — saliency increases smoothly with mastery.
+
+**Examples across archetypes:**
+
+| Entity | No skill | Medium | Expert |
+|---|---|---|---|
+| Wild onion in meadow | leaves render as-is | leaves slightly deeper purple, eye catches it | leaves stand out vividly against the meadow |
+| Cougar in thicket | cougar visible, blends with foliage | cougar's edges slightly sharper against branches | cougar visibly distinct from cover |
+| Bear track in mud | impression in dirt | track edges slightly more defined | track stands out, age and direction read at a glance |
+| Storm front cloud | cloud renders normally | front-edge slightly more visible | front structure pops against sky |
+| Wolf at distant ridge | dark shape, blends with terrain | canid silhouette slightly sharper | wolf shape distinct, gait readable |
+
+The same plant, the same cougar, the same track in the same place. What differs is how much the entity DRAWS THE EYE for the trained character — purely a rendering-pipeline effect.
+
+**What this rule explicitly excludes:**
+
+- Floating world labels naming entities ("Wild Onion" floating above the plant)
+- Outlines or glows around entities
+- Highlight markers or arrows
+- Color-coded threat indicators
+- Tooltip-style world tags
+- Any visual UI element painted on the world's surface
+
+The world stays visually clean. Recognition (entity name, state, inference) lives in interaction channels, not in world overlays.
+
+**Recognition channels (active player engagement, NOT world labels):**
+
+- **Cursor hover** — corner-of-screen text, 1-2 lines, skill-tier-appropriate. Player asks "what's that?" by moving their cursor; the game answers at the level of detail their skill provides.
+- **Inspect action [E]** — committed engagement. Player walks up and presses [E]; pulls compendium-tier-appropriate description into a corner panel.
+- **Character mutter** — sparse audio cues, max ~1/30-60s per skill domain. Diegetic first-person voice ("eyes in the brush…"). Fires for high-relevance entities only.
+- **Action menu** — right-click on entity offers skill-expanded interaction options ("examine" only for novice; "examine / harvest / identify" for Practiced Forager).
+
+**Implementation notes (technical):**
+
+- Each entity carries a `skill_domain` tag (predator-reading, plant-id, tracking, weather-reading, etc.)
+- Renderer queries player's passive-tree skill in that domain per frame
+- Saliency shader applies per-entity at three levels (none / medium / high) based on skill
+- Shader effect is subtle: ~+5–10% saturation/contrast at medium, ~+15–20% at expert (tunable)
+- Multiplayer: saliency shading is purely client-side. Each player's client renders saliency overlays based on their local player's skill. World data is unified across clients.
+- Computational cost: trivial. Standard shader pipeline pattern. Same compute path for all entities; only the shader parameters vary.
+
+**Why this is the right unification across archetypes:**
+
+1. Real-world authentic — experts have biased attention, not different vision
+2. Consistent across all archetypes — same rule for plants, predators, tracks, weather, scat, terrain hazards
+3. Cleanest possible interface — no UI elements, no tags, no markers
+4. Multiplayer parallel-rendering works — each client adjusts saliency per its local player
+5. Subtle, never garish — skill growth feels like getting better at seeing, not acquiring magic vision
+6. Project Zomboid extension — PZ's skill-modulated foraging-tile rendering generalized to every domain
+
+**Reference implementation.** Project Zomboid does limited skill-modulated rendering (foraging skill modulates tile-content visibility). Mother Nature applies the same shader-saliency principle across every domain — predator-reading, plant-ID, tracking, weather-reading, animal-behavior, substrate-reading, edibility, fire-craft, all driven by the same per-entity per-skill shader query.
+
 ---
 
 ## 15. Combat & Weapons (Locked, 2026-05-09)

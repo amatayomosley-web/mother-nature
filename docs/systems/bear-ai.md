@@ -145,19 +145,22 @@ This variance is what makes apex-individual identity (§12.8) load-bearing — e
 
 ## Player-facing surfacing
 
-Per the diegetic-UI commitment (§12.8) and the no-apex-dossier refinement (2026-05-09):
+Per the diegetic-UI commitment (§12.8), the no-apex-dossier refinement (2026-05-09), and §14.13 Skill-Modulated Saliency:
 
 The player perceives bears through:
-- Visible body — size, markings, behavioral animation
+- Visible body — size, markings, behavioral animation. Universal rendering: every player sees the same bear in the same place.
 - Audible vocalizations — huff, woof, jaw-pop, growl, distinctive per output
 - Behavioral output — the 8 outputs render as distinct animation/sound combinations
-- [[compendium-observations]] — encounters log as plain observation entries; trained characters (predator-reading debuff removed per §14) may note identifying features that suggest individual recognition
+- **§14.13 saliency overlay** — for trained predator-readers, the bear's edges and posture cues render with subtle contrast/saturation boost. A novice and an Expert Hunter both see the bear; the Hunter's eye catches the bear and reads its posture more readily because of the saliency shader. No outlines, glows, or labels — just slightly more vivid pixels for the trained eye.
+- [[compendium-observations]] — encounters log as plain observation entries; trained characters may note identifying features that suggest individual recognition
 
 The player NEVER sees:
 - "APEX INDIVIDUAL #N" or any system label
 - A "dossier" framing
 - Population stats or scarcity alerts
 - Predicted attack probability or AI state visualization
+- Floating text labels naming the bear or its state
+- Outlines, glows, or highlight markers around the bear
 
 ## Behavior change over time (mechanical, not narrative)
 
