@@ -55,6 +55,18 @@ There is a critical distinction between random and variable. Randomness — "the
 
 Every system that produces variance must also produce signals the player can learn to read.
 
+### Mechanical Behavior, Not Scripted Narrative
+
+Every entity that exhibits behavior — wildlife, weather, predator, prey, plant — operates from mechanical state and rules, not story arcs. A bear approaches a player camp because scent + hunger + behavioral memory aligned, not because a Storyteller meta-system arranged a dramatic encounter. A wolf pack pressures a drainage because their hunger crossed a threshold, not because the design wanted the player to feel hunted.
+
+The story is the player's, not the system's. The player tells themselves "the bear of the meadow came back for me." The system computes "hunger high + scent reached + location memory said this drainage = sometimes food." Both are true; they are not the same thing. The player's narrative is real to them; the system has no narrative state.
+
+This principle has the same shape as Variance vs. Randomness above, applied at a deeper level. Variance vs. Randomness says: outcomes vary, but in ways the player can read. Mechanical Behavior says: behaviors emerge from agent state, not from designer-arranged story beats. Both demand observable mechanical inputs. Neither permits a hidden authorial hand.
+
+Implication for §12.6 (Storyteller meta-agent): held-open status is now LEAN-REJECT. RimWorld's Storyteller paces narrative dramatically by adjusting probabilities behind the scenes — exactly the opposite shape. Mother Nature's principle says emergence comes from agents behaving on their own logic, not from a meta-system arranging events for dramatic effect. Adopting a Storyteller would directly contradict this principle.
+
+The test for any new system: does its behavior emerge from observable mechanical inputs that the player can perceive and predict? If yes, build it. If no — if it adjusts probabilities or arranges events to "make the story better" — it's the wrong shape, no matter how compelling the narrative payoff might seem.
+
 ### Sources of Per-Run Variance
 
 - Spawn variance: biome, season, time of day, starting weather. A spring forest spawn is a fundamentally different game than a late-autumn tundra spawn.
@@ -556,9 +568,9 @@ Rationale: resolves the soft-pay-to-win risk on public servers without forfeitin
 
 Closes: §8.6 / §10.1 open question.
 
-### 12.6 Storyteller meta-agent — held open
+### 12.6 Storyteller meta-agent — LEAN REJECT
 
-STATUS: OPEN. A RimWorld-style meta-agent pacing weather/wildlife/event rhythms across biomes is the highest-leverage genre import surfaced by Phase 2 research. Decision pending.
+STATUS: LEAN REJECT (as of 2026-05-09). A RimWorld-style meta-agent pacing weather/wildlife/event rhythms across biomes was surfaced by Phase 2 research as the highest-leverage genre import. However, the §2 "Mechanical Behavior, Not Scripted Narrative" principle (added 2026-05-09) directly contradicts the Storyteller pattern: a meta-agent that adjusts probabilities to pace narrative dramatically is exactly the kind of "designer-arranged story beats" the principle rejects. Final rejection deferred only because the Storyteller question can be revisited if playtest reveals that pure agent-driven emergence produces flat pacing.
 
 ### 12.7 Sanity / morale 7th meter — held open
 
