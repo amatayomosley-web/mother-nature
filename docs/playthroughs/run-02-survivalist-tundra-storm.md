@@ -381,3 +381,155 @@ The run could continue for many more days depending on the encounter outcome. De
 | N35 | Caloric debt mid-hike — when food runs out partway through migration | HIGH |
 | N36 | Migration vs stay decision-points — what triggers the migration commit | MEDIUM |
 | N37 | Smoke / fire as long-distance signal from other parties | MEDIUM-HIGH (related to multiplayer presence detection) |
+
+---
+
+## Beat 10 — Day 8, ~10:00–12:00, the encounter
+
+She walks slowly. At ~70m, one of the figures sees her. Movement at the camp — they freeze, then the woman calls out something Ari can't quite make out. Both of them put down what they were doing and watch. The man with the bad leg stays near the fire.
+
+Ari calls out at ~50m: "*I crashed seven days back. Came down from the ridge. I'm alone.*" Hands stay open. Rifle slung.
+
+The woman who saw her first — short, dark hair, late 30s — calls back: "*Drop the rifle. Walk forward to that rock. Then we'll talk.*"
+
+Ari weighs it for a half-second. Cost-matrix per §15: rifle is her best protection at distance. Without it, she's at their mercy if hostile. She unslings the rifle, sets it on a flat stone twenty feet away. Walks past it to the indicated rock. Sits down.
+
+The two women approach. Both worn, dirty, hungry-eyed. One says: "*Same flight as yours? Ours was Tuesday. Two weeks back.*"
+
+"*Mine was last week. Pilot's dead. I came alone.*"
+
+A pause. The first woman: "*We're four. The pilot's leg is broken — that's Tom. Kira's off scouting. I'm Eve. She's Maren.*" Then: "*Bring your rifle. We have nothing for big game. Welcome.*"
+
+**The encounter resolves cooperatively.** Mechanical inputs that produced this:
+- Ari's compliance with the disarm-walk request (signaled non-threat)
+- Their actual NEED (Tom's broken leg + winter food situation)
+- Their numbers (4) vs hers (1) — they could have taken what they wanted but the cost of a fight without provocation was high
+- §14.13 saliency on both sides: Ari read as another survivor, not predator
+- Wind direction held (no scent advantage either way)
+- Daylight encounter is less paranoid than dusk
+
+She retrieves her rifle, walks to their camp.
+
+## Beat 11 — Days 9-10, joining the camp
+
+The group:
+- **Eve** — Forager node (Practiced); knows local plants
+- **Maren** — Tracker node; reads tracks; knows the river
+- **Tom** — pilot; broken right ankle, setting badly; immobile
+- **Kira** — currently 4-day scout further downriver; expected back in 2-3 days
+
+**Their state:** half-buried snow-trench shelter, canvas roof, grade B-C; food ~1.5 days for 3 without Ari; bow + 4 arrows + a knife; no antibiotics; Tom's ankle needs splinting Ari can do.
+
+**Ari's contributions:** rifle + 10 rounds (game-changer for big-game); Survivalist debuff-removal upgrades shelter to A-grade in 2 days; fire efficiency triples; properly splints Tom's ankle (~30 min, grade B treatment).
+
+**Group resource arithmetic at end of Day 10:** food pool ~3 days for 4 people; caloric burn ~12,000 cal/day total; need a kill within 3 days or migration toward better food.
+
+## Beat 12 — Days 11-15, the moose, the wolves, Kira's news
+
+**Day 11**: scouting. Maren spots a moose track ~4km upriver (bull, 18 hours old). Pursue tomorrow.
+
+**Day 12**: three of them track and reach the moose bedded in willow ~6km out. Ari takes the shot with rifle from 80m. **Vital hit, lung.** Moose runs ~120m, collapses. Field-dress, ~80kg meat over 4 hauls back to camp. **Rifle shot — drainage-wide broadcast — logged.**
+
+This buys them ~10 days of food.
+
+**Day 13-14**: smoke-curing meat (Ari's fire-craft Expert means efficient; less smoke than novice but still visible at distance).
+
+**Day 14 evening**: a wolf pack appears at river edge ~400m off. Drawn by the moose-kill scent broadcasting 2 days. Five wolves, lean, hungry. They watch the camp. **§13.2 Carrion Chains + §13.4 Scent Beacon converging.** They don't attack — too many humans, fire visible — but they linger.
+
+**Day 15**: Kira returns. Covered ~25km downriver and back. **News:** an old trapper's cabin ~20km SE. Abandoned. Stove. Walls. Could shelter all four. The journey through wolf-pressured terrain with Tom's broken ankle is brutal.
+
+Group decision: migrate. Day 16 dawn departure.
+
+## Beat 13 — Days 16-19, the migration cascade
+
+**Day 16** — covers ~6km. Cold dropping. Storm front approaches.
+
+**Day 17** — covers ~7km. Storm hits at 14:00 with wet snow. Rough shelter against a cliff face. Cold severe. Tom's stamina nearly gone.
+
+**Day 18** — covers ~3km after storm passes. Slower than projected. Storm cost a full day. Eating into moose meat at higher rate (cold raises caloric burn 50%).
+
+**Day 19** — covers ~2km. Tom collapses mid-day; bad ankle has gone septic, streaking up his leg. Fever. Without antibiotics, his prognosis is grim. Group shelters in place.
+
+Eve and Maren can't carry Tom. **Ari proposes:** scout ahead alone to find the cabin, return to lead them in.
+
+**§14 Survivalist Expert** bias: she trusts her cold-management. **§14.13 saliency** says she's reading the route well. **The math says her solo-success is ~70%; group survival without the cabin is much lower.**
+
+She goes.
+
+**Body state at departure morning Day 19:**
+- Warmth: 65%, Hunger: 60%, Thirst: 80%, Tiredness: 70%
+- Pain (rib): ~15% (mostly healed but aggravated by pack stress + cold)
+- **Cumulative caloric debt: ~4,000 cal across 4 days of net-negative**
+
+## Beat 14 — Day 20, the scout that goes wrong
+
+Leaves at first light. Carries: rifle + 6 rounds, small pack with 1 day food, canteen, mylar blanket, knife, axe.
+
+**07:00–11:00**: covers ~7km. Reaches saddle with view of river bend. Cabin should be ~13km further SE.
+
+**11:00**: weather shifts. A second storm front, faster than expected. She has hours, not a day.
+
+She pushes on. Cracked rib protests. Cold deepens.
+
+**13:00–16:00**: covers another 6km. Visibility dropping. Snow falling horizontally.
+
+**16:00**: she's in unfamiliar terrain. Maren's described route no longer matches. **§14.13 saliency degraded** — fatigue + cold + cumulative caloric debt has reduced her perception. Things that should stand out don't.
+
+**16:30**: crosses a creek that doesn't appear on Maren's mental map. Wrong drainage? She hesitates. Storm intensifies.
+
+**17:00**: she's lost. Mylar blanket out. Wraps herself, finds hollow under deadfall, lights small fire from remaining tinder. Waits.
+
+**17:00–22:00**: storm peaks. Wind 80 km/h. Temperature -22°C. Fire dies after 2 hours — wet snow falling on flame. Mylar retains some heat but inadequate.
+
+**22:00–02:00**: stage 2 hypothermia per §34 cascade. Shivering intense, then slowing. Confusion creeps in. She knows mechanically she should stay still and conserve heat, but judgment is degrading.
+
+She gets up to build a fresh fire. Hands won't work the flint properly. Sits back down, half-conscious, head against the deadfall.
+
+**02:00–04:00**: stage 3. Body's self-correction capacity exhausted. Unconscious. Core temperature dropping below survival threshold.
+
+**~04:30**: she dies of exposure. No predator. No fall. No combat. The cold and the cumulative cascade.
+
+## Beat 15 — Day 21+, aftermath
+
+The storm passes by Day 21 dawn. The cabin Ari was searching for is ~3km from where she stopped. She'd been close.
+
+**For the rear group**: Ari doesn't return. They wait Day 21, Day 22 in worsening cold. Tom dies on Day 22 of sepsis. Eve, Maren, and Kira make the migration on Day 23 with Kira leading, find the cabin, find Ari's body en route. They survive the winter at the cabin.
+
+**For Ari's player account**: compendium preserves all observations through Day 19. Field notes earned: hypothermia-cascade death entry would unlock per §14.12 framework.
+
+---
+
+## What ended Ari — mechanical reading
+
+The death emerged from these conditions aligning:
+
+1. **Cumulative caloric debt** — ~4,000 cal across days 16-19 of migration with cold-amplified burn, never fully replenished
+2. **Cracked rib stress** — pack weight aggravated healing; never fully recovered
+3. **Group commitment** — Ari volunteered the riskier scout because group survival math demanded it; cooperative not selfish
+4. **Storm misjudgment** — read 24-hour window but storm came in 6 hours; weather-reading at her saliency-degraded state was incomplete
+5. **Wrong drainage** — Maren's verbal route description didn't match what she saw; in a less-fatigued state she'd have backtracked sooner
+6. **Fire failure** — wet snow on fire she couldn't keep alive in storm conditions; equipment limit (small tinder reserve) bit
+7. **Hypothermia cascade** — stage 2 to stage 3 transition during unconscious period; no rescue path
+
+No single thing killed her. The migration commitment + storm + fatigue + caloric debt + degraded saliency + fire-failure + cabin-3km-away-but-unreachable cascade did.
+
+**This is what slow-cinch mechanical death looks like.** Different signature from Run 01's cougar pounce. Both are honest emergent outcomes from real inputs.
+
+## What this run delivered (Run 02 full)
+
+- Complete arc, 21 days, mechanical death from compound-cascade
+- Stress-tested §14, §15, §13.2, §13.4, §2, §1 across crisis-onset and migration scenarios
+- Surfaced multiplayer-encounter mechanics (Days 7-10) — cooperative resolution but the design owes spec
+- Surfaced N32-N37 needs (first-contact, smoke as signal, mid-hike caloric debt, etc.)
+- Showed two distinct death signatures: predator-pounce (Run 01) vs cold-cascade (Run 02). Both honest, both mechanically grounded.
+
+## Architecture stress-test results (Run 02 full)
+
+- ✅ **§2 Mechanical behavior**: every event emerged from real inputs aligning; the human-encounter, the moose hunt, the migration, Tom's sepsis, Ari's lostness in storm, the fire-failure, the cascade — all mechanical
+- ✅ **§14 debuff-removal**: Survivalist's cold-tolerance was real but not unlimited; cumulative debt overwhelmed even Expert tier in storm conditions
+- ✅ **§14.13 saliency**: degraded through fatigue + caloric debt + cold; she read terrain less accurately at day 20 than day 8 — the model held that under-conditions saliency degrades
+- ✅ **§15 No Dominant Strategy**: rifle was useful (the moose kill), but it didn't save her in the lost-in-storm cascade; sound broadcasted wolves' interest at the river camp
+- ✅ **§13.2 Carrion Chains + §13.4 Scent Beacon**: moose-kill scent attracted wolves; group's smoke signaled position; both real mechanical pressure
+- ✅ **Multiplayer cooperation incentive**: the encounter-then-cooperation showed real value (combined skills > solo); but resource arithmetic still ground them down (4 mouths in winter)
+- ❗ **First-contact mechanics needed spec** (N32) — surfaced in Beat 10
+- ❗ **Long-arc cooperative-survival math** — Mother Nature's small-group winter survival is grim by design; worth explicit acknowledgment
