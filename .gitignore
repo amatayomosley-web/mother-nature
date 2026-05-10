@@ -30,3 +30,6 @@ desktop.ini
 *~
 *.bak
 *.tmp
+
+# Local working area for issue body drafts and other staging
+staging/
