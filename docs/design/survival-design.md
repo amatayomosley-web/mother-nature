@@ -816,6 +816,58 @@ Five structural passes plus one refinement landed here:
 
 Locked 2026-05-09. Future passes welcome but should reference this baseline rather than starting fresh.
 
+### 14.12 Field Notes — death-triggered ethology entries (framework locked, catalog deferred)
+
+STATUS: FRAMEWORK LOCKED 2026-05-09. Catalog content deferred until empirical death data from playthroughs/playtest establishes what actually kills players.
+
+**Purpose.** Solve the discoverability cost of emergent design. Players who don't bring real-world wilderness ethology knowledge into Mother Nature still need a way to learn predator/weather/body mechanics. Field Notes are death-triggered compendium entries written as ethology — they describe what the killer-thing DOES, leaving strategic synthesis to the player.
+
+**Trigger model.**
+- Death-only triggers. Significant survivals do NOT add entries. Death is the teaching mechanism — that's the point of permadeath.
+- Each death cause unlocks one entry once per account. Subsequent same-cause deaths add nothing.
+- Triggers fire at the moment of character death, indexed by cause-of-death.
+
+**Format.** Each entry is ethology-style prose, ~150-200 words. The entry describes the killer-thing's MECHANISMS — its inputs, behavioral outputs, environmental dependencies — at a level the player can read and apply. Entries do NOT prescribe strategy ("press X to do Y"); they describe mechanism. Player synthesizes the strategy.
+
+Example shape (placeholder — actual entries written after empirical death data):
+> *"Wolves rarely hunt alone. A pack of three or more is bold; a lone wolf is cautious. Pack-hunger crosses a threshold when local prey populations decline. A pack approaching a solo human will fan and flank during assessment — they have not committed yet. Running triggers chase response. Standing tall and vocalizing reduces aggression weight. Wolves do not respond to 'play dead.' Wolves remember individual humans who have hurt them."*
+
+That entry tells the player about wolf MECHANISMS. It does not tell them "drop fish + retreat = survive." The player applies mechanism to context.
+
+**Framing — "Field Notes."** Diegetic in-fiction framing: the entries are presented as journal-style notes from past characters. "After your last character froze in a storm, you find their field notes contained these observations…" — fictional cross-character knowledge inheritance. Account-bound; persists across deaths and characters.
+
+**Persistence and per-server rules.**
+- Solo + friends-only: field-notes entries persist per-account across all deaths and all servers — the meta-progression layer for permadeath
+- Public servers: per §12.5, compendium is server-isolated; this includes field-notes entries. Veteran on public starts with no entries. Honest fresh start. Veteran's player-knowledge persists; the character's compendium does not.
+
+**Visibility.**
+- Locked entries are HIDDEN — not listed-as-locked. Players don't see "??? — earn this through experience." Discovery of a new entry post-death is a moment of meaning, not a checklist tick.
+- Unlocked entries appear in a "Field Notes" section of the compendium, browseable anytime.
+
+**Catalog scope (deferred).** Final list of entries depends on what actually kills players. Provisional taxonomy for ~10-12 entries:
+- Per-species predator entries (wolf, bear, cougar, possibly moose for defensive)
+- Hypothermia / cold death
+- Hyperthermia / heat death (desert biome)
+- Starvation
+- Dehydration
+- Drowning
+- Injury / infection
+- Storm exposure
+- Death by player (multiplayer; one general entry)
+
+This list is provisional. The actual catalog will be authored after sufficient death encounters in playthrough/playtest reveal the real shape of how players die. Theorizing the catalog now would produce expected-deaths content, not actual-deaths content.
+
+**Implementation cost.**
+- Framework: trivial. Compendium system already supports tagged entries with conditional visibility; adding a death-cause-trigger class is a small spec on top.
+- Catalog content: ~150-200 words per entry × ~12 entries = ~2000 words of ethology prose. Authored late in development after death encounters are observed.
+
+**Writing discipline (when catalog is built).**
+- Describe MECHANISM, not strategy
+- Use second-person reflective voice in framing ("you watched a wolf pack take you down...")
+- Keep tone of a real field naturalist's notebook, not a game tutorial
+- Reference observable signals, not internal stats
+- Never include UI directions or button prompts
+
 ---
 
 ## 15. Combat & Weapons (Locked, 2026-05-09)
