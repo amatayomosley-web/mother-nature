@@ -207,3 +207,177 @@ The tundra is becoming a slow-cinch. Day 5+ pushes toward food-pressure crisis o
 - **Ari's experience is fundamentally different from Ren's** despite same architecture. Survivalist solves problems via cold/fire/shelter mastery; Hunter via tracking/stalking/bow. Same world; different game.
 - **Crisis-start scenario pressures different systems** — water (G11), fuel (N26), shelter (G6 → N25), sleep (G36) all hit immediately rather than gradually.
 - **Saliency model held under stress**: Survivalist's specialty is rendered in her vision differently. Verified across 4 days.
+
+---
+
+## Beat 6 — Day 5, hunting attempts
+
+Wakes to clear sky and ambient -12°C. Body state: rib pain ~30% (healing), tiredness 30% (better sleep grade B in improved snow-pit), cough cleared from concussion-residue, hunger 65% (half ration left).
+
+Today's mandate: bag food, or commit to migration. The half ration won't last another day past today.
+
+**Morning** — extends snare placement. Walks 1.2km west following the saliency-flagged dwarf willow line, sets two snares on a hare run she identifies (signs in snow + nibbled stems). She also moves her existing snare to a fresh location closer to a small ravine where caribou tracks crossed days ago.
+
+**Mid-day** — sees a hare ~70m off, dashing across an open meadow toward cover. Atlatl is in her hand. Range is at the very edge of her Practiced atlatl skill. She throws — dart hits 2m short, hare bolts. **Atlatl miss.** Recovers the dart.
+
+Notes: Survivalist's atlatl is Practiced, not Expert. The novelty multiplier doesn't fire (she's hit hares before with atlatl). Net XP gain: near-zero. The miss is mechanically honest — not skilled enough at this range, in this wind.
+
+**Afternoon** — scouts west following the older caribou tracks. They're ~3 days old and lead toward a wider valley. She follows for ~2km, then decides not to commit further; the trail is cold and she can't afford the calorie burn without confirmation.
+
+Returns to camp dusk. **Snares: empty.** No catch.
+
+**Eats remaining ration.** Goes to sleep hungry. Sleep grade C — empty stomach, body still healing.
+
+**Body state end of Day 5:**
+- Warmth: 70% (fire alive)
+- Hunger: 35% — DECLINING
+- Thirst: 75% (water available)
+- Tiredness: 60% (sleep was poor)
+- Pain (rib): ~25% impairment
+- **Caloric debt accumulating** — first day net-negative since the crash
+
+## Beat 7 — Day 6, snare hit + migration commitment
+
+**Dawn snare check.** First sweep west: empty. Second sweep, the new ravine snare: **caught a hare.** ~600 calories. Survival is bought another day.
+
+Field-dresses the hare on site (Survivalist Practiced butchery, grade B output, ~10 min). Burns the offal away from camp. Pelt small but salvageable — she keeps it.
+
+Back at camp 09:00. Cooks half the hare immediately (hot meal recovery), wraps the other half in pine boughs as packable food. Feels her hunger meter recover from 35% to 60%.
+
+**Decision:** stay another day or commit to migration.
+
+**Reasoning:**
+- Drainage 3 (the wreckage area) has thin game and growing predator pressure (wolves remember the pilot's body location)
+- Caribou herds passed through but didn't stay — moving SE per their migration
+- Her body is healing; another week here = recovery, but no caloric supply chain
+- River is ~12km SE — known navigation target; potentially better foraging at lower elevation
+- Aircraft search range past day 3 expired — no rescue coming
+- Weather currently stable — good window for travel
+
+She commits to migration. Day 7 dawn departure target.
+
+**Day 6 prep, ~6 hours:**
+- Smokes the remaining hare meat (fuel + 2 hours fire-tending — preservation grade C, lasts ~4 days)
+- Packs heavy: rifle + 10 rounds ammo + flare gun + 3 flares + medical kit + signal mirror + knife + axe + spear + atlatl + 4 darts + cordage 8m + remaining hare meat + canteen 1L (full)
+- **Decisions of what to LEAVE**: most of the aluminum panels (too bulky for hike), the broken radio (no use), the fuel-soaked rags (wet now from snowmelt; useless), the mylar blanket (light, keeps it), the cargo tarp (heavy but life-saving — keeps it folded under pack)
+- Total pack weight: ~24kg. Heavy for cracked-rib body.
+
+**§14.13 saliency** continues firing — her eye picks the easiest route SE from the camp she's been studying for 4 days. River-bearing visible at SE horizon between two ridges.
+
+Sleeps poorly that last night — anxiety + anticipation. Sleep grade C-D.
+
+**Body state end of Day 6:**
+- Warmth: 75%, Hunger: 60% (recovering), Thirst: 80%, Tiredness: 65%, Pain: 25%
+- **Caloric debt arrested by hare**, but body still has accumulated wear from days 1-5
+
+## Beat 8 — Day 7, the migration hike
+
+**Dawn departure, T+0:00 hike-day.** Sun rises ~10:00 at this latitude/season; she walks in twilight from 06:00.
+
+**Hours 1-3 (06:00-09:00):** descends from wreckage saddle into a sloping tundra valley. Snow ~30cm deep on average; deeper in drifts. Each step is calorie-expensive; the cracked rib protests on uneven ground. She moves at ~1.5 km/hr against the heavy pack, slower than ideal.
+
+**§14.13 saliency** during the hike: she reads:
+- Wind drift patterns telling her safe-walk vs deep-drift zones
+- Old caribou track lines (3-4 days old) confirming she's on a viable route
+- One distant ridge with rock outcrops that could offer mid-hike shelter if needed
+
+**Hours 3-5 (09:00-11:00):** crosses a small frozen creek. Tests ice with spear-butt before stepping (Survivalist Expert: ice-thickness reading). Ice holds. Continues SE.
+
+**11:30 — saddle ridge.** Reaches the ridge. From the top: the river valley spreads ~3 km below. She can see the river itself — partially frozen, with open-water sections where current keeps it flowing. **Significant feature**: a thin smoke column rising from ~6km further SE down the river, near a bend.
+
+**The smoke is mechanically real, not narrative.** It means something — but she doesn't know what:
+- Wildfire? Unlikely in winter cold + wet snow
+- Lightning-strike smolder? Possible from yesterday's storm but slim
+- Camp fire? Most likely. **Other humans somewhere in the region.**
+
+She has no way to identify safely from here. **Decision tree:**
+- Approach openly → potential rescue, potential hostility (unknown party in jungle-rules world)
+- Approach stealthily → assess before commit
+- Avoid → continue along the river but loop around, accept isolation
+- Wait → camp here on the ridge, observe the smoke over a day for patterns
+
+She chooses **stealth-approach** — descends to the river, walks downstream toward the smoke, but stays in cover-line where possible. Decision is risk-tolerant but not reckless.
+
+**Hours 5-7 (11:00-13:00):** descends from saddle, reaches the river by 13:00. Drinks at an open-water section (Survivalist Practiced water-reading: river current = safe enough to drink direct without boiling). Refills canteen.
+
+**Hours 7-10 (13:00-16:00):** follows the river SE, ~3 km closer to the smoke. Stays on the bank, uses brush as cover, scans frequently. Mid-afternoon; light starting to fade.
+
+**16:00 — assessment from cover, ~2km from smoke source.** With binoculars (or just attentive watching — she has no optics in her kit), she can make out: a small camp, fire, possibly canvas tarp or improvised shelter. Maybe 2-3 figures moving. Distance and twilight make detail hard.
+
+**Mechanically**: this is another player or NPC group. In Run 02 as a solo design exercise, we treat it as a player-scenario question — how does Mother Nature handle this encounter? Per §1 No Dominant Strategy, jungle-rules MP, and §15 lethality:
+
+- They could be cooperative (resources to share, group strength)
+- They could be hostile (claim the area, dangerous to approach)
+- They could be ambivalent (let-pass, no engagement)
+
+She doesn't know. She has the rifle but using it transforms the encounter. She has the flare gun (which broadcasts even further than a rifle shot).
+
+**She camps here.** Sets a low rough shelter under a deadfall ~500m from where she observed, no fire (avoid broadcasting her presence), eats cold-smoked hare. Sleeps light, knife at hand, rifle within reach.
+
+**Body state end of Day 7:**
+- Warmth: 60% (no fire is real cost)
+- Hunger: 50%
+- Thirst: 80%
+- Tiredness: 75% (long hike + cold sleep)
+- Pain: 30% (rib aggravated by pack weight)
+
+## Beat 9 — Day 8, the encounter decision
+
+Wakes 05:30 in cold gray light. Body stiff. The smoke column is gone (fire died or was banked). She watches from cover for ~2 hours.
+
+At 07:30 the camp comes alive — two figures emerge, rebuild the fire. They wear winter gear, move like people who've been there days. One of them seems to favor a leg slightly (injury? bad gear?). They don't appear to have weapons drawn or visible — but they have packs, which could conceal anything.
+
+**Three options for the morning:**
+
+**A. Approach openly with hands visible.** High risk if hostile, but signals non-threat. Speak first, identify as a crash survivor, ask for aid. Her cracked rib + visibly worn condition might trigger sympathy. Or might mark her as easy prey.
+
+**B. Continue stealth-observation longer.** Watch their behavior, look for signals of intent. Are they hospitable to strangers? Are they armed? Do they have shared resources or are they hoarding?
+
+**C. Skirt around them, continue downstream.** Lose 1-2 days but avoid the unknown. River likely leads further to other things — a trapper's cabin, a settlement, more open water. Her rifle ammo + smoke-dried meat can stretch.
+
+**Ari's actual decision**: **Option B for two more hours, then A.** She decides observation isn't going to resolve the question without engagement. If they were going to be hostile, they'd likely have already been moving toward where she'd been camped (which they don't seem aware of). She wants the cooperation possibility but isn't going to ambush.
+
+**~10:00**, she stands up from cover at the riverbank ~200m from their camp, slowly walks toward them in clear view, hands open at her sides, calling out from ~100m away in a calm voice. (In a real game, the player would press a "speak" key or similar interaction.)
+
+**The encounter is unwritten beyond this point.** Whether they're cooperative, hostile, or neutral depends on:
+- Their character archetypes (if other players, what nodes? if NPCs, how scripted vs emergent?)
+- Their resource state (well-supplied = generous; struggling = wary)
+- Their recent encounters (have they been threatened by other players or wildlife?)
+- Wind direction (do they smell her smoke, hare-meat, gunsmoke from rifle she's carrying?)
+- §14.13 saliency on both sides (do they read her as Survivalist? She reads them as ?)
+
+The design's commitment is that this encounter EMERGES from real state, not from designer-arranged drama. Whatever happens next is mechanical.
+
+**This run pauses here.** The next development depends on a design call about NPC vs player, which is currently OPEN (Mother Nature is multiplayer-first; NPCs are not yet committed but possible).
+
+---
+
+## Run 02 status at end of Day 8 (paused)
+
+- Alive
+- Has migrated 14km SE to the river
+- Has encountered another camp; first contact in progress
+- Body: ~30% impairment from rib, otherwise functional
+- Inventory: rifle + 10 rounds, flare gun + 3 flares, knife/axe/spear/atlatl, smoked hare meat (~3 days), canteen full, medical kit, mylar blanket, tarp
+- Decisions ahead: trust assessment with the other camp; cooperate/withdraw/proceed-past
+
+The run could continue for many more days depending on the encounter outcome. Death is possible mechanically (hostile camp, ammunition exhausted, severe winter cold without group support), but Survivalist + rifle + group-cooperation-possibility = strong survival odds.
+
+## Architecture stress-test results (Days 5-8)
+
+- ✅ **§14 mastery + novelty**: Atlatl miss honest (Practiced, not Expert; not novel context); rifle held in reserve per cost matrix; saliency-during-hike highlighted right routes
+- ✅ **§14.13 saliency**: River-bearing-from-saddle-ridge, ice-thickness-via-spear-butt, route-reading during 14km hike all fired
+- ✅ **§15 No Dominant Strategy**: rifle present but unused even under hunger pressure — sound cost vs ammo cost vs encounter cost calculus produced restraint, not reflex
+- ✅ **§13.4 Wet Wood / fire dynamics**: post-storm fire alive; fire decision at ridge-camp (no fire to avoid broadcast) was a real cost the game modeled
+- ❓ **Multiplayer encounter mechanics**: NPC-vs-player undetermined; the Day 7-8 encounter surfaces that the design needs spec for first-contact scenarios in jungle-rules MP
+
+## New gaps + needs from Days 5-8
+
+| # | Gap/Need | Severity |
+|---|---|---|
+| N32 | First-contact encounter design (player vs unknown camp) | HIGH if MP first-contact common |
+| N33 | Ridge-line + river navigation as natural waypoints | MEDIUM |
+| N34 | "Stealth approach to unknown camp" as player skill / behavior | MEDIUM |
+| N35 | Caloric debt mid-hike — when food runs out partway through migration | HIGH |
+| N36 | Migration vs stay decision-points — what triggers the migration commit | MEDIUM |
+| N37 | Smoke / fire as long-distance signal from other parties | MEDIUM-HIGH (related to multiplayer presence detection) |
