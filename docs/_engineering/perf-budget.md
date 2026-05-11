@@ -4,7 +4,33 @@
 >
 > Companion: [`game-estimation.md`](game-estimation.md) is the analytical projection — budget waterfall, hardware targets, and confidence-tagged estimates.
 >
+> Authority: §18 Build Discipline — Profile-Driven Scope. The hard caps below are binding on v1 scope decisions per the design doc commitment.
+>
 > Status field values: `proposed` (back-of-envelope only) → `verified` (profile-tested, fits budget) → `shipped` (in v1 build) / `reformatted` (changed to fit budget) / `cut` (removed from v1) / `deferred` (held for v1.x or v2)
+
+## Project Commitment (per §18, locked 2026-05-10)
+
+This document is the binding rule the design respects for v1 scope decisions. Three commitments:
+
+1. **Every committed system has an entry here.** No silent additions. New systems land as `proposed` with cost-class, estimated load, confidence tag, and cut alternative documented.
+2. **No system ships as "I think it fits."** Status moves from `proposed` to `verified` only after profile-tested actuals on the binding hardware tier confirm the estimate.
+3. **When a system overruns budget, the cut hierarchy is fixed:**
+   - First: cut from §13 brainstorm (no load-bearing systems)
+   - Second: defer to v1.x or v2 (Wild-Tender, managed-wild patch-state notebook, multiplayer settlement extensions, etc.)
+   - Third: scope-cut (fewer biomes, archetypes, shard radius, apex individuals)
+   - Fourth: fidelity downgrade (coarser grids, fewer saliency levels, simpler AI)
+   - **NEVER**: cut constitutional pillars (§1, §2, §2.5, §14, §15, §17). If cost forces a pillar to change, the hardware target changes — not the pillar.
+
+The pillars define what MN IS. Performance defines what's allowed to ship as MN. Reversing that ordering produces a different game.
+
+### Binding hardware tiers
+
+| Tier | Spec | Target FPS | Game logic ceiling |
+|---|---|---|---|
+| **Minimum** | Steam Deck OLED | 30 FPS | ~10-15 ms per frame |
+| **Recommended** | 2022-era 6-core PC + GTX 1660 class + 16 GB | 60 FPS | ~6-8 ms per frame |
+
+Every system must fit both. Steam Deck is the binding constraint for most CPU-heavy work (per-core perf); Recommended is the binding constraint for per-frame visual work (shaders, render). Aspirational (8-core + RTX 3060) is free headroom — not new content.
 
 ## Conventions
 

@@ -1446,3 +1446,78 @@ Not enough time to skill-up. Just enough to **not die in the first 10 minutes** 
 - If playtest shows Hard feels mechanically indistinguishable from Mother Nature (the 25% deltas are imperceptible), the multipliers need to scale up OR the axes need qualitative differences not just quantitative.
 - If DS new-character deaths happen at Day 8 with no skill-development progress (<10% of players reach Day 4), the trailhead buffer needs extending OR saliency surfaces need sharpening.
 - If DS deaths feel "unfair" / "unreadable" despite in-world threads being present, the saliency surfaces are failing — the fix is more saliency (better cues, more compendium hints from prior characters), not less hostility.
+
+---
+
+## 18. Build Discipline — Profile-Driven Scope (Locked, 2026-05-10)
+
+The design's commitments (§1, §2, §2.5, §14, §15, §17) define what Mother Nature IS. This section defines the constraint that decides what ships in v1: a profile-driven performance budget. Every committed system has a cost; the cost must fit the target hardware; systems that don't fit are cut, deferred, or downgraded — never the principles.
+
+### 18.1 Hardware tiers and the binding caps
+
+MN ships against two hardware tiers simultaneously. They bind differently — most simulation work is gated by Steam Deck (per-CPU-core perf), most visual work is gated by Recommended (per-frame budget at higher FPS).
+
+| Tier | Spec | Target FPS | Total frame budget | Game logic ceiling |
+|---|---|---|---|---|
+| **Minimum** | Steam Deck OLED (4-core Zen 2 @ 2.4 GHz, 8 RDNA 2 CUs, 16 GB) | 30 FPS sustained | 33.3 ms | ~10-15 ms |
+| **Recommended** | 2022-era 6-core CPU + GTX 1660 class + 16 GB | 60 FPS sustained | 16.7 ms | ~6-8 ms |
+| **Aspirational** | Modern desktop (8-core + RTX 3060 class) | 120 FPS | 8.3 ms | — (free headroom) |
+
+Every system must fit BOTH binding tiers. The Aspirational tier is free headroom — players with better hardware get smoother frames, not new content.
+
+### 18.2 Three cost classes
+
+Every committed system classifies into one of three cost classes with its own budget rule:
+
+- **Always-on** — runs every frame for every player. **HARD aggregate cap: ≤3 ms (Recommended) / ≤6 ms (Steam Deck).** Saliency shader, body meters, character animation, UI, input.
+- **Periodic** — runs at server tick rate (0.5-1 Hz). **HARD cap per tick: ≤5 ms (Recommended) / ≤10 ms (Steam Deck).** Amortizes to <0.5 ms per frame. Weather, scent, AI, decay processing.
+- **Async** — runs on-demand, cached. **HARD cap per call: ≤50 ms.** Trace queries, compendium lookups, shard browser, Field Notes generation.
+
+Anything that doesn't classify cleanly is a smell — the system hasn't been bounded for performance.
+
+### 18.3 The discipline — profile-then-decide
+
+Every new design proposal goes through four states:
+
+1. **PROPOSED** — added to [`docs/_engineering/perf-budget.md`](../../docs/_engineering/perf-budget.md) with: cost class, estimated load (with confidence tag), binding hardware tier, cut alternatives. Estimates are back-of-envelope at this stage.
+
+2. **VERIFIED** — profile-tested on the binding hardware tier confirms the estimate within tolerance. Until verified, a system cannot ship.
+
+3. **SHIPPED** — verified and in v1 build.
+
+4. **CUT / REFORMATTED / DEFERRED** — failed verification or scope decision moved it out of v1. Decision recorded in perf-budget.md decision log with date + rationale.
+
+**No system ships as "I think it fits."** Profile data is the gate.
+
+### 18.4 Cut hierarchy
+
+When a system overruns budget, the cut order is fixed:
+
+1. **First — cut from §13 brainstorm.** Nothing in §13 is load-bearing; it's all uncommitted candidate mechanics.
+2. **Second — defer to v1.x or v2.** Wild-Tender sub-node (Run 16), managed-wild patch-state notebook, multiplayer settlement systems (Run 17), other surfaced-but-not-essential systems.
+3. **Third — scope-cut.** Fewer launch biomes (3→2), fewer archetypes (8→5), smaller shard radius (10→7 km), fewer apex individuals tracked (10→6), shorter shard lifecycle commitments.
+4. **Fourth — fidelity downgrade.** Weather grid 100→64 cells, scent grid coarsened, saliency levels reduced (5→3: Sharp/Narrowed/Tunneled only), shorter trace-decay timescales.
+5. **NEVER — cut constitutional pillars.** §1 No Dominant Strategy, §2 Mechanical Behavior, §2.5 Systems Not Rules, §14 Skill Architecture, §15 Combat, §17 Community Emerges. If cost forces a pillar to change, the **hardware target changes**, not the pillar.
+
+The pillars define what MN IS. Performance defines what's allowed to ship as MN. Inverting that ordering produces a different game.
+
+### 18.5 What this commits operationally
+
+- **Every committed system has a perf-budget entry.** No silent additions.
+- **Every estimate has a confidence tag.** 🟢 HIGH (algorithm-known) / 🟡 MEDIUM (pattern-based) / 🔴 LOW (novel-to-MN).
+- **Every system has a cut alternative documented before it ships.** "If this doesn't fit, the next-best version is X."
+- **Five prototypes gate v1 vertical slice** (per perf-budget.md): saliency shader cost, apex AI utility-eval cost, trace SQL query at scale, multiplayer bandwidth at 100 CCU, saliency-degradation composition at 100 players. Without these measured, scope commitments are guesses.
+
+### 18.6 What this protects
+
+This discipline is asymmetric. It says: it's better to ship a smaller honest MN than a bloated MN that doesn't run. It says the design's pillars are inviolable; the design's scope is negotiable. It says profile data wins arguments.
+
+The risk this guards against: scope creep collapsing under its own weight late in development, forcing emergency cuts that compromise pillars because everything is interconnected. The discipline catches scope problems at proposal time, when reformatting is cheap.
+
+### 18.7 Cross-references
+
+- [`docs/_engineering/perf-budget.md`](../../docs/_engineering/perf-budget.md) — operational manifest, every system × class × estimate × actual × status × cut alternative
+- [`docs/_engineering/game-estimation.md`](../../docs/_engineering/game-estimation.md) — analytical projection, hardware targets, frame budget waterfall, P0/P1/P2 prototypes
+- §12.1 (Multiplayer scope reduced for launch) — the original scope-reduction commitment this discipline extends
+- §17.6 (Difficulty Tiers) — difficulty is shard-level config; doesn't affect per-frame budget
+- All constitutional pillars listed in §18.4 above
