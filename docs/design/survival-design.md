@@ -1246,6 +1246,110 @@ The outcome of each experiment IS a compendium update. Experimentation is the pr
 - §17.5 (proximity-only communication — affects reference learning)
 - `docs/systems/bear-ai.md` ("observation entries" interpretation)
 
+#### 14.14.1 Compendium is a clean account-level reference
+
+The compendium reads as a dev-style unified field guide. **No character attribution surfaces in the player-facing view.** Each entry is a polished writeup synthesizing the account's accumulated knowledge.
+
+When character A adds an observation, then character B's archetype-tier grant upgrades the entry, then character C engages with the same topic — the player sees ONE clean entry that reflects the current-best knowledge. The journey-of-learning lives in §14.12 Field Notes (character-attributed narrative), not in compendium (reference).
+
+The internal data layer preserves provenance (which character contributed what, when, at which tier) for Field Notes generation and analytics; this metadata is never displayed in the player-facing reading view.
+
+#### 14.14.2 Character-active knowledge is a separate per-character layer
+
+Compendium is account-level reference. **In-game perception is driven by a separate per-character layer: character-active knowledge.**
+
+When a character actively engages with an entity (per §14.14), TWO updates fire:
+1. **Compendium update** (account-level) — adds to the shared reference
+2. **Character-active knowledge update** (per-character) — adds to THIS character's experiential knowledge
+
+Saliency (§14.13) and character mutter respond to **character-active knowledge + current skill state**, NOT to the account-level compendium.
+
+A Novice character on an account with rich Expert-tier compendium does NOT auto-perceive Expert-level cues. Their character has to engage personally to build their own experiential knowledge.
+
+#### 14.14.3 Engagement updates both layers
+
+Active engagement is the single trigger that updates both:
+
+- **Compendium** receives the engagement contribution at the character's current skill tier (Novice engagement adds Novice-tier observations; Expert engagement upgrades the unified writeup)
+- **Character-active knowledge** records the same engagement as a per-character experience
+
+When the character dies, character-active knowledge is lost (per §14 character-state resets at death). Compendium persists (account-level).
+
+#### 14.14.4 Skill state drives mechanical capability (existing rule, restated)
+
+Per §14.9, skill state — not compendium — determines what a character CAN DO. A Novice with full Expert compendium reading available still operates at Novice mechanical tier:
+
+- Saliency renders at Novice cue density
+- Right-click options filter at Novice skill verbs
+- Mechanical operations resolve at Novice quality
+- Character mutter triggers at Novice recognition level
+
+The compendium is reference; the skill state is capability.
+
+#### 14.14.5 The game interacts with the player at the current character's state (LOCK)
+
+**Authoritative rule:**
+
+The in-game experience — saliency, mutter, right-click options, action verbs, mechanical capability — responds to the CURRENT CHARACTER's state (skill + character-active knowledge + inventory + workshop). It does NOT read from the account-level compendium.
+
+The compendium is a separate PLAYER-FACING reference tool. The player can read it for metagame planning. The character does not have automatic access to it during play.
+
+This creates a clean separation:
+
+- **Compendium layer**: account knowledge, clean dev-style writeups, read-only reference for the PLAYER
+- **Gameplay layer**: current character's skill + character-active knowledge + inventory + workshop, drives all in-game interaction
+
+A Novice character whose account has Expert-tier compendium gets:
+- Free metagame reading access (player can plan)
+- ZERO automatic in-game capability enhancement
+- The character must EARN every cue, every option, every mechanical capability through their own actions
+
+This honors:
+- §14.9 (backstory ≠ mechanical capability)
+- §14.13 (saliency is character's perceptual state)
+- §14.13.1 (saliency degrades with character state, not account state)
+- §1 (no dominant strategy — account-grinding to fill compendium doesn't grant in-game bypass)
+- §17.1 (No Designed Tribes — no meta-progression unlocks beyond per-character mastery)
+
+#### 14.14.6 Scenario walkthrough — Novice → Expert → Novice
+
+**Lirien (Novice Forager, lived 14 days):**
+- Engaged with willow, plantain, yarrow
+- Compendium gains Novice-tier entries for these plants
+- Character-active knowledge gains these entries for Lirien
+- Lirien dies; character-active knowledge ends with her; compendium persists
+
+**Maren (Expert Forager, second character):**
+- Archetype-tier grant fires; existing compendium entries UPGRADE to Expert-tier writeups
+- Specific observations from Lirien (e.g., "south-bend stream willows") are folded into the unified writeup at appropriate detail
+- Maren's own engagements refine entries further
+- Maren dies
+
+**Ren (Novice Forager, third character — current):**
+
+Player opens compendium:
+- Reads Expert-tier writeups (account-level inheritance)
+- Knows generally about willow tincture preparation, plant ID, look-alike risks
+- Can use this as planning reference
+
+Ren walks into the forest:
+- Sees a willow → her character does NOT auto-recognize it; her saliency is at Novice tier
+- Right-clicks willow → menu shows Novice options only (Examine, Cut for firewood)
+- Process-for-medicinal-preparation verb is ABSENT (requires Forager-Practiced+ skill)
+- Character does NOT mutter "willow" (her character-active knowledge is empty for this character)
+
+To gain in-game perception of willow, Ren must:
+- Engage actively (Inspect [E], hover, right-click action) → adds to Ren's character-active knowledge
+- This adds a Novice-tier observation to compendium (which already has Expert-tier writeups; Ren's contribution is additive)
+- Her character-active knowledge now has willow; future encounters render with Novice-tier saliency
+
+To gain mechanical Expert capability, Ren must:
+- Develop her Forager skill through engagement-derived XP
+- Reach Forager-Practiced → medicinal preparation verb becomes available
+- Reach Forager-Expert → full Expert capability + auto-recognition of Expert-tier cues
+
+**The compendium is the player's library. The character earns everything.**
+
 ---
 
 ## 15. Combat & Weapons (Locked, 2026-05-09)
