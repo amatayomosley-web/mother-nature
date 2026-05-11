@@ -2071,7 +2071,148 @@ Each of the sub-domains feeds into §19 framework:
 
 Each sub-domain is its own issue and its own spec document, all sharing the §19 umbrella.
 
-### 19.16 Cross-references
+### 19.16 Item Crafting (parallel to §19.11 Structure Building)
+
+§19.11 Structure Building walks through the framework applied to spatial placement of walls, roofs, doors. This section walks through the same framework applied to **portable items** — tools, weapons, clothing, food, medicines, containers. The mechanics are identical; only the application differs.
+
+#### 19.16.1 The same right-click + verbs + skill model
+
+A character with a felled oak stave on the ground walks up to it. Right-click → context-filtered menu (per §19.2 five-axis access):
+
+**Master Bowyer at workbench:**
+```
+Right-click oak stave →
+  • Examine ("good grain, slight knot at 18cm, suitable for selfbow")
+  • Shape stave with drawknife
+  • Carve mallet head
+  • Cut for arrow shafts (4-6 viable)
+  • Split for tool handles
+  • Cut for firewood
+```
+
+Same primitive verbs as structures (cut, abrade, shape, heat, compress, pierce, bind, break — §19.5), applied to portable materials.
+
+#### 19.16.2 Concrete walkthrough — Eira's bow (per Run 09)
+
+Eira has prepared a stave. She wants a 42# longbow.
+
+1. **Day 1**: Right-click stave → "Rough out with drawknife." Process bar runs ~3 game-hours. Saliency at her Master Bowyer tier surfaces grain runout; she avoids cutting across it. Stave transitions: raw → rough-shape (mass reduced, profile emerging).
+2. **Days 2-4**: Right-click stave → "Initial tillering." Master batch: she can scrape both limbs in alternating passes (batch verb available at her tier). Stave transitions: rough → tillered-coarse.
+3. **Day 5**: Right-click stave → "String temporarily for test draw." Bow flexes; Eira sees stack pattern; her saliency catches that the left limb is stiff.
+4. **Days 6-8**: Refinement scraping on left limb. Saliency-tier sees what novice would miss.
+5. **Day 9**: Right-click stave → "Cut nocks." Awl + file.
+6. **Day 10**: Right-click stave → "Apply finish" — bear fat or beeswax. Style parameter: glossy / matte / dyed.
+7. **Day 11**: Bowstring — separate composition: sinew + twisting + serving. Right-click cordage → "Make bowstring." 
+8. **Day 11**: Right-click bow → "Brace and tiller-test." Saliency confirms even bend.
+9. **Output**: bow object with properties: draw 42#, accuracy variance 12cm@20m, durability 200 shots, fade rate 0.5/year. Grade A.
+
+No "Bow Recipe" was selected. The bow emerged from primitive operations applied across 11 game-days. A Novice attempting the same workflow on the same stave would produce a Grade C-D bow with weaker properties — same workflow, different skill modulation.
+
+#### 19.16.3 Concrete walkthrough — Bo's willow-bark tincture (per Run 11)
+
+Bo has gathered willow bark + has ethanol vial + mortar/pestle station at camp.
+
+1. Right-click willow bark in inventory → "Process for medicinal preparation." Options surfaced by her Forager-Practiced+ tier:
+   - Decoction (water boil — pain relief, short shelf)
+   - Tincture (ethanol macerate — longer shelf, slower onset)
+   - Poultice (crushed fresh — topical only)
+2. Bo picks Tincture. Right-click tincture → parameters: concentration (light/standard/strong), maceration duration (1 week / 2 weeks / 4 weeks).
+3. Bo picks Standard + 2 weeks. Process initiates: bark goes into ethanol vial, sealed.
+4. ~14 game-days later, Bo right-click vial → "Strain and store." Output: tincture object with properties: analgesic strength (medium), shelf life (~2 game-years), side-effect profile (mild stomach upset at high doses).
+
+No "Willow Tincture Recipe" was selected. The tincture emerged from primitive operations (plant matter + solvent + time + skill).
+
+A Novice doing the same: forgets to seal the vial → evaporation → weak output. Or misidentifies the bark (saliency-failure on plant ID) → wrong species → ineffective or toxic.
+
+#### 19.16.4 Concrete walkthrough — knife sharpening (maintenance)
+
+Simple, frequent activity. Worth showing because it surfaces the §19.9 tool-wear primitive in action.
+
+1. Knife has integrity = 73% (dulled from cutting hide yesterday).
+2. Right-click knife in inventory → "Sharpen with sandstone." (Sandstone is in inventory; whetstone is a workshop alternative for higher quality.)
+3. Saliency at Practiced+ tier surfaces blade-angle preview (master sees correct bevel; novice grinds randomly).
+4. Process bar ~5 game-minutes.
+5. Output: knife integrity → 92%. Edge profile updated.
+6. If at workbench with quality whetstone: integrity → 98%, longer-lasting edge.
+
+The maintenance loop. Tools degrade through use; maintenance reverses it partially; no maintenance = eventual tool failure.
+
+#### 19.16.5 Concrete walkthrough — field dressing a deer (multi-step process)
+
+Player has just killed a deer. The carcass is in the world. Time pressure: Carrion Chain (§13.2) starts emitting scent; predators may converge.
+
+1. Right-click carcass → "Begin field dressing." Process bar starts (~10 game-minutes for full dress at Practiced; ~5 at Master).
+2. Saliency shows priority order: gut → bleed → quarter → debone (Master sees this; Novice may miss critical steps and waste meat).
+3. Mid-process, scent emission grows (per §19.X carcass scent primitive). Player can interrupt for combat readiness.
+4. Output: multiple items — heart, liver, hide, primary quarters (4), trimmings. Each has its own integrity decay (per §19.9) and processing options.
+5. Field dressing TIME affects yield: rushed dress = ~30% meat waste, prolonged dress = high yield but greater scent buildup and predator risk.
+
+Per §19.X.X Field Dressing sub-issue (#35), this gets full domain spec. The framework is shown here.
+
+#### 19.16.6 Aesthetic variety for items
+
+Items have aesthetic options paralleling structures:
+
+| Item type | Aesthetic variants |
+|---|---|
+| Bow | Plain finish / oiled / dyed (berry-stain, charcoal-black, ochre-red) / carved grip / inlaid antler / wrapped grip with cordage pattern |
+| Knife | Plain bone handle / wood handle / wrapped with sinew / carved relief / inlaid stone bead / pommel cap |
+| Cloak | Plain leather / dyed / fringed edges / fur-trimmed / beaded / painted symbols |
+| Mug / vessel | Plain wood / burned-pattern / engraved / dyed / inlaid clay |
+| Bowstring | Plain sinew / colored thread / decorative serving pattern |
+
+These are choices at the FINISH stage of each craft. Plain options are always available; decorative options require skill + materials + time. Master craftspeople produce items that are recognized and valued — the §17.2 specialization economy drives demand for distinctive aesthetic work.
+
+#### 19.16.7 Reference capture for items
+
+Same mechanism as structures (§19.11.5). Walk past another player at their workshop, right-click their bench: "Study technique." Compendium gains an entry: *"Bow carving — relief along grip, wrapped serving on string, finished with bear-fat oil. Studied at Eira's workshop, Northwood shard."*
+
+Apprenticeship-by-observation. The world is the teaching surface; no recipe-unlock notification.
+
+#### 19.16.8 Plan mode for complex item crafts
+
+Per §19.13, plan mode applies to items too. A Master Bowyer can sketch a plan for a custom commission:
+- Stave species + length specification
+- Target draw weight
+- Grip style and decorative scheme
+- Bowstring serving pattern
+- Quiver match
+
+Plan tracks the craft chain across days. Sub-tasks can be claimed by other settlement members (apprentices). Field Notes (§14.12) capture commissioned-craft history — who made what for whom.
+
+For SIMPLE items (sharpening, basic food prep), plan mode is overkill. The framework supports complexity without requiring it for trivial tasks.
+
+#### 19.16.9 Batch processing for items
+
+Per §19.12, batch verbs apply:
+
+| Item activity | Batch granularity |
+|---|---|
+| Sharpening multiple tools | Single (one tool) → Batch (all dulled tools at this workstation) |
+| Processing harvested plants | Single → Batch (all bark from this stand) |
+| Carving arrow shafts | Single → Batch (12 shafts from this stave) |
+| Preparing tinctures | Single → Batch (sealed-vial multi-batch for shelf stock) |
+| Tanning hides | Single → Multi-hide rack (parallel processing) |
+
+Skill modulates batch ceiling per §19.12.2.
+
+#### 19.16.10 Workshop interactions for items
+
+Per §19.8, workshops provide enable + accelerate + quality-multiply. Item crafting strongly benefits:
+
+- **Workbench/shaving horse** → woodwork at 2× quality grade vs improvised
+- **Forge** (later tier) → metallurgy enables knife/axe/tool crafts not otherwise possible
+- **Mortar & pestle station** → botanical prep at consistent quality
+- **Drying rack** → hide processing + herb preservation
+- **Smokehouse** → meat preservation + cold-smoke salmon
+
+A Master crafter without their workshop is reduced to field-quality output. A solo nomad with a knife produces what a knife alone can produce. The workshop is the multiplier.
+
+#### 19.16.11 Cost (per §18 perf-budget)
+
+Item crafting reuses the same systems as structures: composition rules evaluation, material primitive tracking, tool wear, batch sequencing. No new perf-budget entries needed — the §19 entries already cover item crafting cost. Aggregate ~1-2 ms always-on + <1 ms periodic at 100 CCU, 🟢 HIGH confidence.
+
+### 19.17 Cross-references
 
 - §2.5 — Systems That Allow, Not Rules That Allow (umbrella principle)
 - §14 — Skill System Architecture (mastery integration)
@@ -2085,7 +2226,7 @@ Each sub-domain is its own issue and its own spec document, all sharing the §19
 - `docs/_engineering/perf-budget.md` — cost-class entries
 - Run 05 (Maren cabin), Run 09 (Eira bow), Run 10 (Heath trapline), Run 11 (Bo medicine), Run 17 (multiplayer settlement) — playthrough evidence
 
-### 19.17 What this resolves
+### 19.18 What this resolves
 
 - Closes issue #14 (Crafting umbrella)
 - Establishes the framework for all crafting sub-systems
