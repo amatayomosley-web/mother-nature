@@ -45,7 +45,7 @@ The output drives:
 - [[player-body-meters]] — successful attack inflicts injury per §15
 - [[carrion-chains]] — bear claiming a kill site activates the mechanic
 - [[camp-stalkers]] — repeated successful camp-scavenging shifts behavioral memory
-- [[compendium-observations]] — encounters log as plain observation entries
+- [[compendium-observations]] — encounters log as plain observation entries when player actively engages (per §14.14 interaction-driven rule). Walking past a bear at distance without engagement does NOT add to compendium. Engagement triggers: hover ~2-3 game-sec, Inspect [E], combat, sustained observation 30+ game-sec, field-dressing, Study technique on kill site.
 - [[scent-system]] — bear movement updates spatial scent emission
 
 ## Internal state per individual
@@ -152,7 +152,7 @@ The player perceives bears through:
 - Audible vocalizations — huff, woof, jaw-pop, growl, distinctive per output
 - Behavioral output — the 8 outputs render as distinct animation/sound combinations
 - **§14.13 saliency overlay** — for trained predator-readers, the bear's edges and posture cues render with subtle contrast/saturation boost. A novice and an Expert Hunter both see the bear; the Hunter's eye catches the bear and reads its posture more readily because of the saliency shader. No outlines, glows, or labels — just slightly more vivid pixels for the trained eye.
-- [[compendium-observations]] — encounters log as plain observation entries; trained characters may note identifying features that suggest individual recognition
+- [[compendium-observations]] — encounters log as plain observation entries on active engagement (per §14.14); trained characters who engage may note identifying features that suggest individual recognition. Passive walk-past does not add entries.
 
 The player NEVER sees:
 - "APEX INDIVIDUAL #N" or any system label
@@ -233,6 +233,7 @@ Per §17.6 refusal list: no buff-numbers, no spawn-on-player, no accelerated pla
 - §13.2 — Carrion Chains, Camp Stalkers
 - §14.12 — Field Notes (death-as-teaching)
 - §14.13 — Skill-Modulated Saliency (the warning channel)
+- §14.14 — Compendium Update Rule (interaction-driven; engagement-not-proximity)
 - §15 — lethality model applied to bear strikes against player
 - §17.6 — Difficulty Tiers (the parameterization framework)
 - §1 — No Dominant Strategy: bow vs rifle vs flight all valid responses

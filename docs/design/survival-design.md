@@ -1163,6 +1163,89 @@ All three modes degrade equally. A degraded Hunter doesn't catch positive-select
 - `docs/_engineering/perf-budget.md` (cost-class allocations)
 - Run 02, 03, 08, 11, 12, 18 (playthrough evidence corpus)
 
+### 14.14 Compendium Update Rule (Locked, 2026-05-10)
+
+STATUS: LOCKED. Tightens §14.1's ambiguous "filled by observation" framing. **Compendium updates only on active engagement.** Passive walking past, brief glances, and proximity-without-attention do NOT add entries. The trained eye sees more (§14.13 saliency), but learning still requires choosing to engage.
+
+**Why interaction-driven, not passive:**
+
+- Passive walk-past would auto-log 50+ entries per minute walking through a meadow, filling compendium with junk and trivializing the learning loop
+- Matches §14.13 Recognition channels (cursor hover, Inspect [E], character mutter, action menu) — all active player triggers, never proximity-triggered
+- Honors §14 debuff-removal — skill is earned by engagement, not gifted by location
+- Honors §2 mechanical behavior — knowledge requires real cognitive work; engagement is choice
+
+**The four compendium growth paths:**
+
+| Path | Adds entry when | Example |
+|---|---|---|
+| **Direct engagement** | Player actively interacts (hover ~2-3 game-sec, Inspect [E], right-click action menu, combat, crafting, processing, "Study technique", field-dressing, sustained observation 30+ game-sec) | Inspect an unknown plant → compendium adds basic ID entry |
+| **Archetype-tier inheritance (§14.1)** | New character starts with their domain's expert-tier knowledge granted | New Hunter starts with bear-behavior entries |
+| **Skill-tier-up grants** | Character reaches new skill tier; tier-appropriate entries unlock automatically | Forager-Expert promotion grants tincture entry |
+| **Account inheritance (§12.5)** | New character on same account inherits compendium from prior characters (per-account; public-shard policy varies) | Returning to Northwood, your second Hunter starts with first Hunter's accumulated entries |
+
+**What does NOT update compendium:**
+
+- Walking past entities (no engagement)
+- Brief glance / cursor passing
+- Being in proximity to other players' activity without stopping to watch
+- Hearing another player name something in proximity-voice (creates a TENTATIVE entry only; proper entry requires personal engagement)
+- Saliency surfacing a cue (saliency is the READING surface, not the LEARNING surface)
+
+**Saliency and compendium are coupled but distinct:**
+
+| System | What it does | When it fires | Updates compendium? |
+|---|---|---|---|
+| Saliency (§14.13) | Renders cues with higher contrast/saturation based on existing skill + compendium | Continuously, passive | No |
+| Compendium | Stores knowledge entries the character has learned | Only on active engagement | Yes — this rule defines when |
+
+A Master Bowyer walking past 100 oak staves: saliency surfaces them all; compendium does not auto-populate. Only the stave the player hovers, inspects, or right-clicks adds an entry.
+
+**Character mutter is expression of existing knowledge, not new learning:**
+
+When the character mutters "that's a willow tree," they're verbalizing an EXISTING compendium entry for the player's benefit. The mutter doesn't ADD to compendium — it surfaces what's already there. A character with no willow entry doesn't mutter; they see "tree" at baseline saliency.
+
+**Field Notes exception (§14.12):**
+
+Death-triggered Field Notes auto-generate at character death, even without active engagement during the death. This is correct because:
+- Death is the most consequential interaction
+- Notes are constructed from accumulated state + the cascade
+- They're written by the survivor of the account about the dead character
+- They include lessons the dead character experienced but never logged
+
+**Interaction with §19 Crafting Architecture:**
+
+Critical: the §19.2 five-axis access model (Object × Inventory × Skill × Compendium × Workshop) requires reading with the right separation between SKILL and COMPENDIUM:
+
+- **Skill (§14 passive tree)** enables GENERIC VERB CATEGORIES on right-click menus
+- **Compendium** adds SPECIFICITY within those categories (named techniques, named recipes, specific parameter knowledge)
+
+A Forager-Practiced character has the generic verb "Process for medicinal preparation" available on plants — because of SKILL, not compendium. What compendium adds is the specific named options within that verb (Decoction, Poultice, Tincture as named sub-options).
+
+Without a specific compendium entry, the sub-menu still shows generic experimental options ("Experiment with ethanol vial") that allow exploration. Experimentation produces compendium entries through the engagement of running the process — this is the primary growth path for new techniques.
+
+**The "experimentation as discovery" mechanic:**
+
+A character with skill but no specific compendium entry can still attempt crafts via generic-verb options. Outcome varies:
+- Sometimes useful (player learned tincture from willow + ethanol experiment)
+- Sometimes wasteful (bad combination, wasted materials)
+- Sometimes dangerous (mixed jimsonweed with poultice → toxicity)
+
+The outcome of each experiment IS a compendium update. Experimentation is the primary route from skill to knowledge.
+
+**Reference capture (per §19.11.5, §19.16.7):**
+
+"Study technique" on another player's structure or crafting work is an explicit active engagement (~30+ game-sec sustained observation). It adds a compendium entry capturing the observed technique. The studied character doesn't need to be present at the time — partially-completed work or recently-vacated workshops can be studied. Knowledge spreads through the world's social fabric.
+
+**Cross-references:**
+
+- §14.1 (parent — Compendium artifact definition; this section clarifies "filled by observation")
+- §14.13 (saliency — passive reading surface)
+- §14.13.1 (saliency degradation — compendium-side back-room diagnostic for state)
+- §19.2 (five-axis access; this section disambiguates skill vs compendium roles)
+- §12.5 (compendium per-account vs per-server inheritance)
+- §17.5 (proximity-only communication — affects reference learning)
+- `docs/systems/bear-ai.md` ("observation entries" interpretation)
+
 ---
 
 ## 15. Combat & Weapons (Locked, 2026-05-09)
@@ -1667,17 +1750,57 @@ Reference games: Wurm Online (closest), Dwarf Fortress masterwork system, Don't 
 
 ### 19.2 The five-axis access model
 
-What a character can CRAFT at any moment is determined by five interacting axes:
+What a character can CRAFT at any moment is determined by five interacting axes. **The axes have distinct roles** — skill enables generic verb categories; compendium adds specificity within those categories. Per §14.14:
 
-| Axis | What it provides | Example |
-|---|---|---|
-| **Object** | The material's properties and natural affordances | Oak stave: shapeable, splittable, burnable, viable for: selfbow, mallet head, hewn beam |
-| **Inventory** | Tools the character is carrying | Drawknife present → "shape stave" option appears. Absent → it doesn't. |
-| **Skill** | Character's mastery in relevant domain (per §14) | Master Bowyer sees grain runout + crysal risk; Novice sees "wood" |
-| **Compendium** | Account-level knowledge from prior characters (per §12.5) | "I know what good staves look like" — passed through compendium across lives |
-| **Workshop proximity** | Built-environment infrastructure (per §19.6) | Shaving horse → tillering faster + higher quality. Forge → metallurgy enabled |
+| Axis | What it gates | When it updates | Example |
+|---|---|---|---|
+| **Object** | Whether the verb applies to this material's properties | World state | Oak stave is shapeable, splittable, burnable; sandstone is abradable but not shapeable |
+| **Inventory** | Whether the character has the tool | Pick up / drop / break | Drawknife present → "shape stave" verb appears. Absent → it doesn't |
+| **Skill (§14 passive tree)** | Whether the GENERIC VERB CATEGORY appears at all | XP from successful actions | Forager-Practiced enables "Process for medicinal preparation" verb. Without Forager skill, that whole verb category is absent. |
+| **Compendium (§14.14 active engagement)** | Adds SPECIFICITY (named techniques, named recipes, specific parameter knowledge) within skill-enabled verb categories | Active engagement (per §14.14) | Within "Process for medicinal preparation": Decoction/Poultice appear if compendium has those entries; Tincture appears as named option only if compendium has tincture entry. Without entries, generic "Experiment with ethanol vial" option remains for discovery. |
+| **Workshop proximity (§19.6, §19.8)** | Whether workshop-dependent verbs appear and quality multipliers apply | Proximity to workshop primitive | Forge nearby → "Smelt iron" verb appears (otherwise hidden). Shaving horse → tillering at 2× quality. |
 
-**The right-click menu on any object is the INTERSECTION of these five axes.** Same oak stave shows different options to different characters in different contexts.
+**The right-click menu on any object is the INTERSECTION of these five axes, with roles distinguished:**
+
+- **Generic verb appearance** = Object + Inventory + Skill + Workshop
+- **Named-specificity within verbs** = Compendium
+- **Quality multipliers** = Skill tier + Workshop quality + Material quality
+
+This means a Forager-Practiced character with no tincture knowledge can still attempt one — the generic verb "Process for medicinal preparation" appears (skill-enabled), and the experimental sub-option "Experiment with ethanol vial" is available even without compendium specificity. Running the experiment IS the engagement that adds the tincture entry to compendium for next time.
+
+**Concrete examples:**
+
+A character WITHOUT Forager skill encountering willow bark:
+```
+Right-click willow bark →
+  • Examine
+  • Cut for firewood
+```
+(No medicinal verbs — skill blocks the entire verb category. No tincture option appears regardless of compendium state.)
+
+A Novice Forager (no tincture compendium entry, has Forager-Practiced skill):
+```
+Right-click willow bark →
+  • Examine
+  • Process for medicinal preparation →
+    • Decoction (compendium has this — named option)
+    • Poultice (compendium has this — named option)
+    • Experiment with ethanol vial (generic experimental verb)
+  • Cut for firewood
+```
+The Novice can experiment with ethanol → run process → compendium gains tincture entry. Skill enabled access; engagement filled compendium.
+
+A Master Bowyer at workshop with drawknife + scraper + file + tillering jig (full compendium):
+```
+Right-click oak stave →
+  • Examine ("good grain, slight knot at 18cm, suitable for selfbow")
+  • Shape stave with drawknife
+  • Carve mallet head
+  • Cut for arrow shafts (4-6 viable)
+  • Split for tool handles
+  • Cut for firewood
+```
+Same stave, four more options vs the inexperienced character. Each named option requires either skill + compendium entry, or skill + experimental verb access.
 
 Concrete:
 
