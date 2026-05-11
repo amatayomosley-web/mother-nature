@@ -75,7 +75,7 @@ Every system must fit both. Steam Deck is the binding constraint for most CPU-he
 | Ambient prey/predator population (§5.5) | periodic | 0.5 ms | 🟢 | — | proposed | Lotka-Volterra per region, bulk math |
 | Track decay (§13.3, §12.8) | periodic | <0.1 ms amortized | 🟢 | — | proposed | Batch every game-hour (~3 real-min at 24:1); spike ~50 ms |
 | Trace decay (§17.4) | periodic | <0.1 ms amortized | 🟢 | — | proposed | Same shape as tracks; per-shard isolation |
-| **Stress/saliency state composition (§14.13 ext)** | periodic | **~5 ms at 100 CCU ⚠️** | 🟡 | — | **proposed — needs caching design** | Per-active-player × 8 modulators; must cache, recompute on state change |
+| Stress/saliency state composition (§14.13 ext) | periodic | ~0.1 ms at 100 CCU worst case; <0.01 ms with caching | 🟢 | — | proposed | Per-player × 8 modulators; cached, recompute only on state-input threshold cross (~10-15 events per game-hour per player). Math: 100 players × ~15 events/9000-frames × ~0.005 ms each = ~0.001 ms/frame amortized. Revised down from 5 ms estimate after event-rate calculation 2026-05-10. |
 | Carrion Chain state update (§13.2) | periodic | <0.5 ms | 🟢 | — | proposed | Per-active-carcass scent emission update |
 | Apex behavioral memory updates (§17.6 DS) | periodic | <0.2 ms per event | 🟢 | — | proposed | Event-driven, not per-tick |
 | Plant growth tick (§3 biomes, §17.3) | periodic | <0.5 ms per region | 🟡 | — | proposed | Coarse-grain region-level update |
@@ -132,7 +132,7 @@ Every system must fit both. Steam Deck is the binding constraint for most CPU-he
 |---|---|---|---|
 | Saliency shader cost on Steam Deck under naive impl | HIGH | Domain-gated shader + distance LOD + cached level (~70% cost reduction) | Designed; needs prototype validation |
 | Apex AI utility-eval at full input vector | MEDIUM | Per-individual eval at 0.5 Hz, not per-frame | Designed; needs prototype |
-| Stress/saliency composition at 100 CCU | MEDIUM | Cache + threshold-driven recomputation | Designed; needs implementation discipline |
+| Stress/saliency composition at 100 CCU | LOW | Cache + threshold-driven recomputation; revised cost estimate ~0.1 ms not 5 ms | Designed; math validated 2026-05-10 |
 | Trace query at year-old shard | MEDIUM | Spatial index + LOD culling + decay pruning | Designed; needs prototype with synthetic data |
 | Storage growth on long-lived shards | LOW | Decay-pruning to 200 GB steady state | Designed; per-shard VPS sizing handles |
 | Bandwidth at 100+ CCU per shard | LOW | Protocol optimization; voice is biggest factor | Designed |
@@ -170,3 +170,4 @@ P0 items gate v1 vertical slice. Without them, scope decisions are guesses.
 | Date | Decision | Reason |
 |---|---|---|
 | 2026-05-10 | Seeded perf-budget.md with ~30 currently-committed systems classified by tier | Established operational tracking per design discussion. All entries `proposed`; none `verified` until prototyping. |
+| 2026-05-10 | Revised saliency-state composition estimate from ~5 ms to ~0.1 ms (50x reduction) | Original was back-of-envelope without event-rate math. Real cost is dominated by state-input change events (~10-15 per game-hour per player), not per-frame computation. Cache strategy: recompute only on threshold cross. Confidence upgraded from 🟡 to 🟢. |
