@@ -80,6 +80,15 @@ Every system must fit both. Steam Deck is the binding constraint for most CPU-he
 | Carrion Chain state update (§13.2) | periodic | <0.5 ms | 🟢 | — | proposed | Per-active-carcass scent emission update |
 | Apex behavioral memory updates (§17.6 DS) | periodic | <0.2 ms per event | 🟢 | — | proposed | Event-driven, not per-tick |
 | Plant growth tick (§3 biomes, §17.3) | periodic | <0.5 ms per region | 🟡 | — | proposed | Coarse-grain region-level update |
+| Material primitive properties tracking (§19.4) | always-on | ~0.1-0.3 ms per frame | 🟢 | — | proposed | Per-active-item property storage (grain, moisture, integrity, hardness). Modest per-item; bounded by active inventory + visible world items. |
+| Tool wear tracking (§19.9) | periodic | <0.1 ms amortized | 🟢 | — | proposed | Event-driven per use; cheap counter update |
+| Item decay in storage (§19.9) | periodic | <0.5 ms per region | 🟢 | — | proposed | Per-region tick, bulk update against environment conditions |
+| Plan mode sketch (§19.13) | async | <1 ms per placement | 🟢 | — | proposed | Ghost placement; no physics simulation |
+| Plan storage | storage | ~10-50 KB per plan | 🟢 | — | proposed | Sketch elements + materials estimate + time estimate |
+| Batch processing sequencing (§19.12) | periodic | <0.5 ms per tick | 🟢 | — | proposed | Queue management for multi-step character actions |
+| Workshop infrastructure rendering | always-on | ~0.05 ms per visible workshop | 🟢 | — | proposed | Per-workshop sprite + state visualization (smoking/drying/active) |
+| Reference capture ("Study technique") | async | ~5-10 ms per study | 🟢 | — | proposed | Spatial query on adjacent structure + compendium write |
+| Composition rules evaluation | periodic | <0.5 ms on right-click | 🟢 | — | proposed | Filter available actions: object × inventory × skill × compendium × workshop |
 | Day-night cycle update (§4) | periodic | <0.1 ms | 🟢 | — | proposed | Single time tick |
 | Seasonal transition logic (§4.5) | periodic | <0.1 ms | 🟢 | — | proposed | Day-boundary only |
 
@@ -172,3 +181,4 @@ P0 items gate v1 vertical slice. Without them, scope decisions are guesses.
 |---|---|---|
 | 2026-05-10 | Seeded perf-budget.md with ~30 currently-committed systems classified by tier | Established operational tracking per design discussion. All entries `proposed`; none `verified` until prototyping. |
 | 2026-05-10 | Revised saliency-state composition estimate from ~5 ms to ~0.1 ms (50x reduction) | Original was back-of-envelope without event-rate math. Real cost is dominated by state-input change events (~10-15 per game-hour per player), not per-frame computation. Cache strategy: recompute only on threshold cross. Confidence upgraded from 🟡 to 🟢. |
+| 2026-05-10 | Seeded 10 §19 crafting architecture entries | Per design discussion + lock of §19 Crafting Architecture. Material primitives, tool wear, item decay, plan mode, batch processing, workshop rendering, reference capture, composition rules evaluation. All `proposed`; expected aggregate cost ~1-2 ms always-on + <1 ms periodic. Within budget. |

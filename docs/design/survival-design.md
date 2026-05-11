@@ -1632,3 +1632,468 @@ The risk this guards against: scope creep collapsing under its own weight late i
 - §12.1 (Multiplayer scope reduced for launch) — the original scope-reduction commitment this discipline extends
 - §17.6 (Difficulty Tiers) — difficulty is shard-level config; doesn't affect per-frame budget
 - All constitutional pillars listed in §18.4 above
+
+---
+
+## 19. Crafting Architecture (Locked, 2026-05-10)
+
+STATUS: LOCKED. Closes issue #14 (Crafting system — design space umbrella). The crafting framework all sub-systems plug into: cooking, fishing, hide-tanning, fire-craft, shelter, weapon-crafting, snare-making, clothing-craft, container-craft, medicinal-prep, bone-tool-crafting, pelt-combining. Each is an application of §19 to a specific domain.
+
+This section is the umbrella architecture for ALL crafting in Mother Nature. Per §2.5 (Systems That Allow, Not Rules That Allow), crafting is COMPOSITION RULES over primitives, never enumerated recipe lists.
+
+### 19.1 Composition rules, not recipe lists
+
+The core architectural decision: **crafting outputs emerge from primitive operations on materials, not from designer-supplied recipe templates.**
+
+A bow doesn't have a recipe `{wood: 1, sinew: 2, string: 1, tool: drawknife} → bow`. A bow EMERGES from:
+
+- A wood stave (with grain, moisture, species, defect properties)
+- Tools applied to it (drawknife removes mass, scraper tillers, file refines)
+- Skill modulation (Bowyer-Practiced reads grain; Master spots crysal risk)
+- Process duration (3 days for crude, 3 weeks for tournament-grade)
+- Materials combined (stave + cordage + bowstring + glue, each with primitive properties)
+
+The "recipe" is the **composition rule** — this combination of primitives + tools + skill + time produces this output class. Outcome quality emerges from inputs. There is no recipe book to find. There is no "you unlocked Bow Crafting" notification.
+
+**What this means for the build:**
+
+- No crafting menu listing 200 recipes
+- Materials are world objects with specific properties, not generic stacks
+- Tools are world objects whose effects operate on material properties
+- Outputs are objects with derived property profiles (your bow has draw 42#, accuracy variance 12cm @20m, durability 200 shots)
+- Two characters making the same kind of item produce different items
+
+Reference games: Wurm Online (closest), Dwarf Fortress masterwork system, Don't Starve Together (early). Diverges from: Minecraft, Valheim, Terraria recipe-list models.
+
+### 19.2 The five-axis access model
+
+What a character can CRAFT at any moment is determined by five interacting axes:
+
+| Axis | What it provides | Example |
+|---|---|---|
+| **Object** | The material's properties and natural affordances | Oak stave: shapeable, splittable, burnable, viable for: selfbow, mallet head, hewn beam |
+| **Inventory** | Tools the character is carrying | Drawknife present → "shape stave" option appears. Absent → it doesn't. |
+| **Skill** | Character's mastery in relevant domain (per §14) | Master Bowyer sees grain runout + crysal risk; Novice sees "wood" |
+| **Compendium** | Account-level knowledge from prior characters (per §12.5) | "I know what good staves look like" — passed through compendium across lives |
+| **Workshop proximity** | Built-environment infrastructure (per §19.6) | Shaving horse → tillering faster + higher quality. Forge → metallurgy enabled |
+
+**The right-click menu on any object is the INTERSECTION of these five axes.** Same oak stave shows different options to different characters in different contexts.
+
+Concrete:
+
+**Novice Forager with knife + hatchet only:**
+```
+Right-click oak stave →
+  • Examine
+  • Cut for firewood
+  • Split with knife (rough)
+```
+
+**Master Bowyer at workshop with drawknife + scraper + file + tillering jig:**
+```
+Right-click oak stave →
+  • Examine ("good grain, slight knot at 18cm, suitable for selfbow")
+  • Shape stave with drawknife
+  • Carve mallet head
+  • Cut for arrow shafts (4-6 viable)
+  • Split for tool handles
+  • Cut for firewood
+```
+
+### 19.3 Reference: the eight load-bearing primitives (per §2.5)
+
+Crafting operates on the eight primitives MN models deeply:
+
+**heat, light, scent, sound, weight, friction, water, fire**
+
+Plus biological state (hunger, hydration, fatigue, body temp, injury, sleep) and material primitive properties:
+
+### 19.4 Material primitive properties
+
+Every material in the world has properties that determine its behavior under tool effects:
+
+- **grain** — orientation of internal structure (matters for wood, leather, fiber)
+- **moisture** — water content (matters for wood, hide, food)
+- **integrity** — current condition vs new (decays over time/use)
+- **hardness** — resistance to deformation
+- **flexibility** — ability to bend without breaking
+- **conductivity** (thermal, electrical) — heat/cold transmission
+- **species/composition** — what it's made of (oak vs pine; iron vs steel)
+- **defects** — knots, cracks, microbial damage, prior wear
+
+Properties combine with tool effects to produce outcomes. The same drawknife on different stave properties produces different bows.
+
+### 19.5 Tool effects
+
+Every tool applies one or more primitive effects to materials:
+
+- **cut** — sever the material along a plane (axe, saw, knife)
+- **abrade** — remove material gradually (drawknife, scraper, file, sandstone)
+- **shape** — change geometry without removing mass (mallet, hammer, draw-press)
+- **heat** — apply thermal energy (fire, hot stones, forge)
+- **compress** — pack or fuse via pressure (mortar pestle, press, weight)
+- **pierce** — create perforations (awl, drill, needle)
+- **bind** — connect via flexible tension (cordage, rope, sinew, glue)
+- **break** — fracture along weak lines (wedge, splitter, mallet+chisel)
+
+These compose. A bow involves cut (felling) → abrade (drawknife shape) → abrade (scraper tiller) → bind (string attach). A medicinal tincture involves compress (mortar pestle) → heat (mild) → bind (ethanol solvent).
+
+### 19.6 Skill modulators
+
+Per §14, character skill modulates work in domain-specific ways:
+
+| Modulator | What it affects |
+|---|---|
+| Process speed | Master is faster (~25-50%) than Novice at same task |
+| Output quality grade | Master can achieve A; Novice ceilings at C-D |
+| Tool wear rate | Master uses tools efficiently; Novice wastes edges |
+| Saliency on quality cues | Master sees what needs doing; Novice misses signals (per §14.13) |
+| Failure mode awareness | Master catches problems early; Novice discovers them at end |
+| Batch size (per §19.10) | Master executes multi-step batches; Novice does one step at a time |
+| Above-baseline mastery bonus | Capped 15-30% above baseline competent per §14.2 |
+
+### 19.7 Output quality emergence
+
+The grade of any crafted item emerges from the inputs interacting:
+
+**Quality formula (conceptual):**
+```
+output_grade = f(skill_modulator × material_quality × tool_quality × workshop_quality × time_invested) - random_variance
+```
+
+- **Skill sets the floor**: A Novice cannot produce Grade A regardless of materials. Their ceiling is C-D.
+- **Materials set the ceiling**: Rotten wood produces poor output regardless of skill. A Master scraps it.
+- **Workshop provides quality multipliers**: Same task at a shaving horse vs on lap produces measurably different output.
+- **Time investment** earns refinement: A bow rushed in 3 days vs tillered over 3 weeks differs in performance.
+- **Variance** is small and reality-based — even a Master has occasional defects.
+
+### 19.8 Workshop infrastructure
+
+Workshop primitives enable, accelerate, or improve compositions:
+
+| Workshop | Built from | Enables | Quality effect |
+|---|---|---|---|
+| Stone hearth / fire pit | stones + clay | cooking, water boiling, stone work | enables |
+| Drying rack | poles + cordage | drying meats, herbs, hides | enables + airflow improves grade |
+| Smokehouse | small enclosed structure + smoke source | cold-smoking meat, fish | enables + temperature control improves grade |
+| Workbench / shaving horse | logs + pegs | fine woodworking | improves grade + speed |
+| Tanning frame | poles + cordage | hide processing | enables + stretching improves grade |
+| Mortar & pestle station | stones | botanical prep | enables + size enables larger batches |
+| Cold-smoke pit | dug pit + chimney | preservation | enables + draft improves grade |
+| Forge (later tier) | masonry + bellows + fuel | metallurgy | enables |
+
+Workshops are EMERGENT structures per §2.5 — built from materials, not unlocked. They become persistent territorial assets per §17.4 (settlements form around shared workshop infrastructure).
+
+### 19.9 Tool wear and item decay
+
+**Tool wear** — real per-use degradation:
+
+- Knife edge dulls per cut (substrate-dependent — wood is mild, bone is harsh)
+- Saw set wears per stroke
+- Mallet face dents per strike
+- Bowstring frays per shot
+- Axe head loosens per swing in dry conditions
+
+Maintenance crafts (sharpening, re-setting, re-serving, re-wedging) partially reverse wear. Maintenance is its own composition rule with skill modulation.
+
+**Item decay in storage** — primitive property:
+
+- Wood rots if wet
+- Leather mildews if wet + warm
+- Metal rusts if wet + exposed to oxygen
+- Food spoils per temperature + air + microbial load
+- Cordage frays per UV + tension cycles
+- Hides stiffen if not properly preserved
+
+Storage quality (dry, cool, sealed, smoked) matters as a primitive condition. A cabin's interior is dryer than a lean-to; a cellar is cooler than ground level; a smokehouse is microbial-suppressed. Players who build proper storage extend their gear lifespans.
+
+### 19.10 Compendium as knowledge, not unlocks
+
+The compendium stores **knowledge** (account-persistent per §12.5), NOT recipes-as-unlocks.
+
+Compendium entries describe HOW things work:
+
+- *"Bow-making (Bowyer-Practiced+): requires stave, cordage, bowstring, drawknife, scraper, time. Stave quality matters most."*
+- *"Smoked salmon (Forager-Practiced+, smokehouse access): requires fish, salt, smoking wood. Cold-smoke for cure, hot-smoke for preserve."*
+- *"Stone tools (Survivalist-Practiced+): requires basalt/flint cobble, hammerstone."*
+- *"Hemlock vs wild parsnip distinguishing features: stem-hair, leaf-base shape, scent."*
+
+These are reference material. The compendium tells you what your account-of-characters has learned. The right-click action menu tells you what THIS character with THIS inventory at THIS location can attempt right now. Knowledge + access produces options.
+
+### 19.11 Structure Building
+
+Per §2.5 emergence-via-primitives, structures are PLACEMENT-BASED COMPOSITION, not blueprint selection.
+
+#### 19.11.1 Core mechanism
+
+A cabin isn't a thing the game has. A cabin is what you've assembled when you've assembled it. The game recognizes emergent structure-properties:
+
+- Walls enclose a space → indoor zone (temperature regulated, scent contained, partial predator-blocking)
+- Roof covers it → waterproof against weather
+- Door provides access → entry point
+- Hearth in fire-safe location → heating + cooking
+- Smoke-vented → smokehouse function (if specifically configured)
+
+No `is_cabin: true` flag exists. Cabin properties emerge from the spatial configuration of primitives.
+
+#### 19.11.2 Construction verbs
+
+The player works through verb operations:
+
+- **Mark structure outline** — drag a rectangle/polygon defining footprint
+- **Lay foundation course** — place stones along outline (with style parameters)
+- **Stack wall course** — place logs/timbers/stones with corner technique parameter
+- **Frame ridge** — place ridge pole
+- **Lay rafters** — place perpendicular roof beams
+- **Lay roof covering** — apply thatch/sod/shingles/slate/hide
+- **Hang door** — place door frame + door object + hinges
+- **Build hearth** — place stones in fire-safe location with smoke management
+- **Chink walls** — fill gaps between logs (moss, clay, daub)
+
+Each verb has style parameters chosen at placement:
+
+- Foundation: material (stone/earth/brick), pattern (random/coursed/decorative), width (single/double/triple course)
+- Wall: material (round log/hewn timber/stone/adobe/sod), corner technique (saddle/dovetail/scarfed/mortise-tenon)
+- Roof: shape (gable/hipped/pyramid/shed/flat/A-frame/domed), material (thatch/shingle/sod/slate/hide)
+- Door: style (plank-batten/framed-panel/hide-flap/carved-relief/glass-pane)
+- Finish: bare/debarked/plastered/lime-washed/painted/carved-relief
+
+#### 19.11.3 Aesthetic vocabulary
+
+Aesthetic variety emerges from layered choices at each step. The vocabulary needed:
+
+- **8-10 wall materials**: log, hewn timber, timber-frame + wattle-daub, stone, adobe, sod block, driftwood, mixed
+- **6-8 joinery techniques**: saddle notch, square notch, dovetail, scarfed, mortise-tenon, earthbond (adobe), ashlar (cut stone)
+- **6-8 wall finishes**: bare wood, debarked, plastered, lime-washed, painted, carved relief, paneled, stuccoed
+- **5-7 roof shapes**: gable, hipped, pyramid, shed, flat (low-snow biomes), A-frame, domed
+- **5-7 roof materials**: thatch, split shingle, sod, slate, hide, plank, tile-if-salvage
+- **4-6 door styles**: plank-and-batten, framed-and-panel, hide-flap, carved-relief, glass-pane-if-salvage
+- **4-6 window treatments**: none, oilskin, parchment, horn-pane, glass-if-salvage, shutter-no-pane
+- **8-10 decorative placements**: carvings, painted symbols, hung antlers/bones, planted vegetation, hearth-stones, threshold-carving, banners, wind chimes
+
+**Total: ~50-70 primitive options.** Combinatorial output: thousands of visually distinct structures. Reference: Wurm Online achieves visible structural variety with ~30-40 components; MN at 50-70 should produce more distinct screenshot-shareable structures.
+
+#### 19.11.4 Limited modern-material salvage
+
+MN's setting is wilderness-realist. Modern architecture (steel/glass/concrete) is NOT achievable through native materials.
+
+**Salvage as exception**: Per Run 15 (Karuk's greenhouse glass), occasional modern materials may be found at remote ruined sites. Specifically:
+
+- Glass panes (windows, partial walls — sealed at edges with daub or pitch)
+- Salvaged steel beams (rare; structural)
+- Concrete blocks (rare; foundations)
+- Metal sheeting (rare; roofing accents)
+- Plastic sheeting (rare; weatherproofing)
+
+These are HIGH-RARITY salvage. They allow aesthetic ACCENTS within vernacular builds — a stone cottage with a salvaged glass picture window; a sod-roofed longhouse with a steel-reinforced door. They do NOT enable fully modern architecture (insufficient material flow + missing tool-effects for industrial fabrication).
+
+Per §17.4 trace persistence, salvaged materials accumulate at ruins; players who explore find them.
+
+#### 19.11.5 Reference capture
+
+When a player walks past another player's structure, they can right-click a wall: **"Study technique"**. Compendium gains an entry describing the approach: *"Timber-frame infill walls — vertical posts with horizontal beams, wattle-and-daub between. Studied at Lirien's homestead, Northwood shard."*
+
+This captures the technique as observed knowledge — NOT a recipe-unlock. You could already use the primitive verbs. What "Study technique" does is **show you that someone else used this combination of primitives to produce this effect.** Apprenticeship-by-observation.
+
+Optionally, "Study technique" can produce a SKETCH PLAN — your character's interpretation of the structure as a plan you can execute (or modify). Skill modulates fidelity — Master sees techniques accurately; Novice misses details and the plan reflects that.
+
+Forest Signs (§13.1) extend this — Builders can leave instructional marks: "saddle notch here, dovetail at corners only" carved on a sample post.
+
+### 19.12 Batch Processing
+
+#### 19.12.1 Two-layer system
+
+**Layer 1: Player-issued batch granularity** — the player chooses how much to issue per command:
+
+| Granularity | Example verb | What it does |
+|---|---|---|
+| Single | "Place this log" | One placement action |
+| Run | "Stack course (this wall)" | Place all logs along one wall side, one course high |
+| Full course | "Stack course (all walls)" | Complete one course around all walls |
+| Multi-course | "Stack walls to height 4" | Continue stacking until reaching height 4 |
+| Wall section | "Build this entire wall" | Frame + stack to specified height |
+
+Higher batches consume more game-time but require fewer player actions. The character does the work over time.
+
+**Layer 2: Skill-modulated batch ceiling** — what batches are AVAILABLE depends on skill:
+
+| Skill tier | Maximum batch | Why |
+|---|---|---|
+| Novice Builder | Single | Lacks experience to plan multi-step work |
+| Practiced | Run (one wall side) | Can sustain single line of thought |
+| Expert | Full course | Can hold structure in mind |
+| Master | Multi-course / wall section | Can plan and execute substantial work as one decision |
+
+A Master Builder's "stack walls to height 6" is in-fiction realistic — masters see the whole job; novices handle one log at a time.
+
+#### 19.12.2 Batch safety
+
+Batches preserve all the integrity features of individual placements:
+
+- Character does the work, time passes, materials consumed in sequence
+- Mistakes can happen mid-batch (a defective log can abort the batch and require human attention)
+- Saliency degradation (§14.13.1) affects individual placements within a batch
+- Interruption by predator approach, weather, injury pauses the batch (resumes per §17.3 world memory)
+- Skill check at each batch step
+
+### 19.13 Plan Mode
+
+#### 19.13.1 Principle
+
+Player-created spatial design, NOT designer-supplied blueprint. The plan is a record of the player's own intent — different player, different plan; the same plan slot doesn't exist as designer content.
+
+Plans are personal artifacts; blueprints would be recipe-lists.
+
+#### 19.13.2 Four diegetic tool tiers
+
+| Tier | Tool | Where | Fidelity | Persistence | Cost |
+|---|---|---|---|---|---|
+| **Casual** | Stick in dirt / drawing on snow | Anywhere | Rough — 1 structure outline | ~1 game-hour (weather erases) | Free |
+| **Field** | Charcoal on bark | Anywhere outdoors with material | Medium — multiple components | Persistent in inventory | Charcoal + bark fragment |
+| **Workbench** | Drafting board + stylus | At workbench/workshop | High — full structures with detail | Persistent; portable | Crafted workbench + stylus |
+| **Settlement** | Permanent drafting table | At settlement workshop | Highest — multi-player viewable | Persistent; shared | Built table + paper/parchment |
+
+The casual tier ensures "I want to think for a moment" is a free affordance. Higher tiers reward investment and enable cooperative settlement-scale planning.
+
+#### 19.13.3 Plan workflow
+
+**Sketch phase** (no materials consumed, no time taken):
+
+1. Right-click drafting tool → "Begin sketch"
+2. Character takes position (kneeling/standing at table), animation plays
+3. World shader shifts: existing structures dim, ghost placements render bright translucent
+4. Player issues construction verbs as GHOST PLACEMENTS
+5. Materials list updates as plan is built
+6. Time estimate updates based on character skill
+7. §14.13.1 saliency may surface warnings ("roof angle inappropriate for thatch in your biome")
+
+**Plan storage:**
+
+- Field tier and above save plans to character inventory
+- Settlement table holds plans for shared access (viewable by anyone in proximity)
+- Plans are physical artifacts (a paper/parchment document) — can be carried, traded, destroyed
+- Field Notes (§14.12) reference plans by name when characters die mid-build
+
+**Execution phase:**
+
+- Switch to build mode
+- Plan elements show as faint ghosts overlaid on world
+- Player issues batch commands that resolve against the plan
+- Character works through plan in priority order (foundation → walls → roof → doors)
+- Plan elements transition: ghost → in-progress → built
+
+**Mid-build adjustment:**
+
+- Right-click drafting tool → "Adjust active plan"
+- Modifications recalculate materials and time estimates
+- Already-built sections affected by changes are flagged with rework cost
+- Player accepts or rejects each adjustment
+
+#### 19.13.4 Multiplayer plan-sharing (per §17.5)
+
+- Settlement drafting table is visible to anyone in workshop area (proximity per §17.5)
+- Anyone can VIEW plans on table
+- Editing requires "Claim drafting" — locks the table to one editor
+- Lock auto-releases when claimer leaves area
+- All edits logged with character name (per §14.12 traceability)
+- Sub-task claiming: members claim specific structures ("I'll build the smokehouse")
+- Settlement-scale construction emerges from coordinated execution without shared UI
+
+#### 19.13.5 Emergency exit
+
+The character is in plan mode; a bear arrives.
+
+**Principle: any incompatible action drops plan mode immediately.**
+
+| Trigger | Behavior |
+|---|---|
+| Movement key (W/A/S/D) | Character drops drafting, plan auto-saves at last committed state, full movement resumes |
+| Weapon equip | Character drops drafting tool, hand goes to weapon |
+| Space (dedicated panic key) | Pure "exit now" — no direction input needed |
+| Right-click world (not drafting interface) | Treated as non-drafting action |
+| Take damage | Auto-exit triggered by injury |
+| Predator within X meters | Optional auto-exit + character mutter (player setting) |
+
+All execute in one frame. No save delay. No "exiting plan mode..." animation. Character drops what they're doing and acts.
+
+**Commits happen at click-confirm, not at exit.** If exiting mid-preview (player hovering ghost placement, not yet clicked-confirm), the preview is dropped. Plan state remains at the last confirmed placement. No partial-placement weirdness.
+
+#### 19.13.6 Resume mechanics
+
+Player survives, returns to drafting tool:
+
+- Right-click tool → "Resume sketch" (or "Adjust plan")
+- Character resumes at the exact state of exit
+- Same plan, same view, same camera angle
+- Saliency state may have shifted (e.g., fatigue now showing — degraded cues per §14.13.1)
+- No re-entry tax beyond walking back
+
+Drafting tools remain in the world during emergencies — dropped stick visible at the dirt sketch; dropped charcoal beside the bark; pencil on workbench. Diegetic trace of the interruption.
+
+#### 19.13.7 Quick-look review mode
+
+For consulting an already-saved plan without editing:
+
+- Right-click plan in inventory → "Review"
+- Character pulls out plan for ~10-30 game-seconds, looks at it
+- World renders plan as ghost overlay
+- No editing capability
+- Interruptible; exits at first incompatible action
+
+### 19.14 Multiplayer crafting interactions
+
+Per §17.2 (Specialization at Full Mastery), crafting drives the cooperative economy:
+
+- A Master Bowyer's Grade-A bow is genuinely better than a generalist's Grade-B
+- Workshop access ≠ between players — settlements pool workshops
+- A character who has a smokehouse + skill can preserve another player's hunt
+- A Master Builder's plan is a tradeable artifact (sold/given to settlement)
+- No shared crafting UI — physical proximity workshop space with multiple players' tools and materials
+
+Per §17.5 (Proximity-Only Communication), trade negotiations happen in-fiction in proximity. No global market UI; no auction house.
+
+### 19.15 Sub-domain hooks
+
+Each of the sub-domains feeds into §19 framework:
+
+- **§19.X.1 Cooking** — heat application primitives + ingredient primitive properties; per #18
+- **§19.X.2 Fishing** — bait + line + skill + water-primitive interaction; per #17
+- **§19.X.3 Hide-tanning** — frame workshop + tanning materials + time-staged process; per #16
+- **§19.X.4 Fire-craft** — ignition source primitives + fuel properties + airflow; per #13
+- **§19.X.5 Shelter** — uses §19.11 Structure Building model; per #2
+- **§19.X.6 Weapon-crafting** — uses §19 composition rules + §15 weapon-system integration
+- **§19.X.7 Snare-making** — tension/trigger/anchor primitives + bait + scent management; per #10
+- **§19.X.8 Clothing-craft** — fabric/hide primitives + sewing/lacing + weather property output
+- **§19.X.9 Container-craft** — material + sealing + shape primitives
+- **§19.X.10 Medicinal-prep** — plant + heat + solvent + time + folk-medicine principle (§14.12 cascade-intervention)
+- **§19.X.11 Bone-tool-crafting** — bone primitive + abrasion + binding; per #N10 from playthroughs
+- **§19.X.12 Pelt-combining** — hide + thread + sewing primitive; per #N15 from playthroughs
+
+Each sub-domain is its own issue and its own spec document, all sharing the §19 umbrella.
+
+### 19.16 Cross-references
+
+- §2.5 — Systems That Allow, Not Rules That Allow (umbrella principle)
+- §14 — Skill System Architecture (mastery integration)
+- §14.13 — Saliency (rendering of craft-relevant cues)
+- §14.13.1 — Saliency Degradation (state affects craft quality)
+- §15 — Combat & Weapons (weapon-crafting feeds in)
+- §17.2 — Specialization at Full Mastery (cooperative economy)
+- §17.4 — Significant Actions Leave Traces (built structures persist)
+- §17.5 — Proximity-Only Communication (no shared crafting UI)
+- §18 — Build Discipline (perf-budget tracking)
+- `docs/_engineering/perf-budget.md` — cost-class entries
+- Run 05 (Maren cabin), Run 09 (Eira bow), Run 10 (Heath trapline), Run 11 (Bo medicine), Run 17 (multiplayer settlement) — playthrough evidence
+
+### 19.17 What this resolves
+
+- Closes issue #14 (Crafting umbrella)
+- Establishes the framework for all crafting sub-systems
+- Commits to composition-rules over recipe-lists
+- Commits to placement-based structure building
+- Commits to player-created plans, not designer blueprints
+- Commits to ~50-70 primitive vocabulary for aesthetic variety
+- Commits to limited modern-material salvage (rare accents within vernacular builds)
+- Provides the diegetic plan-mode interface with four tool tiers
+- Provides emergency-exit safety for plan mode
+- Per §18 cut hierarchy: workshops are tier-3 scope-cut candidates if budget tightens (could ship with stone hearth + drying rack only at v1, smokehouse + forge later)
