@@ -57,7 +57,8 @@ Every system must fit both. Steam Deck is the binding constraint for most CPU-he
 | Character animation (§5, §6) | always-on | ~0.05 ms | 🟢 | — | proposed | Godot AnimationTree, well-benchmarked |
 | Player input handling | always-on | <0.01 ms | 🟢 | — | proposed | Trivial |
 | **Saliency shader visible entities (§14.13)** | always-on | **1-3 ms** | 🔴 | — | **proposed — P0 PROTOTYPE** | Cost depends on shader × visible entity count. Domain-gating + distance LOD + cached level = ~70% reduction |
-| Saliency-degradation level (§14.13 ext) | always-on | <0.05 ms | 🟢 | — | proposed | Cached; recomputed only on state-input threshold cross |
+| Saliency-degradation level (§14.13.1) | always-on | <0.05 ms | 🟢 | — | proposed | Cached; recomputed only on state-input threshold cross |
+| Peripheral viewport desaturation (§14.13.1) | always-on | ~0.01-0.05 ms | 🟢 | — | proposed | Post-process shader, single uniform (saliency level), viewport-radial gradient. Standard pattern in Godot 4. Continuous diegetic signal for saliency state. |
 | UI / HUD render | always-on | ~0.2 ms | 🟢 | — | proposed | Static-heavy UI |
 | Per-frame entity-state tick (visible apex + ambient) | always-on | ~0.3-0.8 ms | 🟡 | — | proposed | Light tick per visible entity (~40 total) |
 

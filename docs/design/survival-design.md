@@ -1052,6 +1052,117 @@ The world stays visually clean. Recognition (entity name, state, inference) live
 
 **Reference implementation.** Project Zomboid does limited skill-modulated rendering (foraging skill modulates tile-content visibility). Mother Nature applies the same shader-saliency principle across every domain — predator-reading, plant-ID, tracking, weather-reading, animal-behavior, substrate-reading, edibility, fire-craft, all driven by the same per-entity per-skill shader query.
 
+### 14.13.1 Saliency Degradation Under State (Locked, 2026-05-10)
+
+**Status: LOCKED.** Closes issue #63. Extends §14.13 baseline saliency with state-driven degradation — perception narrows when body and mind are in cascade. This is the mechanism by which compounding cascades (cold, sepsis, caloric debt, sleep deprivation) become lethal: perception fails before the body does, which is why the player makes the wrong call.
+
+**Principle.** A Master Hunter at peak condition reads the world at full saliency. The same Master under fatigue + cold + caloric debt + injury reads the world worse than a fresh Practiced Hunter. Skill is permanent in the abstract; expressed skill is conditioned on body state. Reality-based — real fatigue, hypothermia, and starvation measurably narrow human perception.
+
+**Five named levels** the player learns as vocabulary:
+
+| Level | Player feels | World renders | Character behaves | Recovery window |
+|---|---|---|---|---|
+| **Sharp** (0-30% degradation) | Alert, capable | Cues full saturation; full audio range | Steady gait, clear voice | N/A — baseline |
+| **Fading** (30-60%) | "I'm tired" | Cues slightly dimmer; minor audio falloff | Occasional mutter, slight slow | Minutes — eat, sip, sit briefly |
+| **Narrowed** (60-80%) | "I'm in trouble" | Cues significantly dimmer; missing background | Visible stumbles, breath audibly stressed, voice strained | Hours — full meal, fire, rest |
+| **Tunneled** (80-95%) | "I'm dying" | World almost lifeless; only immediate dangers visible | Slow, confused movement; broken speech ("can't... think") | Half-day — emergency intervention |
+| **Below** (95-100%) | Incoherence, possible hallucination | World may render misleading cues | Character no longer mechanically reliable | Irrecoverable without rescue |
+
+Field Notes use these names. Compendium discusses degradation in these terms. Players learn the vocabulary by experience: "I went into Narrowed in that storm" becomes common shorthand. The labels are diegetic-when-spoken, never UI text.
+
+**Eight state modulators** compose multiplicatively up to a saturating cap:
+
+- `fatigue` — sleep debt + recent exertion
+- `caloric_debt` — cumulative calorie shortfall
+- `cold_stress` — proximity to hypothermia stage 1-3
+- `heat_stress` — proximity to hyperthermia
+- `pain` — active injury distraction
+- `illness` — cognitive fog from fever / infection
+- `environmental_overload` — storm noise, whiteout, sensory input reduction
+- `emotional_stress` — sustained predator pressure, recent traumatic event
+
+Each contributes 0-30% degradation; two severe + two moderate reaches Tunneled. No single modulator alone reaches Below — that requires multiple compounding. This is the cascade-lethality mechanism.
+
+**Sub-baseline floor:** degradation can suppress a Master to below-novice performance in extreme conditions, but stops at ~50% of novice baseline. Mastery is never erased; only suppressed. The floor preserves the principle that learned skill is permanent — extreme adversity can dampen it, never destroy it.
+
+**Four diegetic channels** for player perception (no UI overlays, no HUD bars, no popups — strict diegetic discipline per §12.8 + §14.13 commitments):
+
+| # | Channel | When it fires | Cost | Notification class |
+|---|---|---|---|---|
+| 1 | **Voice mutter** | Threshold crossing (Sharp→Fading, etc.) | event-driven | character speech, diegetic |
+| 2 | **Peripheral viewport desaturation** | Continuous, scales with level | ~0.01 ms/frame | post-process shader, diegetic |
+| 3 | **World saliency dimming** (the existing §14.13 shader, modulated by level) | Per visible entity | included in baseline shader | render effect, diegetic |
+| 4 | **Back-room compendium diagnostic** | When player opens compendium | async on-demand | review tool, opt-in |
+
+Channel 2 (peripheral desaturation) is the always-on continuous signal:
+
+| Saliency level | Center viewport (where you look) | Outer viewport (peripheral) |
+|---|---|---|
+| Sharp | full saturation | full saturation |
+| Fading | full | -10% saturation |
+| Narrowed | -5% | -30% |
+| Tunneled | -15% | -60% washed out |
+| Below | -30% | -80% nearly monochrome |
+
+Post-process shader gradient with viewport-radial falloff. In 2D top-down, "peripheral" maps to outer-third of the viewport (away from the player character) — where the player isn't actively focused. The center stays useable; the edges fade. Real-world analog: tunnel vision under fatigue/cold/stress is documented human perception physiology. The shader is modeling reality, not telegraphing UI state.
+
+**Recovery curves** proportional to underlying state recovery:
+
+- **Eat to caloric surplus** → degradation clears over 12-24 game-hours (caloric debt is slow to repay)
+- **Sleep full cycle** → fatigue clears in one jump (significant); partial rest = partial
+- **Warmth + cover** → cold_stress clears over ~30-60 game-minutes
+- **Heal injury** → pain clears proportional to wound severity (sepsis cascade may gate this)
+- **Treat illness** → illness clears proportional to medical treatment quality + folk-remedy delay (per §14.12 cascade-counterplay)
+
+**Three observable playtest metrics** distinguishing "I need to get better" from "I feel cheated":
+
+| Metric | Learnable threshold | Cheated signal |
+|---|---|---|
+| **T_recognize** — time between degradation onset and player realizing | ≤ 5 game-min (mutter fires; world dims) | > 10 min → degradation feels random |
+| **T_recover** — intervention to first visible improvement | ≤ 1 game-hour (food/sleep/warmth produces observable change) | > 2 hours → recovery feels unclear |
+| **T_review** — Field Notes generation per death | 100% of degradation-related deaths reviewable with intervention windows | Missing chain → death feels arbitrary |
+
+**Interaction with cascade systems:**
+
+Saliency degradation IS PART of the §14.12 cascade-death framework. Hypothermia stage 1 → mild reduction. Stage 2 → significant. Stage 3 → severe (this is when players misread terrain and hallucinate). Sepsis cascade does the same. Caloric collapse the same. The degradation IS the mechanism by which compounding cascades become lethal — perception fails before body does, which is why you don't recognize you're dying until it's too late.
+
+Per playthrough evidence: Run 02 (Ari hypothermia Day 20), Run 03 (Tova sepsis Day 21), Run 08 (Kai triage stress Day 18-19), Run 12 (Pell deprivation), Run 18 (Reni caloric collapse) — five independent runs surfaced this need. Plus the Run 11 hemlock near-miss on Day 2 (fatigued Bo could have failed plant-ID under degradation).
+
+**Interaction with three saliency modes** (positive-selection, negative-selection, delta-against-prior-state):
+
+All three modes degrade equally. A degraded Hunter doesn't catch positive-selection cougar cues. A degraded Bowyer (Run 09) accepts bad staves they'd reject when fresh (negative-selection fails). A degraded Iri (Run 16) misses patch-state-changes (delta-read fails). Same shader pipeline; one `need_state_modulator` parameter multiplies before the per-mode render.
+
+**Difficulty-tier scaling** (§17.6):
+
+- **Mother Nature baseline**: degradation curves as specified above
+- **Hard**: onset ~25% earlier (Ari would have lost terrain-reading at Day 17, not Day 20)
+- **Death Sentence**: onset ~50% earlier; underlying cascade progression also ~50% faster; compounding effect on top
+
+**Implementation notes:**
+
+- State composition: 8 modulators → single level. Cached per character. Recomputes only when one of the 8 state inputs crosses a threshold (~10-15 events per game-hour per player). Cost: ~0.001 ms per frame amortized at 100 CCU.
+- Peripheral desaturation: post-process shader, single uniform (saliency level). Cost: ~0.01-0.05 ms per frame. Standard pattern.
+- Voice mutter trigger: event-driven on level crossings; queues into character behavior queue.
+- Compendium diagnostic: lazy-loaded when player opens compendium. Per §14.6 Hybrid C reviewable channel.
+
+**Adversarial:**
+
+- *"Doesn't the dimmed world feel like bad eyesight rather than skill loss?"* — Yes, deliberately. Real fatigue + cold + hunger DO produce that sensation. The player's brain attributes it correctly: "I'm in bad shape." That IS the lesson.
+- *"Won't the Tunneled level be where 'I felt cheated' clusters?"* — Tunneled is already cascade-stage. The fix isn't softening Tunneled; it's making Narrowed impossible to miss so players intervene before Tunneled triggers.
+- *"What about a player who genuinely can't read peripheral desaturation (vision impairment, etc.)?"* — Voice mutter and back-room diagnostic remain available. Accessibility settings may allow scaling the peripheral effect independently of the world-saliency channels. Filed as accessibility consideration for build phase.
+
+**Falsification:** if playtest shows players reaching Narrowed/Tunneled without registering Fading first (T_recognize > 10 min), the mutter + peripheral-desat thresholds are firing too late. Push them earlier. If players feel the desaturation is a HUD element rather than a felt perception, the gradient is too aggressive — narrow it inward.
+
+**Cross-references:**
+
+- §14.13 (parent — baseline saliency by skill tier)
+- §6 body meters (state inputs feeding the modulators)
+- §14.12 Field Notes (cascade-death review surfaces degradation timeline)
+- §14.6 Hybrid C (back-room diagnostic for compendium-side review)
+- §17.6 Difficulty Tiers (per-tier degradation scaling)
+- `docs/_engineering/perf-budget.md` (cost-class allocations)
+- Run 02, 03, 08, 11, 12, 18 (playthrough evidence corpus)
+
 ---
 
 ## 15. Combat & Weapons (Locked, 2026-05-09)
