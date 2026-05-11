@@ -172,13 +172,72 @@ A bear's behavioral memory updates after specific events:
 
 These updates are mechanical state changes. The player experiences them as the bear behaving differently next encounter. There is no "the bear is becoming a Camp Stalker" notification.
 
+## Difficulty-tier parameterization (added 2026-05-10)
+
+Per §17.6 Difficulty Tiers, bear behavior changes across tiers via **utility-AI weight shifts and starting-state seeding**, not new code paths. The 8-output state machine and 5 attack pathways above are unchanged in structure across all tiers. What changes:
+
+### Mother Nature baseline
+
+- Behavioral memory starts EMPTY at character spawn — bears in the region are "naive" toward this character
+- `food-conditioned` state: false by default; only accumulates through actual scavenging events the bear successfully performs
+- Investigation phase before commit: full — bears display warning + bluff charge + defensive escalation per Paths A-D before transitioning to attack
+- Detection-to-commit time: full investigation cycle (~30-90 seconds for Paths A/B; predatory Path C builds across game-days/weeks)
+- Pre-baked apex roster: minimal — designer-seeded population with naive behavioral state
+
+### Hard
+
+- Behavioral memory starts with shard-aggregate state: bears have prior experience with humans in general, biased ~25% toward investigative/cautious approach
+- `food-conditioned` rate of accumulation: ~25% faster — fewer successful scavenges needed to reach Path C
+- Investigation phase shortened ~25%: warning displays brief; bluff charge → commit transition tighter
+- Pre-baked apex roster: ~25% more individuals; mixed naive + lightly-experienced personalities
+
+### Death Sentence
+
+- **Pre-baked food-conditioned state at shard seed**: bears spawn already in `food-conditioned = true`, with behavioral memory pre-populated with synthetic prior-character-encounter events. The world predates your character.
+- **Utility weights biased toward attack**: predatory-attack utility is ~50% higher base weight; investigative-approach utility ~50% lower. Same AI structure; different starting weights.
+- **Investigation phase collapsed**: no warning displays, no bluff charge. Bear transitions detection → commit in ~5-15 seconds.
+- **Persistent across player deaths**: the bear individual that killed your prior character retains spatial memory, behavioral state, and personality. Same bear in same drainage when your next character lands.
+- **Pre-baked apex roster ~2× density**: more individuals per shard; rosters skew toward aggressive + food-conditioned personalities at the population-distribution roll.
+
+### What does NOT change across tiers
+
+- Hit-zone math (§15) — a bear bite is the same bite
+- Attack pathways A-E — same five mechanical alignments
+- 8-output state machine — same outputs available
+- Personality variance distribution shape — still bell-curve over `aggression`, `curiosity`, `fear`; only the MEAN shifts at higher tiers, not the distribution shape
+- Saliency surface (§14.13) — same cue rendering at all tiers; the Master Hunter reads the same cues; the cues are simply more frequently present at DS
+
+### Minimum saliency-warning window (DS commitment)
+
+DS predators must leave a **~5-15 second window** between first-detectable-cue and lethal contact. A Master Hunter must be able to react. The cues include:
+
+- Silence of prey species (birds, deer alarm calls)
+- Distant scent-post smell (fresh marking on a tree)
+- Broken brush ~50m off the player's path
+- Scat freshness on a recently-walked trail
+- Wind shift carrying meat-scent the bear's been tracking
+- The pack-coordination call of approaching wolves
+
+The window is FOR §14.13 saliency to fire. Below ~5 seconds, even Master saliency fails to trigger; above ~15 seconds, the warning becomes obvious to all tiers. The 5-15 second band is where the skill check actually applies.
+
+### In-fiction explanation (the "never cheated" guarantee)
+
+DS shards spawn with pre-baked ecological history because the region has been inhabited by humans before. Real predators DO behave this way when food-conditioned (garbage bears in Yellowstone, food-trained cougars in California exurbs, learned-aggressive wolf packs across Eurasia). The pre-baking is a one-time-at-shard-birth seeding that grants the shard's predator population the behavioral state real predators would have under those conditions. After seed, predator state evolves only through real interactions — no ongoing designer-thumb-on-scale.
+
+Per §17.6 refusal list: no buff-numbers, no spawn-on-player, no accelerated player meters, no invisible RNG. Every painful event reconstructable as a chain of in-world consequences. The bear hunted you because it knew your camp scent from the LAST character (whose Field Notes are in your compendium). The story is the player's; the system has only state.
+
 ## Cross-references
 
 - §12.8 — apex-individuals-capped-at-10 architectural commitment
+- §12.9 — shard model and difficulty-flag
 - §13.2 — Carrion Chains, Camp Stalkers
+- §14.12 — Field Notes (death-as-teaching)
+- §14.13 — Skill-Modulated Saliency (the warning channel)
 - §15 — lethality model applied to bear strikes against player
+- §17.6 — Difficulty Tiers (the parameterization framework)
 - §1 — No Dominant Strategy: bow vs rifle vs flight all valid responses
+- §2.5 — Systems That Allow, Not Rules That Allow (this AI honors emergence-via-primitives)
 
 ## Tags
 
-#wildlife #predator #ai-agent #apex
+#wildlife #predator #ai-agent #apex #difficulty-tiers

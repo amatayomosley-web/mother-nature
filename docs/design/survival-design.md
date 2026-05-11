@@ -75,6 +75,59 @@ The test for any new system: does its behavior emerge from observable mechanical
 - Animal individuality: each meaningful animal has its own state, needs, and territory; encounters emerge from individual circumstance, not spawn rolls.
 - Weather emergence: weather is simulated, not scripted; no two runs have the same storm sequence even on the same map and season.
 
+## 2.5 Systems That Allow, Not Rules That Allow (Locked, 2026-05-10)
+
+A sibling principle to §2 Mechanical Behavior. §2 says agents act on internal state, not narrative arcs. §2.5 says world-mechanisms exist as primitives with properties, not as enumerated features with allowlists.
+
+A greenhouse is not a coded entity with `is_greenhouse: true` and `allows_winter_growth: true`. A greenhouse exists because **light passes through glass + heat is retained by enclosure + soil holds moisture**. Each property is a primitive the simulation tracks. When a player composes glass walls around soil, the warmer interior emerges from the physics. The "greenhouse" is the player's word for a structure the simulation produces naturally.
+
+This is the design's commitment to emergence-via-primitives over emergence-via-features. A door is not `blocks_predator: true`; it is mass + hinge + resistance, and a predator pushes through iff `force_applied > hinge_resistance`. A snare is not `catches_rabbit: true`; it is tension + trigger + loop, and a rabbit is caught iff their pace + path + escape-attempts interact with the trigger correctly. The world emerges from primitives interacting; nothing in the world is hand-flagged as "this is a thing that does X."
+
+### 2.5.1 The eight load-bearing primitives
+
+Modeling all physics is unaffordable. The design picks the primitives that matter to wilderness survival and models THOSE deeply; everything else composes from them or stays abstracted.
+
+The eight load-bearing primitives:
+
+- **Heat** — temperature gradients, transfer rates by material, retention by enclosure, body-heat as source
+- **Light** — direction (sun angle by time + latitude), intensity, transmission through materials (glass, foliage, water), shadow casting
+- **Scent** — emission strength, wind-borne dispersal (already on the weather grid per §12.8), decay by distance, masking by other scents
+- **Sound** — emission strength, attenuation by distance, masking by ambient (rain, wind, river), substrate-dependent (footfall on leaves vs rock)
+- **Weight** — mass affects movement speed, carrying capacity, falling damage, structural stress
+- **Friction** — surface interactions: snow grip, mud slowdown, ice slip, rope vs hide vs metal contact
+- **Water** — liquid state, freezing/melting transitions, flow direction by terrain, absorption by materials, drying rate by humidity
+- **Fire** — fuel + oxygen + heat triangle; spread rate by fuel density + wind; quench by water/wet conditions; heat output by fuel type
+
+These eight + the existing biological state (hunger, hydration, fatigue, body temperature, injury, sleep) compose to produce: greenhouses, snowshoes, smokehouses, traps, fires, baths, cisterns, drying racks, signal mirrors, condensation rigs, salt evaporators, every survival affordance the game allows. None of these are coded as named entities; all of them are compositions of primitives.
+
+### 2.5.2 The leave-alone condition
+
+Pure emergence at full fidelity is infeasible. The principle has explicit acknowledgments:
+
+- **Outside the eight**, abstraction is permitted. Plant growth is tick-based, not a full photosynthesis model. Animal digestion is a calorie-converted timer, not a metabolic simulation. Tool wear is a duration counter, not a metallurgy model. The eight load-bearing primitives are modeled deeply; everything else gets a tuned approximation.
+- **Performance budgets cap fidelity**. Heat-transfer simulation runs at coarse cell resolution (composes with §12.8 hex weather grid). Scent dispersal is grid-based not particle-based. Sound is attenuation curves, not wave physics. The simulation models the right SHAPE at affordable cost.
+- **Game-feel concessions are allowed where realism would punish without teaching.** Sleep doesn't have to model REM cycles. A character doesn't need a full immune-response model — sepsis cascade timing is a tuned curve, not bacterial-growth simulation.
+
+The line: every load-bearing player-facing CAPABILITY emerges from primitives. The supporting cast (digestion, growth, plant maturation) can be tuned approximations.
+
+### 2.5.3 The discoverability requirement
+
+Hidden mechanisms no player can find are wasted budget. Every emergent system must be DISCOVERABLE through observation + skill saliency + Field Notes (§14.12) + Compendium (§8 → see §14.1 for current role) growth.
+
+The greenhouse "exists" only when a Builder-Practiced character can read the diegetic cues — frost-melt on the glass face, warmer body-meter inside, dew on the underside — and form the hypothesis that "glass + enclosure + sun = warmer interior." Without §14.13 saliency surfaces, emergent systems become wiki-rewarding mechanics; with them, they become discoverable knowledge that experienced players teach newcomers via Forest Signs and word-of-mouth.
+
+The test for any emergent affordance: a Practiced-tier character in the relevant domain CAN derive the affordance from observable primitives within reasonable playtime. If no skill tier surfaces it, the system isn't emergent — it's hidden.
+
+### 2.5.4 Implications for cross-cutting systems
+
+- **§3 Biomes** are environments with primitive-property profiles, not enumerated zones. A "desert" is high-light + low-water + thermal-mass-favoring + sparse-fuel — these properties produce the desert experience, not a `biome: desert` flag.
+- **§13.2 Carrion Chain** is scent-emission + scavenger-utility-AI + apex-claim — not an enumerated multi-day event.
+- **§15 hit-zone lethality** is already this shape — wound severity emerges from impact-point + projectile-mass + velocity + tissue-resistance.
+- **§14.13 Skill-Modulated Saliency** is the discovery surface for primitives most players miss.
+- **§17 Community Emerges** is the same principle applied at the social layer: communities are not authored; they emerge from primitives (proximity, trace, scarcity, specialization) interacting.
+
+The whole design composes around this principle. Where existing sections appear to violate it (a system specified as a named feature rather than a primitive composition), the section is wrong and should be refactored toward primitives.
+
 ## 3. The World
 
 ### 3.1 Launch Biomes
@@ -108,9 +161,11 @@ The lethal one. Where veteran players go to test themselves and where most first
 - Threats: Cold above all. Wet-cold from falling through ice has minutes to kill, not hours. Frostbite as permanent injury. Whiteouts. Apex predators desperate in winter. The dark itself in deep winter — six or more hours of barely-twilight, eighteen of full night.
 - Signature experience: The first winter night the fire goes out. Everything else in the game leads up to "can I keep this fire alive."
 
+Per §2.5, biomes are environments with primitive-property profiles, not enumerated zones. A "desert" is high-light + low-water + thermal-mass-favoring + sparse-fuel — these properties produce the desert experience, not a `biome: desert` flag. The biome differences above all compose from the eight primitives (heat, light, scent, sound, weight, friction, water, fire) plus per-biome flora/fauna/terrain composition.
+
 ### 3.2 Map Sizes
 
-Map size scales with the play style. A small map for seven friends on a private server. A continent for thousands on a public world server. Same systems, same stakes — only scope changes.
+Map size scales with the play style. A small map for seven friends on a private server. A continent for thousands on a public world server. Same systems, same stakes — only scope changes. Per §12.9 shard model, the launch target is 7-10 km radius shards holding 100-300 active accounts.
 
 ### 3.3 Weather Simulation
 
@@ -594,6 +649,66 @@ Validated and committed without dispute:
 
 These commitments are the architectural defaults; deviations require explicit rationale.
 
+### 12.9 The Shard Model (Locked, 2026-05-10)
+
+A shard is a named persistent region with bounded population and geography. This is the unit of multiplayer reality in MN — players don't play "on a server," they live in **Northwood** or **Saltflats** or **Brokeneck Pass**. The shard's identity, history, difficulty tier, and community are tied to its name and its accumulated state.
+
+#### Shard size and population
+
+- **Radius**: 7-10 km. Diameter 14-20 km. Comparable to DayZ Chernarus (15 km × 15 km), Project Zomboid Knox (12 km × 5 km), Wurm server (8 km × 8 km). Falls on the larger end of survival-game shard sizes — justified by MN's community-emergence pillars (§17) requiring room for distinct territories, apex-individual ranges, and biome ecotone diversity within one shard.
+- **Population target**: 100-300 active accounts per shard. Large enough to meet strangers; small enough that veterans recognize most names. Per-shard isolation per §12.8.
+- **Per-shard concurrent players**: 32-128 expected, with surges at peak hours. Matches §12.1 indie-viable range.
+
+#### Time compression and traversal
+
+- **Default time compression**: 24:1 game-time to real-time. One in-game day in 60 real-minutes. One in-game season (per §4.5 default 8 days) in ~8 real-hours.
+- **Edge-to-edge walk**: ~5-7 game-hours at Practiced wilderness pace = ~12-18 real-minutes pure walking, ~2-3 real-hours including camp + sleep + eat breaks at the 24:1 compression.
+- **Day-trip from base**: ~3-5 km out = ~30-60 real-minutes round trip with foraging stops.
+- **Compression is shard-configurable**. Casual shards may run slower; hardcore shards may approach 12:1 (closer to real-time).
+
+#### Character-shard binding
+
+- **One character per shard**. A character belongs to ONE shard. They live, build, fail, and die there.
+- **Account is not shard-bound**. The compendium, Field Notes, and learned knowledge accumulate at the account level across all characters on all shards (per §12.5 default for solo/friends-only; public-shard policy per §12.5).
+- A player can have a Northwood Hunter AND a Brokeneck Builder simultaneously. Knowledge transfers; presence does not. No character ferries gear or skills between shards.
+- **Why**: keeps "this place is real" intact. No master character imported into a fresh shard to dominate. Each shard's economy and territory belong to the characters who built up presence there.
+
+#### Shard lifecycle
+
+- **Birth** — designer-curated seeding. A new shard is spawned when current shards of a similar biome are saturating, OR by player petition (a community wants its own shard). Not auto-spawn.
+- **Growth** — open to new player landings. World develops history.
+- **Peak** — at population cap, new landings auto-route to sister shards.
+- **Dormancy** — if active accounts drop below ~10 over a 30-day window, shard is marked DORMANT. Existing characters can still play; new landings re-routed.
+- **Archive** — dormant shards persist for ~1 game-year of further decline before world-state is snapshotted + frozen. Returning players see "Northwood archived. Your character is preserved as a Field Notes entry on your account but cannot be played." Characters become history.
+
+**No auto-merge.** Players have hated this in MMO history; merging shards erases territorial work. Dormant shards just sleep. Players who want a new active shard create new characters on existing live shards.
+
+#### Landing — how players arrive
+
+- **Shard browser** at character-creation. Public shards listed with metadata: name, current population, age (real-days), dominant biome mix, average session length, founding character (in-fiction lore), difficulty tier, public/private/invite-only.
+- Player **picks** a shard, or **random-selects** by preference filters (biome, population, difficulty).
+- **Friend invitations** are out-of-band. A friend shares the shard name via Discord, text, voice. They land there. No in-game friend-list, no party UI (per §17.5 Proximity-Only Communication).
+- **Entry points (trailheads)** — each shard has multiple designer-set spawn locations chosen for ecological-plausibility reasons (see §17.6 Trailhead Convention for the difficulty-tier interaction).
+- **Diegetic arrival framing** varies per entry point: trailhead, riverbank, beach, crashed-vehicle, abandoned-cabin. Starting gear varies by entry-point lore — a plane-crash spawn gets more salvageable parts; a hiked-in spawn gets a packed kit.
+
+#### Returning — how players resume
+
+- **Sleeping-bag tether logout** per §12.4. Wake exactly where you slept. World-state and trace around you persisted.
+- Character's biological meters (hunger, thirst, fatigue, body temp) **pause** during logout. World processes (weather, animal migration, plant growth, decomposition) continue at the shard's configured rate.
+
+#### Permadeath cascade flow
+
+- Character dies. Field Notes generated on the account. Compendium updated per §12.5 policy.
+- Player chooses: **re-land** on SAME shard at a different trailhead (different character), OR **migrate** to a different public shard.
+- Same-shard re-landing — your prior character's gear is at the death site if unlooted. Forest Signs your prior character left are still there. The world remembers.
+- Different difficulty rules apply at Death Sentence (per §17.6) — same-shard re-land may be blocked entirely.
+
+#### Shard-level difficulty flag
+
+The shard's difficulty tier (Mother Nature / Hard / Death Sentence per §17.6) is set at shard creation and is part of its identity. Difficulty is NOT a per-player setting within a shard — all players on a shard play at that shard's tier. Communities of like-minded players cluster around shards of their preferred intensity.
+
+Cross-references: §12.4 logout model; §12.5 compendium per-account; §12.8 per-shard SQLite WAL; §17 Community Emerges; §17.6 Difficulty Tiers; §17.4 Trace as Object.
+
 ---
 
 ## 13. Brainstorming — Mechanic ideas (pending development)
@@ -614,6 +729,7 @@ STATUS: BRAINSTORMING. None of the items below are committed design. Each is a c
 
 - Rides on: scent-on-weather-grid; wildlife utility AI; apex individual identity.
 - Implementation: carcass is a scent-emitting entity with intensity decaying over time; AI utility curves include "scavenge" priority modulated by hunger; apex claim creates a temporary territory the player cannot easily re-enter.
+- Per §2.5 emergence-via-primitives: Carrion Chain is scent-emission + scavenger-utility-AI + apex-claim composing; not a hardcoded multi-day event. Run 10 (Trapper) surfaced that trapline clusters are lower-intensity, longer-accumulation analogs — same scent-persistence primitive, different intensity profile. The "Carrion Chain" should be reframed as the SCENT-PERSISTENCE chain in future spec.
 
 **Camp Stalkers.** A specific bear or wolf that successfully scavenges a player's poorly-secured food storage learns the lesson permanently. That individual stops hunting natural prey, loses caution, and becomes a personal antagonist — testing defenses, waiting just outside firelight.
 
@@ -695,6 +811,8 @@ All of §13 is brainstorming. Commit nothing until each item has its own design 
 STATUS: LOCKED through 14 design decisions taken in conversation 2026-05-09. Numbers in this section (magnitudes, thresholds, time-scales) are proposals for tuning in playtest, not committed values. The architecture is locked; the dials are open.
 
 This section supersedes §8's mechanical-progression role. §8 must be rewritten to its new role as a read-only lore log when build begins. §6 (body meters) and §13 (perception ladder) need integration passes to fold into the structure below.
+
+Per §2.5 (Systems That Allow, Not Rules That Allow), the skill system honors emergence: skills do not enumerate "this character can build a greenhouse" or "this character can hunt deer." Skills modify the character's interaction with PRIMITIVES — how fast they swing an axe, how acutely they read tracks, how cleanly they butcher. The character's CAPABILITIES emerge from primitives + skill modulation, not from feature allowlists. Mastery is observable performance change against the same physics; it is not a license to access new content.
 
 ### 14.1 Four artifacts
 
@@ -940,6 +1058,8 @@ The world stays visually clean. Recognition (entity name, state, inference) live
 
 STATUS: LOCKED. Resolves §12.3. All weapons in this section are IN; their cost matrices implement the No Dominant Strategy pillar (§1). Magnitudes (effective ranges, ammo weights, sound radii) are tuning proposals, not committed values.
 
+Per §2.5: hit-zone lethality is already primitive-based. Wound severity emerges from impact-point + projectile-mass + velocity + tissue-resistance. No HP bars, no buff-numbers across §17.6 difficulty tiers — the same bear bite is the same bite, the same arrow is the same arrow. Difficulty changes the WORLD, not the §15 math.
+
 ### 15.1 Weapon roster
 
 Pre-industrial:
@@ -1112,3 +1232,217 @@ Chain notes:
 - `overhunting-predator-aggression.md` — paradigmatic ecology pressure chain
 
 More notes will land as systems get specified through ongoing playthrough scripting and design discussion. Future high-priority spec targets surfaced in Run 01: water system (G11), shelter construction (G6), movement modes (G9), sleep system (G36), food caches (G41), apex predator economic intelligence (G42).
+
+---
+
+## 17. Community Emerges, Not Designed (Locked, 2026-05-10)
+
+The design's intent for multiplayer is that communities form because of mechanical pressure, not because the game tells players which factions exist or which roles they must fill. The design stance is **create conditions, not author outcomes**.
+
+A clarification matters: this is not "no design." Conditions are themselves design. Freedom without costs produces solo play; costs without freedom produces guilds-on-rails. MN's commitment is that the design's job is the AFFORDANCES (you can build, you can hide caches, you can leave Forest Signs) and the COSTS (you cannot do everything alone, specialization is irreducible, trust is hard-won, traces of action persist). The community is what emerges.
+
+Five pillars support emergence. The sixth sub-section establishes difficulty tiers and the Trailhead Convention.
+
+### 17.1 No Designed Tribes
+
+No factions, no guilds-as-mechanic, no alliance UIs, no reputation systems, no class quotas. Players invent whatever groupings they invent, in whatever language they invent. The game does not bless or recognize tribes.
+
+- **Why**: Designed tribes (Alliance/Horde, faction-pick-at-character-creation, karma-score reputation) override the slow-trust dynamics that produce real communities. Players play their faction rather than themselves.
+- **Leave-alone condition**: A shard MAY host a long-running player-organized tribe with rituals, names, and territory. The game does not stop them; it just doesn't author them. The Group Charter convention (issue #41) is a player-authored social-contract artifact, not a game-issued one.
+- **Mechanical apparatus**: Forest Signs (§13.1) is the writing surface. Group Charter is the typography. The game provides primitives for player invention; the typography is not designer-supplied.
+
+### 17.2 Specialization at Full Mastery
+
+No character covers all needs at full mastery. A cooperative settlement of specialists outproduces a solo generalist by mechanical inevitability — not by penalty. Cooperative formation is rewarded, not enforced.
+
+- **Why**: This is the load-bearing community-emergence force. Run 17 (multiplayer settlement playthrough) demonstrated coop didn't increase yield-per-m² but increased viability of the larger plot. Without specialization pressure, solo is always viable and community is optional.
+- **Architecture**: §14 multi-axis quality grading + §14.5 master-only signature abilities + above-baseline cap (15-30%) per §14.2 — together these guarantee no character at full mastery covers the full survival surface. A Master Hunter is genuinely better than a Practiced Hunter at hunting; same Master Hunter is sub-baseline at masonry. The deltas accumulate; trade and cooperation become the natural economic shape.
+- **Leave-alone condition**: solo play remains possible (Run 12 Survivalist Pell survived 30-day mobile fieldcraft solo). Community is REWARDED, not gated.
+- **Settlement-scale economy**: §17.5 Proximity-Only Communication, combined with character-shard binding (§12.9), means trade and cooperation happen in physical proximity. A settlement is the natural form of specialist-density. Run 17 surfaced the gaps (MP1-MP9 multiplayer-specific) needing follow-on spec.
+
+### 17.3 The World Has Memory
+
+World STATE persists between sessions. Your camp, traps, kill cache, Forest Signs, dug pits, worn paths — all still there when you return. The world is not deleted-and-reloaded per session.
+
+- **Character state pauses on tether logout** per §12.4 — you don't decay while logged out. Real lives are respected.
+- **World processes (weather, plant growth, animal migration, kill decomposition) run at the shard's configured rate** per §12.9. The CLOCK is shard-configurable; the MEMORY is non-negotiable.
+- **Multi-day mechanics (Carrion Chain, sepsis cascade, garden harvest cycle) tune to whatever the shard's time rate is** — they are durations, not absolute clocks.
+- **Why**: Without async persistence, MN becomes "instance loaded on first login" and no one builds anything together. Territory, settlements, and the work of community require a world that holds its shape between sessions.
+- **Leave-alone condition**: The clock RATE can pause when no players are present on a shard (configurable per shard). Casual shards may opt for this; hardcore shards may run continuously. The principle is memory, not perpetual motion.
+
+### 17.4 Significant Actions Leave Traces; Traces Decay; Trace is Shard-Local
+
+Every significant player action leaves persistent world-state. Structures, felled trees, kill sites, Forest Signs, abandoned camps, dug pits, worn paths. The land remembers what's been done.
+
+- **Significant** filter: structures, fellings, kill sites, signs, camps, pits, repeated-path-wear. NOT every footstep, breath, or gesture.
+- **Decay is biome-appropriate**: stumps weather + are absorbed by undergrowth over ~2-3 game-years; unmaintained shelters rot; paths fade in a season without re-wear; Forest Signs are removable by passers-by; kill sites lose visual trace in ~weeks.
+- **Maintained = persistent**: a cabin lived in stays a cabin; a cabin abandoned becomes a ruin over 1-2 game-years.
+- **Aggregate density is managed by decay rates**, not by per-player quotas. The world ages, the world heals.
+- **Trace is per-shard** (per §12.9 character-shard binding). Cross-shard trace does not exist. Per-shard isolation keeps storage bounded; per-shard decay keeps render-density manageable.
+- **Storage**: ~14 GB/month raw per active shard, decay-pruned to ~150-200 GB steady state after a year. Modest infrastructure.
+- **Why**: Iri's notebook (Run 16 managed-wild playthrough) is the player-side analog of territorial knowledge. The world also needs to carry the marks for that knowledge to be shareable. Without trace, two players occupy the same map but live in different worlds.
+
+### 17.5 Proximity-Only Communication
+
+Voice, text, and gesture are all in-fiction proximity. No global chat. No party-text-feed. No friend-status indicators. No whisper-from-anywhere. To talk to someone, you have to find them.
+
+- **Proximity scarcity makes neighbors valuable**. A friend across the shard is functionally unreachable until you spend the days to walk there. Geography matters.
+- **Forest Signs** (§13.1) is the asynchronous-mediated channel. Leave a note in the world; the next traveler reads it. Async communication exists; it is mediated through the world, not through UI.
+- **Out-of-game coordination** (Discord, voice, text) is unrestricted. Friends arrange to play together via outside channels; they land on the same shard and meet in-fiction.
+- **Why**: Forces real geography to matter and forces in-fiction first-contact dynamics (per Run 02 Beat 10 disarm-walk protocol, c58 DayZ voice-proximity ref). The community-emergence force depends on players actually finding each other to interact.
+- **Leave-alone condition**: technical voice infrastructure is a build-phase decision. The principle is "no global channel"; the technical implementation (proximity voice, push-to-talk radius, text in nearby chat bubbles) is open.
+
+### 17.6 Difficulty Tiers (Locked, 2026-05-10)
+
+Three named tiers. Difficulty is **shard-level** (set at shard creation), NOT per-player. The shard's tier becomes part of its identity; communities of like-minded players gravitate naturally.
+
+#### Mother Nature (baseline)
+
+The game as designed. Permadeath, cascade-based deaths, realist commitment, hit-zone lethality, skill-modulated saliency, diegetic UI. The floor — no easier tier exists.
+
+- Compendium inherits across characters on the account per §12.5
+- Field Notes inherit per §14.12
+- New character on a shard gets full archetype competence (Hunter starts knowing hunting basics)
+- 24:1 time compression, 7-10 km radius shard per §12.9
+- Death → choose to land new character on same shard immediately
+- Predators are naive — they investigate before committing per the bear-ai.md utility-AI baseline; commit-on-detection does NOT fire
+- Trailheads have no special safety budget (predators don't commit on detection at baseline anyway)
+
+#### Hard
+
+The world bites back harder. Density and history shift; commit-rates increase.
+
+- Resource density ~25-30% lower (fewer berries, fish, game, timber per hectare)
+- Predator pressure ~25% higher (more apex individuals per shard, faster behavioral-memory accumulation, longer Carrion Chains)
+- Weather harshness up: more storms, faster cold-onset, sharper season edges
+- Cascade speed ~25% faster (sepsis faster, hypothermia earlier, caloric debt accumulates faster)
+- Compendium **partial-inheritance**: Field Notes inherit; discovered-plant/material entries reset (account knows ramps exist; new character's compendium doesn't auto-mark them)
+- Death-respawn cooldown: 24 real-hours before new character on same shard
+- Trace decay slightly slower (the world remembers your prior camp longer)
+- Trailheads have ~24-game-hour decaying safety budget — mild reduction (~40-50%) for first day, then normal
+
+#### Death Sentence
+
+The ironman tier. The world is denser with hostile entities, has accumulated history of human deaths, and is compounding pressure on every system.
+
+**Density (more entities, same rules):**
+
+- Predator population ~2× baseline (within real-world bounds — Yellowstone-tier predator-rich regions, not fantasy density)
+- More apex individuals per shard; expanded apex-individual rosters
+- **Group predators (wolf packs) operate as default coordinated AI**, not exception
+- Expanded disease vector roster: ticks, biting flies, leeches, water-borne pathogens at biome-realistic but unsoftened levels
+
+**History (the world remembers across player deaths):**
+
+- DS shards spawn with **pre-baked ecological history**. The region has had prior human presence (real prior characters + designer-seeded ghost-presence at shard birth). The world predates your character.
+- Apex individuals are **pre-primed at shard seed**: cougars on Path C territories already exist; bear behavioral-memory of human-camps already established; wolf packs have decided humans-are-prey.
+- **Predator-behavioral-memory persists across player deaths** — the cougar that killed your prior character is still there. Same individual, same memory, same territory. Next character lands and inherits the consequence.
+
+**Compounding (time has consequences):**
+
+- Weather has memory: rain → mud → slower travel → calorie cost; cold snap → reduced sleep quality → cumulative fatigue
+- Carrion Chain decay rate slower (scent persists ~2× as long); trapline-as-scent-broadcaster works against you harder
+- Resource regrowth ~50% rate — over-harvest becomes a real economic problem; ecosystem can be wounded
+- Disease cascade speed ~2× faster
+
+**Refusal list — what DS REFUSES (the "never cheated" guarantee):**
+
+- **No buff-numbers**: a wolf bite is the same wolf bite. §15 hit-zone math identical to baseline.
+- **No spawn-on-player**: every predator was on the map before you saw it. Reachable by stalking, scent-following, ambush-from-cover — never materializing at close range.
+- **No accelerated player meters without cause**: hunger/thirst/sleep curves are biology, not difficulty. Faster starvation comes from low-resource zones, not from a doubled tick rate.
+- **No designer-RNG punishments**: every painful event must be RECONSTRUCTABLE as a chain of in-world consequences. §14.12 Field Notes principle holds — every death is reviewable.
+- **No invisible mechanics**: hostility comes from entities and states the player CAN observe (saliency-permitting) — tracks, scent posts, scat, broken brush, kill remains, weather signs.
+
+**Predator commitment profile on DS:**
+
+DS predators **commit on detection** rather than entering an investigation phase. The behavioral utility-AI from bear-ai.md is unchanged in structure; weights shift toward attack because predators are pre-conditioned as food-experienced.
+
+| Predator | Detection trigger | DS response |
+|---|---|---|
+| **Bear** | Scent at ~150-300m downwind | Silent downwind approach, ambush from cover. No territorial-bluff phase. No false-charge. Commits. |
+| **Cougar** | Visual or scent at ~50-100m | Silent stalk, pounce at first viable angle. No tail-twitch warning. Pre-positioned for ambush from above/cover. |
+| **Wolf pack** | Scent at ~500m+ | Coordinated approach, beta-wolves drive prey toward alpha's ambush, encirclement before commitment. |
+| **Lone wolf** | Scent + visual | Stalk → harass-to-exhaustion → kill at vulnerable moment (rest, sleep, injury). |
+
+These are utility-AI weight shifts in the existing bear-ai.md framework, not new code paths. The AI still evaluates hunger, energy, terrain, time-of-day. DS biases attack-utility weight upward and starts predators in food-conditioned state. See bear-ai.md "Difficulty-tier parameterization" section for implementation detail.
+
+**Minimum saliency-warning window**: ~5-15 seconds between first-detectable-cue and lethal contact. Master-tier §14.13 saliency reads the warning (silence of prey species, distant scat-fresh, broken brush, scent-post smell, wind shift); novice doesn't. Skill IS the difference between survival and death.
+
+**Detection is the skill check; the kill is the consequence**:
+
+Counterplay remains:
+- §14.13 saliency surfaces warning signs to trained characters
+- Wind awareness — scent travels with wind; downwind player is undetected
+- Active scent-management (charcoal, mud, smoke-clothing-prep, scent-mask plants)
+- Route selection (drainage choice, ridge vs valley, water crossings)
+- Cover concealment (line-of-sight breaks reduce pounce accuracy)
+- Defensible structures (cabin, cave, high ground)
+- Counter-signals (gunshot, fire flare, shouting — with §1 cost: broadcasts location)
+
+**DS death-respawn rules:**
+
+- **One life per shard option**: shard policy may enforce "one character per account per shard, ever." Character dies → cannot re-land on this shard. Character becomes Field Notes entry on account + permanent dead-body world-object for next player to find. Account-knowledge inherits to characters on OTHER shards.
+- **Alternative DS policy**: 72 real-hour respawn cooldown, then new character lands at a different trailhead. Shard owner sets policy at creation.
+- **Compendium does NOT inherit** between characters at DS — every new character starts with archetype baseline only. Forces re-derivation.
+- **Field Notes inherit** (per §14.12 death-as-teaching) but can't be used as gameplay shortcut.
+- **Time compression** configurable down to 12:1 (edge-to-edge ~4-6 real-hours; a game-day ≈ a real-life evening).
+- **Trace decay** is much slower at DS — failures haunt the shard for game-years.
+
+#### 17.6.1 The Trailhead Convention
+
+Spawn points are not generic. Each shard's trailheads are specific in-world locations chosen for **ECOLOGICAL reasons** that produce lower predator density at the start. Not magic safe zones — terrain + recent-disturbance affordances that earn the buffer.
+
+**Trailhead types** (ecologically-justified spawn locations):
+
+| Type | In-fiction reason | Why it works |
+|---|---|---|
+| **High ridge above treeline** | Character descended a cliff path or crashed at altitude | Cougars don't favor open rock; bears rarely range above 2500m; line-of-sight clear |
+| **Fresh burn scar (2-3 game-weeks old)** | Walked out of recent wildfire | Wildlife displaced; smoke-residue masks human scent; charred ground still warm |
+| **Mid-river island** | Boat crash or washed-ashore | Mainland predators don't cross deep current; visible approaches |
+| **Recently-abandoned cabin site** | Prior occupant departed weeks ago | Human-pressure residue still deterring wildlife |
+| **Mesa edge with single approach** | Hiked in along ridge spine | Geographic isolation; one predictable predator approach vector |
+| **Glacial moraine / scree field** | Recent climber emergency | Unstable terrain that predators avoid |
+
+**Safety budget per trailhead** (DS tier — tighter than earlier draft per 2026-05-10 conversation):
+
+| Phase | Game-time | Real-time at 24:1 | Predator reduction |
+|---|---|---|---|
+| Strong | First 24 game-hours | ~1 real-hour | ~60% |
+| Decaying | Next 24 game-hours | ~1 real-hour | ~30% |
+| Normalized | Hour 49+ | — | 0% (full DS density) |
+
+- **Radius**: ~200-300m around the trailhead. Small bubble forces the player out into normal-density terrain for water/food within the safe window.
+- **Per-use depletion**: 2 deaths at the same trailhead exhaust its budget. Third character lands at full DS hostility from minute one.
+- **Saliency surface**: smoke residue, cliff height, scree instability, water sound, fresh burn ground — all observable cues. Player CAN tell their trailhead is initially safer; the explanation is in-world, not labeled.
+
+**Tier scaling for the convention:**
+
+- **Mother Nature baseline**: trailheads are simply low-traffic terrain. No special safety budget. Predators are naive; no commit-on-detection.
+- **Hard**: ~24 game-hour decaying safety (mild ~40-50% reduction for first day, then normal).
+- **Death Sentence**: 48 game-hour budget with the 60% → 30% → 0% decay above, plus per-use depletion.
+
+**What the window is FOR (one ~2-hour real-time session of orientation):**
+
+- Read trailhead Field Notes from prior dead characters
+- Find immediate water source
+- Build a lean-to or find defensible cover
+- Scout 200-300m in each direction
+- Identify wind direction, terrain drainages, and one predator territory boundary
+
+Not enough time to skill-up. Just enough to **not die in the first 10 minutes** and form a plan for after the buffer drops.
+
+#### 17.6.2 Cross-references
+
+- §12.9 shard model — shards carry a difficulty flag
+- §14.12 Field Notes — every DS death must be reviewable
+- §14.13 saliency — warning channel for incoming predators
+- §15 combat — hit-zone math identical across tiers
+- §17.3 World Has Memory — shard clock-rate may be tuned with difficulty
+- §17.4 Trace as Object — DS slows trace decay
+- `docs/systems/bear-ai.md` — difficulty-tier parameterization spec
+
+#### 17.6.3 Falsification criteria
+
+- If playtest shows Hard feels mechanically indistinguishable from Mother Nature (the 25% deltas are imperceptible), the multipliers need to scale up OR the axes need qualitative differences not just quantitative.
+- If DS new-character deaths happen at Day 8 with no skill-development progress (<10% of players reach Day 4), the trailhead buffer needs extending OR saliency surfaces need sharpening.
+- If DS deaths feel "unfair" / "unreadable" despite in-world threads being present, the saliency surfaces are failing — the fix is more saliency (better cues, more compendium hints from prior characters), not less hostility.
