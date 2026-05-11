@@ -89,6 +89,12 @@ Every system must fit both. Steam Deck is the binding constraint for most CPU-he
 | Workshop infrastructure rendering | always-on | ~0.05 ms per visible workshop | 🟢 | — | proposed | Per-workshop sprite + state visualization (smoking/drying/active) |
 | Reference capture ("Study technique") | async | ~5-10 ms per study | 🟢 | — | proposed | Spatial query on adjacent structure + compendium write |
 | Composition rules evaluation | periodic | <0.5 ms on right-click | 🟢 | — | proposed | Filter available actions: object × inventory × skill × compendium × workshop |
+| Color grading LUT (§20.4) | always-on | ~0.1-0.2 ms | 🟢 | — | proposed | Single screen-space LUT per scene; per-biome / per-time-of-day modulation |
+| 2D dynamic lighting (§20.5) | always-on | ~0.5-2 ms | 🟢 | — | proposed | Bounded light count; radial pools around fires + ambient sun direction |
+| Atmospheric particle effects (§20.6) | always-on | ~0.3-1.5 ms | 🟢 | — | proposed | Rain, snow, dust, embers, eye-shine. Particle count capped per biome |
+| Sprite rendering @ 40-80 visible sprites (§20.3) | always-on | ~1-3 ms | 🟢 | — | proposed | Standard 2D sprite rendering; high count from apex + ambient + player + structures |
+| Bloom pass (§20.7) | always-on | ~0.3-0.5 ms | 🟢 | — | proposed | Selective; only bright elements (fires, eye-shine, master items) |
+| Film grain + texture overlay (§20.7) | always-on | ~0.1-0.2 ms | 🟢 | — | proposed | Subtle painterly quality without painted-style cost |
 | Day-night cycle update (§4) | periodic | <0.1 ms | 🟢 | — | proposed | Single time tick |
 | Seasonal transition logic (§4.5) | periodic | <0.1 ms | 🟢 | — | proposed | Day-boundary only |
 
@@ -182,3 +188,4 @@ P0 items gate v1 vertical slice. Without them, scope decisions are guesses.
 | 2026-05-10 | Seeded perf-budget.md with ~30 currently-committed systems classified by tier | Established operational tracking per design discussion. All entries `proposed`; none `verified` until prototyping. |
 | 2026-05-10 | Revised saliency-state composition estimate from ~5 ms to ~0.1 ms (50x reduction) | Original was back-of-envelope without event-rate math. Real cost is dominated by state-input change events (~10-15 per game-hour per player), not per-frame computation. Cache strategy: recompute only on threshold cross. Confidence upgraded from 🟡 to 🟢. |
 | 2026-05-10 | Seeded 10 §19 crafting architecture entries | Per design discussion + lock of §19 Crafting Architecture. Material primitives, tool wear, item decay, plan mode, batch processing, workshop rendering, reference capture, composition rules evaluation. All `proposed`; expected aggregate cost ~1-2 ms always-on + <1 ms periodic. Within budget. |
+| 2026-05-10 | Seeded 6 §20 art direction entries | Per design discussion + lock of §20 Art Direction (Eastward visual target). Color LUT, 2D lighting, particles, sprites, bloom, film grain. All `proposed`; aggregate ~2.3-7.4 ms always-on. Within budget on both Recommended and Steam Deck tiers. |

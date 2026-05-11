@@ -2465,3 +2465,199 @@ Item crafting reuses the same systems as structures: composition rules evaluatio
 - Provides the diegetic plan-mode interface with four tool tiers
 - Provides emergency-exit safety for plan mode
 - Per §18 cut hierarchy: workshops are tier-3 scope-cut candidates if budget tightens (could ship with stone hearth + drying rack only at v1, smokehouse + forge later)
+
+---
+
+## 20. Art Direction (Locked, 2026-05-10)
+
+STATUS: LOCKED. Visual reference target: **Eastward** (Pixpil Games, 2021). MN's art direction commits to pure 2D pixel-art top-down with rich post-processing — distinctive atmospheric mood through palette, light, and particles, while staying within the §18 hardware-tier budget.
+
+This section commits the visual identity that supports the screenshot-virality marketing strategy without requiring HD-2D (3D environments) and without pushing past Steam Deck capability.
+
+### 20.1 Visual reference target — Eastward
+
+The defining visual characteristics of Eastward that MN inherits:
+
+- **Mid-density pixel art** — characters at ~24-32px tall with rich detail per sprite; not minimalist (RimWorld) or super-pixely (early Stardew). High pixel-art quality at a moderate grid resolution.
+- **Color palette per scene/region** — each location has distinctive grading. Lush greens, sickly yellows, warm interiors, cold underground. Color tells the story.
+- **Strong day-night lighting contrast** — selective bloom on light sources at night; interior firelight is a recognizable warm pool; night is genuinely dark.
+- **Atmospheric particles** — light beams through trees, dust motes in light shafts, rain, fog drift, embers. Constant subtle movement adds life.
+- **Detailed sprite work with rich frame-by-frame animation** — each character moves distinctly; animations have personality.
+- **Environment detail** — every screen has many carefully-placed small objects (clutter that suggests life). Backgrounds feel hand-painted in pixels.
+- **3-quarter top-down camera perspective** — slight downward angle that shows ground while revealing character fronts; not pure top-down, not isometric. Allows character faces to read.
+- **High resolution sprites at moderate pixel grid** — pixel work visible but not chunky retro.
+
+MN screenshots should evoke the same visual weight Eastward achieves: every frame feels deliberate, atmospheric, hand-crafted.
+
+### 20.2 Camera perspective — 3-quarter top-down
+
+Per §1 (Art style: 2D top-down or isometric), MN commits to **3-quarter top-down**:
+
+- Camera angle: ~20-35° downward from horizontal
+- Player character renders with visible front + slight top view
+- Ground occupies majority of screen
+- Distant terrain has slight perspective foreshortening
+
+This perspective:
+- Matches Eastward's framing
+- Reads more atmospheric than pure top-down
+- Keeps character readability (faces, body language visible)
+- Allows depth cues without requiring 3D rendering
+- Compatible with §14.13.1 peripheral viewport desaturation
+
+### 20.3 Sprite work specifications
+
+| Asset class | Sprite scale | Animation frames | Estimated hours per asset |
+|---|---|---|---|
+| Player character archetype | 28-40px tall | Idle (4-8), walk (8 per direction × 4 dirs), action (6-12 per common verb), reaction (variable) | ~80-200 hours per archetype |
+| Apex individual (bear, cougar, wolf, etc.) | 32-48px | Idle, walk, run, attack (multiple), defensive postures, dying, dead | ~40-80 hours per |
+| Ambient wildlife (deer, fox, rabbit, birds) | 16-32px | Idle, walk/flight, alarm reaction | ~20-40 hours per species |
+| Plant / herb / mushroom | 12-32px | Sometimes static; some animated (grass sway, flower bobbing) | ~5-15 hours per object type |
+| Tools, weapons, consumables (inventory icons) | 24-48px | Static + held animation per usage | ~5-20 hours per |
+| Environment tiles per biome | 32px tile base + variants | Variants for season, lighting state, weather | ~80-200 hours per biome |
+| Structures (cabin, smokehouse, etc.) | Variable | Plus construction-state visuals (in-progress, complete, decayed) | ~40-80 hours per structure type |
+
+**Total estimated asset work for v1**: 1.5-2.5 years solo, ~9-15 months small team (3-5 with dedicated pixel artist + 3D-free environment specialist).
+
+### 20.4 Color palette per biome and time
+
+**Per-biome signature palettes:**
+
+| Biome | Signature palette | Color grading mood |
+|---|---|---|
+| Deep Forest | Cool greens, forest browns, occasional warm-orange highlights (sunlight breaks) | Lush, mysterious, dappled |
+| Desert | Warm ochres, salmon-pinks, deep oranges, occasional violet shadow | Stark, exposed, hot-day / cold-night contrast |
+| Tundra | Cold blues, whites, slate-grey rock, sparse warm accents (driftwood, blood) | Brutal, sparse, ice-and-stone |
+
+**Per-time-of-day modulation:**
+
+| Time | Color shift |
+|---|---|
+| Dawn | Cool blues lift into warm pinks/oranges; mist visible |
+| Midday | High saturation, neutral grading |
+| Dusk | Warm amber dominates; long shadows |
+| Night | Cold dark palette; selective bloom on fires and eye-shine |
+
+**Per-season modulation:**
+
+| Season | Forest | Desert | Tundra |
+|---|---|---|---|
+| Spring | Vivid greens, wet textures | Brief greening, wildflower colors | Slush, mud, ice-break |
+| Summer | Full lush green, dappled light | Bleached overexposed look | Tundra-bloom green, 24hr daylight |
+| Autumn | Reds, oranges, browns | Cooler ochres, longer shadows | Brief golden window, frost dust |
+| Winter | Snow-overlay, blue-white | Cold-night palette, sparse warm | Total monochrome blue-white, dark long nights |
+
+Color grading is per-scene / per-cell driven by the §12.8 hex weather grid + day-night cycle. Implemented as a single screen-space color-LUT shader.
+
+### 20.5 Lighting and atmosphere
+
+**Dynamic 2D lighting per scene:**
+
+- **Fires cast radial warm-pool lighting** — saturation boost + warm color shift within ~3-5m radius
+- **Sunlight angle** affects shadow direction and ambient color across day cycle
+- **Night is genuinely dark** — saturation crushes; selective bloom on light sources
+- **Storm lighting** — flashes briefly illuminate during lightning; rain reduces ambient saturation
+- **Predator eye-shine** at night — small bloomed pixels visible at predator eye locations (saliency cue per §14.13)
+
+**Atmospheric depth (without 3D):**
+
+- **Distance fog** as flat overlay — far elements desaturated and lightly hazed
+- **Light shafts through trees** — animated rays during sunrise/sunset/dappled-forest moments
+- **Heat shimmer** in desert midday — particle-distortion shader
+- **Snow drift / dust drift / pollen drift** as ambient particles per biome
+
+### 20.6 Particle effects
+
+| Effect | Trigger | Visual |
+|---|---|---|
+| Rain | Weather state (per §12.8 grid) | Slanted streaks; surface wetness shader |
+| Snow | Weather + temperature | Drifting white particles; accumulates on surfaces |
+| Falling leaves | Autumn / shaken trees | Multi-color drift |
+| Dust motes | Sunbeam through windows / canopy | Tiny floating particles |
+| Fire embers | Fire active | Small warm-orange particles rising |
+| Smoke | Fire + wind direction (per §13.4) | Drifting gradient toward wind |
+| Scent visualization | Per §13.2 carrion / §13.4 wet wood | Optional faint drift; can be toggled / saliency-tier-gated |
+| Predator eye-shine | Night + predator within visual range | Small bloomed pixels |
+| Master-crafted item glint | Master-tier crafted items at rest | Subtle sparkle |
+| Blood | Combat / injury | Splatter + slow drip |
+| Tracks | Per §13.3 | Animation: pressed earth, fading per substrate + weather |
+
+Particles are cheap (<1 ms total per frame) and add the "life" that distinguishes atmospheric games from utilitarian ones.
+
+### 20.7 Post-processing pipeline
+
+**Render order:**
+
+1. Background tiles (terrain)
+2. Mid-ground objects (plants, items, structures)
+3. Character + wildlife sprites (per Y-sort for depth)
+4. Foreground overlays (foliage, drifting particles)
+5. Lighting pass (2D dynamic lights + ambient)
+6. Color grading LUT (per-biome / per-time / per-state)
+7. Atmospheric fog (flat overlay)
+8. Particles
+9. Bloom (selective, on bright elements)
+10. Film grain / texture overlay (subtle)
+11. Saliency-degradation peripheral desaturation (per §14.13.1)
+12. UI overlay (HUD, hand-held compass, character mutter)
+
+### 20.8 Compute cost (per §18 perf budget)
+
+| Element | Cost on Recommended | Cost on Steam Deck | Confidence |
+|---|---|---|---|
+| Sprite rendering (~40-80 visible sprites) | 1-2 ms | 2-3 ms | 🟢 HIGH |
+| Background tile rendering | 0.5 ms | 1 ms | 🟢 HIGH |
+| 2D dynamic lighting (limited light count) | 0.5-1 ms | 1-2 ms | 🟢 HIGH |
+| Particle effects | 0.3-0.7 ms | 0.7-1.5 ms | 🟢 HIGH |
+| Color grading LUT | 0.1 ms | 0.2 ms | 🟢 HIGH |
+| Bloom (selective) | 0.3 ms | 0.5 ms | 🟢 HIGH |
+| Film grain / vignette / peripheral desat | 0.2 ms | 0.3 ms | 🟢 HIGH |
+| **Total rendering** | **2.9-4.8 ms** | **5.7-8.5 ms** | |
+
+**Within current §18 budget** on both tiers:
+- Recommended: rendering ~6-8 ms total (was estimated at this level)
+- Steam Deck: rendering ~10-15 ms total (was estimated at this level)
+
+The Eastward-tier art direction FITS within current hardware-tier commitments. No need to drop Steam Deck minimum or raise Recommended target.
+
+### 20.9 Asset authoring requirements and risks
+
+**The honest scope:**
+
+Eastward's art was produced by a small dedicated pixel-art team over 5+ years (~3-5 artists). MN at the same quality is a 1.5-2.5 year solo asset effort or ~9-15 month small-team effort.
+
+**Specific risks:**
+
+1. **Procedural placement vs hand-authored feel.** Eastward authored every scene by hand. MN is procedurally generated. Each biome's tile-set + placement rules must produce hand-crafted-feeling environments through composition. This is the hardest art-tech challenge.
+2. **Animation breadth.** MN has more distinct action animations than Eastward (combat, crafting, hunting, processing, fire-tending, sleeping, dying). Each archetype needs comprehensive animation coverage.
+3. **Apex-individual variation.** Per §12.8, ~10 named apex individuals per shard. Each needs distinct sprite work to support apex-individual identity (Tova-killer bear is recognizable across encounters).
+4. **Quality consistency.** Mid-development style drift can produce inconsistent visuals. Strong art-bible discipline required.
+
+**Mitigation:**
+
+- Asset library + tile-set approach (rather than one-off per location)
+- Procedural variation through palette + accent + layering (rather than unique sprites per location)
+- Animation-state reuse (idle/walk/attack/etc. modular per archetype)
+- Outsourced contract pixel-art work for repetitive assets (plants, props) — preserves consistency on signature work (characters, apex individuals)
+
+### 20.10 Falsification
+
+If early vertical-slice produces:
+- Procedural environments that feel "mushy" or repetitive vs Eastward's hand-crafted scenes — art-tech approach needs revision (more tile variants, better procedural rules, or hand-painted background base + procedural overlay)
+- Animation work proves more expensive than estimated — scope-cut animations to essential set (idle, walk, primary action only)
+- Color grading produces visually fatiguing screens — palette work needs tuning
+- Eastward-quality is unachievable at the team size / timeline — fall back to Don't Starve-tier stylized 2D (less pixel-detail, stronger silhouettes, lower asset cost)
+
+### 20.11 Cross-references
+
+- §1 (art style commitment — 2D top-down)
+- §3 (biome distinctiveness through art)
+- §4 (day-night cycle / seasonal scaling drives palette work)
+- §13.4 (wet wood / smoke visualization)
+- §14.13 (saliency-modulated rendering)
+- §14.13.1 (peripheral viewport desaturation — already in spec)
+- §17.4 (significant actions leave traces — visual aging of structures)
+- §18 (Build Discipline — art-direction cost fits budget)
+- `docs/_engineering/perf-budget.md` — entries for Art Direction (to be added)
+- **Visual reference**: Eastward (Pixpil Games, 2021)
+- Secondary references: Hyper Light Drifter (color/atmosphere), Don't Starve (silhouettes/animation), Stardew Valley (palette-per-time-of-day)
