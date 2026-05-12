@@ -241,6 +241,74 @@ This produces most of the emergent behavior of true atmospheric simulation at a 
 
 Terrain feeds back into the atmospheric grid. Valley floors are reliably foggier in the morning. South-facing slopes melt snow first in spring. Coasts are milder than the interior. Players learn the map in a way no scripted system can teach.
 
+### 3.4 Sub-biome Pockets (Locked, 2026-05-11)
+
+STATUS: LOCKED. Direct consequence of §0 design pillars (beauty as value + systems as substrate + emergent-over-scripted) and §19.19 (data-driven content extension). Validated by a 13-image MJ reference corpus generated 2026-05-11.
+
+Within each biome, the procedural generator places **pockets** — hand-designed templates with distinct visual identity, central feature, and gameplay function. Pockets are how procedural environments avoid feeling mushy or repetitive (§20's named risk) while staying procedurally placed.
+
+#### 3.4.1 What a pocket is
+
+A pocket is a **visual + functional bundle**, not a visual variant alone. Each pocket schema commits to three things together:
+
+1. **Visual identity** — species mix, ground cover, palette skew, lighting feel (e.g., "crimson weeping willows + still pool + mossy stones")
+2. **Central feature** — usually a single defining element (a spring, a boulder field, ancient hollow trees, a still pond)
+3. **Gameplay function** — what services it provides to a player who reaches it (water source, predator cover, natural shelter, rare-herb cluster, navigation landmark)
+
+The visual signals the gameplay. A player who sees "pink petals on still water" knows it's a Bloom Hollow and that bloom-pollen and clean water are likely here — without anything telling them so. This serves the **recognition-as-verb pillar** (§14.13, issue #68): the world teaches its own gameplay through visual identity.
+
+#### 3.4.2 Three tiers
+
+| Tier | Instances per world | Naming | Compendium | Examples |
+|---|---|---|---|---|
+| **Common** | Many per biome | Generic category names | One entry per category | Mixed Oak Stand, Pine Grove, Birch Line, Aspen Patch, Riverside Cottonwoods, Lowland Marsh |
+| **Rare** | 0-2 per biome | Players name specific instances | One entry per pocket type | Crimson Glade (red willows + spring), Silver Pines (teal evergreens + boulders), Hollow Elder Stand (ancient trees with cave openings), Bloom Hollow (magenta blossoms + petal-strewn pond) |
+| **Legendary** | 1 per world | Singular, world-defining names | One unique entry | The Singing Pines, The Lightning-Marked Oak, The Mother Tree |
+
+#### 3.4.3 Data-driven templates (per §19.19)
+
+Each pocket is a `.tres` Resource defining:
+
+- `name`, `description`, `compendium_entry` (text)
+- `footprint`: min/max area in tiles
+- `terrain_requirements`: slope, water-adjacency, elevation, soil type
+- `species_mix`: list of tree species + relative weights
+- `ground_cover`: list of plants/mushrooms/rocks + density
+- `central_feature`: optional (spring, hollow tree cluster, boulder, ancient tree, pond)
+- `gameplay_tags`: water_source / shelter / cover / rare_herbs / landmark / vantage
+- `placement_rules`: how procedural generator decides where to place (rarity, biome eligibility, terrain match)
+
+This makes pockets fully modding-extensible per §19.19 — modders drop a new `.tres` + sprite reference into `mods/<name>/pockets/`, the procedural generator picks it up.
+
+#### 3.4.4 Why pockets matter for §0 pillars
+
+| Pillar | How pockets serve it |
+|---|---|
+| §0.1 Beauty as value | Players have memorable *places* to return to, not just memorable *moments*. The world is worth dwelling at specific locations. |
+| §0.2 Systems as substrate | Each pocket runs autonomously (animals visit, seasons change appearance, water freezes/melts) — players can revisit and see real change |
+| §0.3 Emergent over scripted | Pocket templates are data; what happens *inside* a pocket emerges from the substrate (a Bloom Hollow's pollen interacts with allergy mechanic, scent diffusion, etc.) |
+| §14.13 Recognition-as-verb | Pockets are the canonical things players learn to identify. Visual cue → known services. |
+| §17 Community Emerges | Players name specific instances ("the Crimson Glade by the broken stone bridge"); the community builds mythology around landmark pockets |
+
+#### 3.4.5 Locked aesthetic corpus
+
+13 MJ reference images locked 2026-05-11 define the visual language for forest pockets:
+
+- 5 generic forest scenes (common-tier baseline)
+- 1 Crimson Glade (rare-tier)
+- 2 Silver Pines variants (rare-tier)
+- 2 Hollow Elder Stand variants (rare-tier)
+- 3 Bloom Hollow variants (rare-tier)
+
+Corpus saved at `docs/art/reference/forest-corpus/`. Sprite Forge production targets these images via --sref-style anchoring. Future biome corpora (tundra, desert, marsh) follow the same generation methodology.
+
+Cross-references:
+- §0 Design Pillars — beauty + systems + emergent
+- §14.13 Skill-Modulated Saliency — recognition-as-verb
+- §17 Community Emerges — pocket naming becomes community lore
+- §19.19 Modding & Player Extension — pockets are data-driven, modder-extensible
+- §20 Art Direction — Painterly Pixel Coherent style applied to pockets
+
 ## 4. The Day-Night & Seasonal Cycle
 
 ### 4.1 The Two Clocks
