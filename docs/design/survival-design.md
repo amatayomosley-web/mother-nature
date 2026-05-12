@@ -2470,7 +2470,7 @@ Item crafting reuses the same systems as structures: composition rules evaluatio
 
 ## 20. Art Direction (Locked, 2026-05-10)
 
-STATUS: LOCKED. Visual reference target: **Eastward** (Pixpil Games, 2021). MN's art direction commits to pure 2D pixel-art top-down with rich post-processing — distinctive atmospheric mood through palette, light, and particles, while staying within the §18 hardware-tier budget.
+STATUS: LOCKED. Visual reference target: **Eastward** (Pixpil Games, 2021). MN's art direction commits to pure 2D pixel-art with 3/4 oblique perspective and rich post-processing — distinctive atmospheric mood through palette, light, and particles, while staying within the §18 hardware-tier budget.
 
 This section commits the visual identity that supports the screenshot-virality marketing strategy without requiring HD-2D (3D environments) and without pushing past Steam Deck capability.
 
@@ -2489,9 +2489,9 @@ The defining visual characteristics of Eastward that MN inherits:
 
 MN screenshots should evoke the same visual weight Eastward achieves: every frame feels deliberate, atmospheric, hand-crafted.
 
-### 20.2 Camera perspective — 3-quarter top-down
+### 20.2 Camera perspective — 3-quarter oblique
 
-Per §1 (Art style: 2D top-down or isometric), MN commits to **3-quarter top-down**:
+Per §1 (Art style: 2D 3/4-perspective or isometric), MN commits to **3-quarter oblique**:
 
 - Camera angle: ~20-35° downward from horizontal
 - Player character renders with visible front + slight top view
@@ -2505,6 +2505,21 @@ This perspective:
 - Allows depth cues without requiring 3D rendering
 - Compatible with §14.13.1 peripheral viewport desaturation
 
+#### 20.2.1 Camera & scale spec (locked 2026-05-11, empirically validated via `mother-nature-code` camera_test.tscn)
+
+| Parameter | Value | Rationale |
+|---|---|---|
+| Native render viewport | **640×360** | Clean 3× integer upscale to 1920×1080; pixel-perfect |
+| Default gameplay camera zoom | **0.8×** | Effective 800×450 world units visible — between Eastward (intimate) and Don't Starve Together (survival-wide). Calibrated against Stardew Valley reference: slightly tighter than Stardew's character-to-viewport ratio. |
+| Character height | **40 world units** | ~9% effective viewport height; reads as "character" (Eastward-grade intimacy) while leaving room for spatial awareness |
+| Tile size | **24 world units** | Updated from §20.3's earlier 32px estimate. Empirical testing showed 24 gives better track-symbol clarity and procedural-placement density at the chosen viewport. |
+| Stylized track symbol | **14 world units** | Species-distinguishable at gameplay distance; survives the atmospheric post-FX stack |
+| Texture filter | **nearest-neighbor** | Pixel-perfect, no smoothing |
+
+The 0.8× default camera zoom is the production baseline — every gameplay camera inherits it. Cutscene or photo-mode cameras may use 1.0× for Eastward-strict framing on key moments.
+
+**Trade-off being chosen**: slightly less character intimacy than Eastward's tightest framing, in exchange for the spatial-awareness needed for predator-stalk warning, track-trail reading, and multiplayer presence at viewport edges. This serves the **§14.13 Skill-Modulated Saliency** layer (recognition needs spatial context) and **§14.12 Field Notes** (track-trail reading must be diegetic).
+
 ### 20.3 Sprite work specifications
 
 | Asset class | Sprite scale | Animation frames | Estimated hours per asset |
@@ -2514,7 +2529,7 @@ This perspective:
 | Ambient wildlife (deer, fox, rabbit, birds) | 16-32px | Idle, walk/flight, alarm reaction | ~20-40 hours per species |
 | Plant / herb / mushroom | 12-32px | Sometimes static; some animated (grass sway, flower bobbing) | ~5-15 hours per object type |
 | Tools, weapons, consumables (inventory icons) | 24-48px | Static + held animation per usage | ~5-20 hours per |
-| Environment tiles per biome | 32px tile base + variants | Variants for season, lighting state, weather | ~80-200 hours per biome |
+| Environment tiles per biome | 24px tile base + variants (updated 2026-05-11) | Variants for season, lighting state, weather | ~80-200 hours per biome |
 | Structures (cabin, smokehouse, etc.) | Variable | Plus construction-state visuals (in-progress, complete, decayed) | ~40-80 hours per structure type |
 
 **Total estimated asset work for v1**: 1.5-2.5 years solo, ~9-15 months small team (3-5 with dedicated pixel artist + 3D-free environment specialist).
