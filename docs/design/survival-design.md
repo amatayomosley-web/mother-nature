@@ -7,9 +7,62 @@
 
 Working title TBD — Design Synthesis v1
 
+## 0. Design Pillars (Locked, 2026-05-11)
+
+Mother Nature offers two intertwined draws on a shared architectural commitment.
+
+### 0.1 Beauty as value
+
+The world is worth dwelling in for its own sake — atmospheric naturalism, seasonal richness, contemplative pacing, diegetic UI that doesn't break the spell. Players should want to stop and look. The Eastward-influenced art direction (§20) is not decoration; it is the value proposition. Beauty is *why a player who already has a cabin, garden, and gates keeps playing*.
+
+### 0.2 Systems as substrate
+
+The simulation depth — body, weather, ecology, animal autonomy, persistence — makes the world function as a sim for players who choose lower survival pressure, and as a survival game for those who choose more. Survival is the optional intensity dial; the world is the constant.
+
+A player at 100 days who has built shelter, secured water, planted a garden, and reached "nothing will kill me now" has not finished the game. They have unlocked the sim half. The world's beauty + autonomy + emergent interactions are the post-survival game.
+
+These reinforce each other: beauty invites dwelling; systems reward it.
+
+### 0.3 The architectural commitment that enables both — emergent over scripted
+
+Every game system reads from and writes to a shared world substrate (temperature, scent, sound, light, materials, time, weather, structures). **No closed system-to-system APIs. No scripted set-pieces. Interactions emerge from the substrate, not from designer scenarios.**
+
+Consequences:
+
+- **Greenhouse effect** is not coded — it emerges because walls retain heat, sun provides heat, plants read temperature, structures form air pockets. (See §2.5 Systems That Allow.)
+- **Smoke as long-distance signal** (issue #59) is not coded — it emerges because fire produces smoke, wind moves smoke, chimneys concentrate smoke, vision reads atmospheric density.
+- **Predator stalking via scent** is not coded — it emerges because animals deposit scent, scent diffuses with wind, predators read scent gradients.
+- **The player base will discover compositions the developers never anticipated.**
+
+This is the design lineage MN places itself in: Vintage Story, RimWorld, Dwarf Fortress, BoTW. Games where the developer's scripted content caps the budget, but the substrate's emergent compositions don't.
+
+### 0.4 What this means for production
+
+| Investment | Priority | Why |
+|---|---|---|
+| Shared world substrate (temperature, scent, sound, light, materials grid, time, weather state) | Foundation | Must exist before any feature builds on it |
+| Atmospheric art stack (shaders, lighting, fog, day/night) | High | Beauty pillar foundation |
+| Seasonal palette variety + species color range | High | Beauty pillar + temporal storytelling |
+| Animal AI with autonomous behavior | High | Sim pillar — animals do their thing whether watched or not |
+| Weather + ecology persistence (world runs without observer) | High | Sim pillar foundation |
+| Ambient audio + soundscape | High | Beauty + sim immersion |
+| Combat polish | Lower | Important but not the draw |
+| Quest / objective UI | Skipped | There isn't one (per design DNA) |
+| Modding pathway (data-driven extension) | Medium-high | §19.19 — enables the player base to grow the world |
+
+### 0.5 Cross-references
+
+- §2.5 Systems That Allow, Not Rules That Allow — emergent-over-scripted at the rules layer
+- §17 Community Emerges, Not Designed — player-driven community formation
+- §19 Crafting Architecture (composition rules, not recipe lists) — same pillar applied to crafting
+- §19.19 Modding & Player Extension (added 2026-05-11) — the player-base-grows-the-world commitment
+- §20 Art Direction — beauty as value proposition
+
+---
+
 ## 1. The Pitch
 
-A 2D top-down multiplayer survival simulation where nature is the antagonist and the only goal is to live. No bosses, no quests, no win condition. Heat, cold, hunger, thirst, exhaustion, injury, and weather behave like a real body answering a real environment. The entertainment isn't progression — it's the player's own learning curve. Every run is a different survival problem, and the meta-game is everything you carry from one life to the next.
+A 2D 3/4-perspective multiplayer survival simulation where nature is the antagonist and the only goal is to live. No bosses, no quests, no win condition. Heat, cold, hunger, thirst, exhaustion, injury, and weather behave like a real body answering a real environment. The entertainment isn't progression — it's the player's own learning curve. Every run is a different survival problem, and the meta-game is everything you carry from one life to the next.
 
 Comparable titles: Project Zomboid without the zombies, The Long Dark with other people, Rust without the raid meta. A survival simulation where the entertainment is the player's own learning curve, and where the only thing they keep when they die is what they've come to understand.
 
@@ -2466,6 +2519,57 @@ Item crafting reuses the same systems as structures: composition rules evaluatio
 - Provides emergency-exit safety for plan mode
 - Per §18 cut hierarchy: workshops are tier-3 scope-cut candidates if budget tightens (could ship with stone hearth + drying rack only at v1, smokehouse + forge later)
 
+### 19.19 Modding & Player Extension (Locked, 2026-05-11)
+
+STATUS: LOCKED. Direct consequence of §0.3 (emergent-over-scripted) and §19.1 (composition rules over recipes): if everything is data-driven, modding is near-free as a design consequence.
+
+**The architectural commitment:**
+
+- **Material library**: every material (wood species, stone types, hides, fibers, etc.) lives in data files (`.tres` Resources in Godot + JSON descriptor for mods). Properties: density, durability, insulation, flammability, decay rate, visual sprite reference, audio profile.
+- **Part schemas**: every constructible primitive (wall, roof, beam, window, door, foundation, decoration piece) is a data file. Defines: dimensions allowed, attach points, accepted materials, derived properties (insulation per area, load capacity, fire resistance).
+- **Composition rules**: how parts attach to other parts — declarative, not procedural. A wall attaches to a foundation below, walls beside, a roof above.
+- **Tool effects**: how each tool's operation transforms material properties (drawknife removes mass; scraper smooths; file refines edge) — data, not code.
+- **Skill effects**: how skill levels modulate outcome quality — data tables, not code branches.
+
+**What this means for modders:**
+
+- Adding a new material = drop a `.json` or `.tres` into `mods/<modname>/materials/` + a sprite. Game picks it up.
+- Adding a new part type = same shape — schema file + sprite. The composition engine handles the rest.
+- Adding a new tool = same. Its effects on materials are declared as data.
+- Adding new compendium entries (recipes-as-knowledge per §19.10) = same — data file describing the entry.
+
+**What modders can NOT do without engine code changes (deliberate boundary):**
+
+- Change the substrate (temperature physics, scent diffusion, time loop, persistence model) — these are engine-level
+- Add new fundamental rules (gravity, fire propagation behavior, animal AI structure) — engine-level
+- Change multiplayer architecture — engine-level
+
+The boundary: **modders extend the vocabulary; the engine enforces the grammar.** New nouns (materials, parts, tools, creatures, herbs) are mod territory; new verbs (how time works, how scent diffuses, how structural integrity computes) are engine territory.
+
+**Why this matters for the design:**
+
+- The §0.2 systems pillar implies a deep simulation; deep simulations attract communities that want to extend them; the data-driven architecture makes that extension cheap
+- The §0.3 emergent commitment means new modded content automatically participates in emergent interactions (a modder's new "ironwood" material is fire-resistant per its data; greenhouse-effect physics will read it correctly)
+- The §17 community-emerges pillar gets material reinforcement: not just emergent community formation, but emergent *content production*
+
+**What I'd expect to see in practice (from the lineage):**
+
+- **Vintage Story**: modding community produces thousands of new materials, mobs, mechanics per year via data files
+- **RimWorld**: same — Steam Workshop hosts ~30K mods, all data-driven
+- **Stardew Valley**: SMAPI + Content Patcher allow data-driven content extension; community-produced content rivals base-game content volume
+- **Project Zomboid**: similar pattern, scripted Lua extends the data layer
+
+MN aims for this same property at launch — not after years of refactoring.
+
+### 19.20 Cross-references
+
+- §0.3 — emergent-over-scripted architectural commitment
+- §0.4 — modding pathway listed as medium-high priority investment
+- §2.5 — Systems That Allow, Not Rules That Allow
+- §19.1 — composition rules, not recipe lists (this section's parent commitment)
+- §19.11 — Structure Building (the most affected sub-system)
+- §19.16 — Item Crafting (also fully modding-compatible)
+
 ---
 
 ## 20. Art Direction (Locked, 2026-05-10)
@@ -2519,6 +2623,28 @@ This perspective:
 The 0.8× default camera zoom is the production baseline — every gameplay camera inherits it. Cutscene or photo-mode cameras may use 1.0× for Eastward-strict framing on key moments.
 
 **Trade-off being chosen**: slightly less character intimacy than Eastward's tightest framing, in exchange for the spatial-awareness needed for predator-stalk warning, track-trail reading, and multiplayer presence at viewport edges. This serves the **§14.13 Skill-Modulated Saliency** layer (recognition needs spatial context) and **§14.12 Field Notes** (track-trail reading must be diegetic).
+
+#### 20.2.2 Palette discipline by asset layer (refined 2026-05-11)
+
+The world's bones are restrained; the world's life is vivid.
+
+| Layer | Palette discipline |
+|---|---|
+| **Ground / earth / paths / stone** | Restrained earth tones — browns, ochres, dusty greys, muted greens. The base. |
+| **Rocks / mineral / cliff** | Cool greys, slate, occasional warm sandstone. Restrained. |
+| **Structures / wood / metal / fabric** | Earth tones aging into rusts, weathered browns, leathered greens. Restrained. |
+| **Characters / animals** | Naturalistic fur/skin/clothing. Muted earth-tone wardrobe. Selective accent colors permitted (a red scarf, a rust-colored hood). Restrained. |
+| **Foliage / trees / bushes** | **EXPANDED.** Saturated species and seasonal variety — magenta blossoms, gold-yellow autumn, teal pine, rust-orange birch, deep purple seasonal accents. Range is *intentional* — species and season signal location and time via color. |
+| **Water / sky / atmosphere** | Per-region grading — emerald rivers, slate seas, autumn-tinted skies. Tied to atmospheric shader stack. |
+
+**Design rationale:**
+
+- Earth + character + structure layers use restrained palette so the world reads coherent and atmospheric (Eastward mood)
+- Foliage + water + sky carry the *vivid* register — they're where seasonal storytelling, species identification, and biome character live
+- Per-species foliage color (magenta-blossom tree → grows near water; gold-yellow leaves → autumn deciduous) serves the **recognition-as-verb** pillar (§14.13, issue #68): players read the world by reading its colors
+- Saturated foliage against muted bones creates atmospheric punch without chaos
+
+**Reference**: the multi-color tree palette in the parametric-construction inspiration screenshot (2026-05-11 generation) demonstrates the foliage-expanded range. Adopted only for foliage and water/sky; rejected for earth/structure/character.
 
 ### 20.3 Sprite work specifications
 
